@@ -19,5 +19,9 @@ public class Main {
         }
         Deck deck = new Deck();
         deck.shuffle();
+        for (int i = 0; i < n; i++) {
+           deck.hit();
+        }
+        System.out.println(deck.toStringBuilder());
     }
 }
