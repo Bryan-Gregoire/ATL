@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package OO_Cards;
+package esi.atl.g53735.cards;
 
 /**
  *
  * @author Utilisateur
  */
-public class Card {
+public enum Value {
     
 }
