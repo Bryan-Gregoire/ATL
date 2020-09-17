@@ -37,12 +37,7 @@ public class Deck {
         return this.list.size();
     }
 
-    public StringBuilder toStringBuilder() {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < list.size(); i++) {
-            builder.append(list.get(i).toString());
-            builder.append(" ");
-        }
-        return builder;
+    public String toString() {
+        return list.toString();
     }
 }
