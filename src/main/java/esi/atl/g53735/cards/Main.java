@@ -1,7 +1,5 @@
 package esi.atl.g53735.cards;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -23,23 +21,24 @@ public class Main {
         }
         Deck deck = new Deck();
         deck.shuffle();
+        StringBuilder nCard = null;
         for (int i = 0; i < n; i++) {
-            deck.hit();
+            nCard.append(deck.hit().toString());
         }
-        System.out.println(deck.toString());
+        System.out.println("Cartes supprimés: " + nCard);
+        System.out.println("Cartes qui reste : " + deck.toString());
     }
 
-    private int enterInteger(String message) {
-        Scanner keyboard = new Scanner(System.in);
-        System.out.println(message);
-        while (!keyboard.hasNextInt()) {
-            keyboard.next();
-            System.out.println("not an integer, try again");
-            System.out.print(message);
-        }
-        return keyboard.nextInt();
-    }
-
+//    private int enterInteger(String message) {
+//        Scanner keyboard = new Scanner(System.in);
+//        System.out.println(message);
+//        while (!keyboard.hasNextInt()) {
+//            keyboard.next();
+//            System.out.println("not an integer, try again");
+//            System.out.print(message);
+//        }
+//        return keyboard.nextInt();
+//    }
     public static boolean isStringInteger(String number) {
         try {
             Integer.parseInt(number);
@@ -48,5 +47,4 @@ public class Main {
         }
         return true;
     }
-
 }

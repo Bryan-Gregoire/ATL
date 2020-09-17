@@ -28,9 +28,12 @@ public class Deck {
         return list.isEmpty();
     }
 
-    public void hit() {
+    public Card hit() {
         int choosenCard = (int) (Math.random() * ((list.size())));
-        list.remove(list.get(choosenCard));
+        Card card = new Card(list.get(choosenCard).getColor(),
+                list.get(choosenCard).getValue());
+        list.remove(card);
+        return card;
     }
 
     public int size() {
