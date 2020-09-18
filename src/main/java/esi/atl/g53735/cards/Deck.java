@@ -29,17 +29,14 @@ public class Deck {
     }
 
     public Card hit() {
-        int choosenCard = (int) (Math.random() * ((list.size())));
-        Card card = new Card(list.get(choosenCard).getColor(),
-                list.get(choosenCard).getValue());
-        list.remove(card);
-        return card;
+        return list.remove(0);
     }
 
     public int size() {
         return this.list.size();
     }
 
+    @Override
     public String toString() {
         return list.toString();
     }
