@@ -1,6 +1,7 @@
 package esi.atl.g53735.cards;
 /**
- *
+ * Represent the value of the cards.
+ * 
  * @author Utilisateur
  */
 public enum Value {
