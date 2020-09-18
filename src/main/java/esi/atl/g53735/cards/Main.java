@@ -9,18 +9,18 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        if (args.length != 0) {
+        if (args.length != 1) {
             throw new IllegalArgumentException("Error, respect the rules");
         }
         int n;
         if (!isStringInteger(args[0])) {
             System.out.println("This is not a number");
-            int nb = enterInteger("Enter a integer");
+            int nb = enterInteger("Enter a integer between 1 and 52");
             n = nb;
         } else {
             n = Integer.parseInt(args[0]);
         }
-        if (n < 0 | n > 52) {
+        if (n < 1 | n > 52) {
             throw new IllegalArgumentException("Error, respect the consign");
         }
         Deck deck = new Deck();
@@ -36,7 +36,7 @@ public class Main {
         System.out.println(deck.toString());
     }
 
-    public static int enterInteger(String message) {
+    private static int enterInteger(String message) {
         Scanner keyboard = new Scanner(System.in);
         System.out.println(message);
         while (!keyboard.hasNextInt()) {
@@ -47,7 +47,7 @@ public class Main {
         return keyboard.nextInt();
     }
 
-    public static boolean isStringInteger(String number) {
+    private static boolean isStringInteger(String number) {
         try {
             Integer.parseInt(number);
         } catch (NumberFormatException e) {
