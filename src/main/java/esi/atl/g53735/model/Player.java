@@ -26,7 +26,6 @@ public class Player implements Model {
         this.deck.getList().add(gameDeck.getList().get(0));
         gameDeck.getList().remove(0);
     }
-    
 
     @Override
     public Deck getDeck() {

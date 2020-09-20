@@ -5,10 +5,20 @@
  */
 package esi.atl.g53735.model;
 
+import esi.atl.g53735.cards.Deck;
+
 /**
  *
  * @author g53735
  */
 public class Game {
+    
+    private Deck deck;
+
+    public Game(Deck deck) {
+        this.deck = deck;
+    }
+    
+    
     
 }
