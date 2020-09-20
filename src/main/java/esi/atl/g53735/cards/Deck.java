@@ -25,6 +25,11 @@ public class Deck {
         }
     }
 
+    public ArrayList<Card> getList() {
+        return list;
+    }
+    
+
     /**
      * Shuffle the deck.
      *
