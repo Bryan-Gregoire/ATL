@@ -1,8 +1,5 @@
 package esi.atl.g53735.controller;
 
-import esi.atl.g53735.model.Card;
-import esi.atl.g53735.model.Color;
-import esi.atl.g53735.model.Value;
 import esi.atl.g53735.model.Model;
 import esi.atl.g53735.view.InterfaceView;
 import esi.atl.g53735.view.View;

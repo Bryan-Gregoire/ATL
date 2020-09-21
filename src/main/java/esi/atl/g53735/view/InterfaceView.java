@@ -56,6 +56,7 @@ public interface InterfaceView {
     /**
      * Display the possible gain.
      * 
+     * @param gold the gold.
      */
     public void displayGain(int gold);
 }

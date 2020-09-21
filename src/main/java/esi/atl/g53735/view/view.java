@@ -1,10 +1,7 @@
 package esi.atl.g53735.view;
 
 import esi.atl.g53735.model.Card;
-//import esi.atl.g53735.model.Color;
-import esi.atl.g53735.model.Deck;
 import java.util.List;
-//import esi.atl.g53735.model.Value;
 import java.util.Scanner;
 
 /**
