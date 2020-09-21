@@ -1,6 +1,5 @@
 package esi.atl.g53735.model;
 
-import esi.atl.g53735.cards.Card;
 import esi.atl.g53735.cards.Deck;
 
 /**
@@ -11,5 +10,5 @@ public interface Model {
 
     Deck getDeck();
 
-    boolean keepGoing(Boolean yesOrNo, Deck gameDeck);
+    void keepGoing(Boolean yesOrNo, Deck gameDeck);
 }

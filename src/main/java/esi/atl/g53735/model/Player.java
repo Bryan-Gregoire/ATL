@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package esi.atl.g53735.model;
 
 import esi.atl.g53735.cards.Card;
@@ -14,11 +9,33 @@ import esi.atl.g53735.cards.Deck;
  */
 public class Player implements Model {
 
-    Deck deck;
+    private Deck deck;
+    private int gold;
+    private int score;
 
-    public Player(Deck deck) {
-        this.deck = deck;
+    public Player() {
+        this.deck = new Deck();
+        this.gold = 1000;
+        this.score = 0;
     }
+
+    public int getGold() {
+        return gold;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setGold(int gold) {
+        this.gold = gold;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+    
+    
 
     public void startPlayer(Deck gameDeck, Card card) {
         this.deck.getList().add(card);
@@ -33,12 +50,10 @@ public class Player implements Model {
     }
 
     @Override
-    public boolean keepGoing(Boolean yesOrNo, Deck gameDeck) {
+    public void keepGoing(Boolean yesOrNo, Deck gameDeck) {
         if (yesOrNo == true) {
             this.deck.getList().add(gameDeck.getList().get(0));
             gameDeck.getList().remove(0);
-            return true;
         }
-        return false;
     }
 }

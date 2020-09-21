@@ -11,14 +11,20 @@ import esi.atl.g53735.cards.Deck;
  *
  * @author g53735
  */
-public class Game {
-    
-    private Deck deck;
+public class Game implements Model {
 
-    public Game(Deck deck) {
-        this.deck = deck;
+    private Deck deck;
+    private Player player;
+    private Bot bot;
+
+    @Override
+    public Deck getDeck() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
+
+    @Override
+    public void keepGoing(Boolean yesOrNo, Deck gameDeck) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
