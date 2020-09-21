@@ -25,7 +25,7 @@ public class Deck {
             }
         }
     }
-
+   
     public ArrayList<Card> getList() {
         return list;
     }
@@ -53,8 +53,8 @@ public class Deck {
      *
      * @return the removed card.
      */
-    public void hit() {
-        list.remove(0);
+    public Card hit() {
+        return list.remove(0);
     }
 
     /**

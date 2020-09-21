@@ -30,9 +30,9 @@ public class Game implements Model {
         return this.player;
     }
 
-    public void takeCard(Boolean takeCard, Deck gameDeck, Card card) {
-        if (takeCard == true) {
-            player.startDeckPlayer(deck, card);
+    public void takeCard(Boolean takeCard, Deck gameDeck) {
+        if (takeCard) {
+            player.startHandsPlayer(deck);
         }
     }
 }

@@ -1,23 +1,26 @@
 package esi.atl.g53735.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author g53735
  */
 public class Player {
 
-    private Deck deck;
+    private List<Card> hand;
     private int gold;
     private int score;
 
     public Player() {
-        this.deck = new Deck();
+        this.hand = new ArrayList<>();
         this.gold = 1000;
         this.score = 0;
     }
 
-    public Deck getDeck() {
-        return deck;
+    public List<Card> getHand() {
+        return hand;
     }
 
     public int getGold() {
@@ -36,25 +39,31 @@ public class Player {
         this.gold = this.gold - goldLose;
     }
 
-    public void startDeckPlayer(Deck gameDeck, Card card) {
-        this.deck.getList().add(gameDeck.getList().get(0));
-        gameDeck.getList().remove(gameDeck.getList().get(0));
-        this.deck.getList().add(gameDeck.getList().get(0));
-        gameDeck.getList().remove(0);
-    }
-
-    public void keepGoing(Boolean yesOrNo, Deck gameDeck) {
-        if (yesOrNo == true) {
-            this.deck.getList().add(gameDeck.getList().get(0));
+    public void startHandsPlayer(Deck gameDeck) {
+        for (int i = 0; i < 2; i++) {
+            this.hand.add(gameDeck.getList().get(0));
+            this.score += this.hand.get(i)
+                    .valueOfCard(this.hand.get(i).getValue());
             gameDeck.hit();
         }
     }
 
-    public int scoreOfDeck() {
-        for (int i = 0; i < this.deck.size(); i++) {
-            this.score = this.score + this.deck.getList().get(i)
-                    .valueOfCard(this.deck.getList().get(i).getValue());
+    public void keepGoing(boolean yesOrNo, Deck gameDeck) {
+        if (yesOrNo) {
+            this.hand.add(gameDeck.getList().get(0));
+            this.score += this.hand.get(this.hand.size() - 1)
+                    .valueOfCard(this.hand.get(this.hand.size() - 1)
+                            .getValue());
+            gameDeck.hit();
         }
-        return this.score;
     }
+
+//    public static void main(String[] args) {
+//        Deck deck54 = new Deck();
+//        deck54.shuffle();
+//        Player player = new Player();
+//        player.startDeckPlayer(deck54);
+//        System.out.println(player.getHand().toString());
+//        System.out.println(player.score);
+//    }
 }

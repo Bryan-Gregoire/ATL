@@ -23,5 +23,11 @@ public interface InterfaceView {
      */
     public void displayPlayerDeck(Deck playerDeck);
     
-    public void displayRemovedCard(Card card);
+    public void displayTakenCard(Card card);
+    
+    public void displayScore(int score);
+    
+    public boolean askYesOrNo(String message);
+    
+    public boolean askTakeCard();
 }
