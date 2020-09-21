@@ -1,17 +1,20 @@
 
 package esi.atl.g53735.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author g53735
  */
 public class Bank {
     
-    private Deck deck;
+    private List<Card> cards;
     private int score;
 
     public Bank() {
-        this.deck = new Deck();
+        this.cards = new ArrayList<>();
         this.score = 0;
     }
 

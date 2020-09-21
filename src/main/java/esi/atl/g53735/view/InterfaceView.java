@@ -2,6 +2,7 @@ package esi.atl.g53735.view;
 
 import esi.atl.g53735.model.Card;
 import esi.atl.g53735.model.Deck;
+import java.util.List;
 
 /**
  *
@@ -21,13 +22,40 @@ public interface InterfaceView {
      * 
      * @param playerDeck player cards. 
      */
-    public void displayPlayerDeck(Deck playerDeck);
+    public void displayPlayerCards(List playerDeck);
     
+    /**
+     * Display the taken card.
+     * 
+     * @param card the taken card. 
+     */
     public void displayTakenCard(Card card);
     
+    /**
+     * Display the score of the player.
+     * 
+     * @param score the score.
+     */
     public void displayScore(int score);
     
+    /**
+     * Ask yes or no.
+     * 
+     * @param message the given message.
+     * @return True if yes else false if no.
+     */
     public boolean askYesOrNo(String message);
     
+    /**
+     * Ask if want to draw an other card.
+     * 
+     * @return true if want a card else false.
+     */
     public boolean askTakeCard();
+    
+    /**
+     * Display the possible gain.
+     * 
+     */
+    public void displayGain(int gold);
 }
