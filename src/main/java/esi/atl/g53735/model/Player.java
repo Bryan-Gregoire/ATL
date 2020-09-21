@@ -1,13 +1,10 @@
 package esi.atl.g53735.model;
 
-import esi.atl.g53735.cards.Card;
-import esi.atl.g53735.cards.Deck;
-
 /**
  *
  * @author g53735
  */
-public class Player implements Model {
+public class Player {
 
     private Deck deck;
     private int gold;
@@ -19,6 +16,10 @@ public class Player implements Model {
         this.score = 0;
     }
 
+    public Deck getDeck() {
+        return deck;
+    }
+
     public int getGold() {
         return gold;
     }
@@ -27,33 +28,33 @@ public class Player implements Model {
         return score;
     }
 
-    public void setGold(int gold) {
-        this.gold = gold;
+    public void winGold(int goldWin) {
+        this.gold = this.gold + goldWin;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void loseGold(int goldLose) {
+        this.gold = this.gold - goldLose;
     }
-    
-    
 
-    public void startPlayer(Deck gameDeck, Card card) {
-        this.deck.getList().add(card);
-        gameDeck.getList().remove(card);
+    public void startDeckPlayer(Deck gameDeck, Card card) {
+        this.deck.getList().add(gameDeck.getList().get(0));
+        gameDeck.getList().remove(gameDeck.getList().get(0));
         this.deck.getList().add(gameDeck.getList().get(0));
         gameDeck.getList().remove(0);
     }
 
-    @Override
-    public Deck getDeck() {
-        return deck;
-    }
-
-    @Override
     public void keepGoing(Boolean yesOrNo, Deck gameDeck) {
         if (yesOrNo == true) {
             this.deck.getList().add(gameDeck.getList().get(0));
-            gameDeck.getList().remove(0);
+            gameDeck.hit();
         }
+    }
+
+    public int scoreOfDeck() {
+        for (int i = 0; i < this.deck.size(); i++) {
+            this.score = this.score + this.deck.getList().get(i)
+                    .valueOfCard(this.deck.getList().get(i).getValue());
+        }
+        return this.score;
     }
 }

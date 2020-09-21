@@ -1,5 +1,6 @@
 package esi.atl.g53735.cards;
 
+import esi.atl.g53735.model.Deck;
 import java.util.Scanner;
 
 /**
@@ -31,7 +32,7 @@ public class Main {
             System.out.print("Les cartes supprimées: ");
         }
         for (int i = 0; i < n; i++) {
-            System.out.println(deck.hit());
+//            System.out.println(deck.hit());
         }
         System.out.println("Les cartes restant: " + deck.toString());
     }

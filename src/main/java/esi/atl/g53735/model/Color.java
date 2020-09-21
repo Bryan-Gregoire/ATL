@@ -1,5 +1,5 @@
 
-package esi.atl.g53735.cards;
+package esi.atl.g53735.model;
 
 /**
  * Represent the color of the cards.

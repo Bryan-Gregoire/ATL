@@ -1,6 +1,7 @@
 package esi.atl.g53735.view;
 
-import esi.atl.g53735.cards.Deck;
+import esi.atl.g53735.model.Card;
+import esi.atl.g53735.model.Deck;
 
 /**
  *
@@ -21,4 +22,6 @@ public interface InterfaceView {
      * @param playerDeck player cards. 
      */
     public void displayPlayerDeck(Deck playerDeck);
+    
+    public void displayRemovedCard(Card card);
 }

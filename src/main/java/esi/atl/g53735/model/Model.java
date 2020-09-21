@@ -1,7 +1,5 @@
 package esi.atl.g53735.model;
 
-import esi.atl.g53735.cards.Deck;
-
 /**
  *
  * @author g53735
@@ -9,6 +7,9 @@ import esi.atl.g53735.cards.Deck;
 public interface Model {
 
     Deck getDeck();
+    
+    Bank getBank();
+    
+    Player getPlayer();
 
-    void keepGoing(Boolean yesOrNo, Deck gameDeck);
 }

@@ -1,5 +1,6 @@
-package esi.atl.g53735.cards;
+package esi.atl.g53735.model;
 
+import esi.atl.g53735.model.Card;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -52,8 +53,8 @@ public class Deck {
      *
      * @return the removed card.
      */
-    public Card hit() {
-        return list.remove(0);
+    public void hit() {
+        list.remove(0);
     }
 
     /**

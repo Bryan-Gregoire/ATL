@@ -1,8 +1,9 @@
 package esi.atl.g53735.view;
 
-import esi.atl.g53735.cards.Color;
-import esi.atl.g53735.cards.Deck;
-import esi.atl.g53735.cards.Value;
+import esi.atl.g53735.model.Card;
+import esi.atl.g53735.model.Color;
+import esi.atl.g53735.model.Deck;
+import esi.atl.g53735.model.Value;
 
 /**
  *
@@ -22,6 +23,12 @@ public class View implements InterfaceView {
             displayColorCards(playerDeck.getList().get(i).getColor());
         }
     }
+    
+    @Override
+    public void displayRemovedCard(Card card) {
+      
+    }
+    
 
     private void displayValueCards(Value value) {
         switch (value) {
@@ -82,4 +89,5 @@ public class View implements InterfaceView {
                 break;
         }
     }
+    
 }

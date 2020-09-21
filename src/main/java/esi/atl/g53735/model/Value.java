@@ -1,4 +1,4 @@
-package esi.atl.g53735.cards;
+package esi.atl.g53735.model;
 /**
  * Represent the value of the cards.
  * 
@@ -6,4 +6,5 @@ package esi.atl.g53735.cards;
  */
 public enum Value {
     ACE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,TEN,JACK,QUEEN,KING
+    
 }
