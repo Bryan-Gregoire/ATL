@@ -17,7 +17,7 @@ public class Bank {
         this.score = 0;
     }
 
-    public List getDeck() {
+    public List getCards() {
         return this.cards;
     }
 
@@ -25,15 +25,20 @@ public class Bank {
         return score;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void addScore(int score) {
+        this.score += score;
     }
-
-    public int scoreOfDeck() {
-        for (int i = 0; i < this.cards.size(); i++) {
-            this.score = this.score + this.cards.get(i)
-                    .valueOfCard(this.cards.get(i).getValue());
+    
+    public void resetScore() {
+        this.score = 0;
+    }
+    
+    public void takeCard(Deck gameDeck, int n) {
+        for (int i = 0; i < n; i++) {
+            Card takenCard = gameDeck.hit();
+            this.cards.add(takenCard);
+            this.score += takenCard.valueOfCard(takenCard.getValue());
         }
-        return score;
     }
+    
 }

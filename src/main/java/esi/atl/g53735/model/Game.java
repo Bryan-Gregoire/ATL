@@ -29,10 +29,5 @@ public class Game implements Model {
     public Player getPlayer() {
         return this.player;
     }
-
-    public void takeCard(Boolean takeCard, Deck gameDeck) {
-        if (takeCard) {
-            player.startHandsPlayer(deck);
-        }
-    }
+    
 }

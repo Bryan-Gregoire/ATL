@@ -59,4 +59,12 @@ public interface InterfaceView {
      * @param gold the gold.
      */
     public void displayGain(int gold);
+    
+    /**
+     * Display the message of the error.
+     * 
+     * @param errorMessage the message to display.
+     */
+    public void displayError(String errorMessage);
+    
 }

@@ -37,10 +37,13 @@ public class View implements InterfaceView {
 
     @Override
     public void displayGain(int gold) {
-        System.out.println("The possible gain is " + 2*gold);
+        System.out.println("The possible gain is " + 2 * gold);
     }
-    
-    
+
+    @Override
+    public void displayError(String errorMessage) {
+        System.out.println("Error : " + errorMessage);
+    }
 
     /**
      * Ask to enter a cardinal direction.

@@ -31,6 +31,14 @@ public class Player {
         return score;
     }
 
+    public void addScore(int add) {
+        this.score += add;
+    }
+
+    public void resetScore() {
+        this.score = 0;
+    }
+
     public void winGold(int goldWin) {
         this.gold = this.gold + goldWin;
     }
@@ -39,31 +47,11 @@ public class Player {
         this.gold = this.gold - goldLose;
     }
 
-    public void startHandsPlayer(Deck gameDeck) {
-        for (int i = 0; i < 2; i++) {
-            this.hand.add(gameDeck.getList().get(0));
-            this.score += this.hand.get(i)
-                    .valueOfCard(this.hand.get(i).getValue());
-            gameDeck.hit();
+    public void takeCard(Deck gameDeck, int n) {
+        for (int i = 0; i < n; i++) {
+            Card takenCard = gameDeck.hit();
+            this.hand.add(takenCard);
+            this.score += takenCard.valueOfCard(takenCard.getValue());
         }
     }
-
-    public void keepGoing(boolean yesOrNo, Deck gameDeck) {
-        if (yesOrNo) {
-            this.hand.add(gameDeck.getList().get(0));
-            this.score += this.hand.get(this.hand.size() - 1)
-                    .valueOfCard(this.hand.get(this.hand.size() - 1)
-                            .getValue());
-            gameDeck.hit();
-        }
-    }
-
-//    public static void main(String[] args) {
-//        Deck deck54 = new Deck();
-//        deck54.shuffle();
-//        Player player = new Player();
-//        player.startDeckPlayer(deck54);
-//        System.out.println(player.getHand().toString());
-//        System.out.println(player.score);
-//    }
 }
