@@ -40,5 +40,4 @@ public class Bank {
             this.score += takenCard.valueOfCard(takenCard.getValue());
         }
     }
-    
 }

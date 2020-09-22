@@ -13,11 +13,11 @@ public class Game implements Model {
 
     private Player player;
     private Bank bank;
-    private Deck deck;
+    private Deck gameDeck;
 
     @Override
-    public Deck getDeck() {
-        return this.deck;
+    public Deck getGameDeck() {
+        return this.gameDeck;
     }
 
     @Override
@@ -29,5 +29,20 @@ public class Game implements Model {
     public Player getPlayer() {
         return this.player;
     }
-    
+
+    @Override
+    public void beginHandPlayer() {
+        player.takeCard(this.gameDeck);
+        player.takeCard(this.gameDeck);
+    }
+
+    @Override
+    public void playerDrawCard() {
+        player.takeCard(this.gameDeck);
+    }
+
+    @Override
+    public boolean checkPlayerLose() {
+        return player.getScore() > 21;
+    }
 }

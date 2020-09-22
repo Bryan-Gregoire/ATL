@@ -6,10 +6,15 @@ package esi.atl.g53735.model;
  */
 public interface Model {
 
-    Deck getDeck();
-    
-    Bank getBank();
-    
-    Player getPlayer();
+    public Deck getGameDeck();
 
+    public Bank getBank();
+
+    public Player getPlayer();
+
+    public void beginHandPlayer();
+
+    public void playerDrawCard();
+
+    public boolean checkPlayerLose();
 }

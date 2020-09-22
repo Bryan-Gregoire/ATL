@@ -22,7 +22,7 @@ public class View implements InterfaceView {
 
     @Override
     public void displayPlayerCards(List playerHand) {
-        System.out.println(playerHand.toString());
+        System.out.println("The cards in your hand: " + playerHand.toString());
     }
 
     @Override
