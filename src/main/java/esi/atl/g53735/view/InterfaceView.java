@@ -58,7 +58,7 @@ public interface InterfaceView {
      * 
      * @param gold the gold.
      */
-    public void displayGain(int gold);
+    public void displayPossibleGain(int gold);
     
     /**
      * Display the message of the error.

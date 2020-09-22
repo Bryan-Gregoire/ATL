@@ -13,10 +13,10 @@ import java.util.List;
  */
 public abstract class Players {
 
-    protected List<Card> hand;
-    protected int score;
+    private List<Card> hand;
+    private int score;
 
-    protected Players(List<Card> hand, int score) {
+    public Players(List<Card> hand, int score) {
         this.hand = hand;
         this.score = score;
     }
@@ -27,10 +27,6 @@ public abstract class Players {
 
     public int getScore() {
         return score;
-    }
-
-    public void addScore(int add) {
-        this.score += add;
     }
 
     public void resetScore() {

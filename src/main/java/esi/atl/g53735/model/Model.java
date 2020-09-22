@@ -10,15 +10,17 @@ public interface Model {
 
     public Deck getGameDeck();
 
-    public Bank getBank();
-
     public Players getPlayer();
+    
+    public Bank getBank();
 
     public void beginHandPlayer();
 
-    public void playerDrawCard();
+    public void playerDrawCard(Players players);
 
-    public boolean checkPlayerLose();
+    public boolean checkScoreLose(Players players);
 
     public void resetCards(List<Card> hand, Deck gameDeck);
+    
+    public boolean check21(Players players);
 }

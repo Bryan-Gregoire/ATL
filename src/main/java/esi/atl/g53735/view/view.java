@@ -36,7 +36,7 @@ public class View implements InterfaceView {
     }
 
     @Override
-    public void displayGain(int gold) {
+    public void displayPossibleGain(int gold) {
         System.out.println("The possible gain is " + 2 * gold);
     }
 

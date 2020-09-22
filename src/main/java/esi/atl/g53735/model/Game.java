@@ -13,43 +13,44 @@ import java.util.List;
  */
 public class Game implements Model {
 
-    private Players players;
+    private Player player;
     private Bank bank;
     private Deck gameDeck;
-
+    
     @Override
     public Deck getGameDeck() {
         return this.gameDeck;
     }
 
     @Override
+    public Player getPlayer() {
+        return player;
+    }
+    
+    @Override
     public Bank getBank() {
         return this.bank;
     }
 
     @Override
-    public Players getPlayer() {
-        return this.players;
-    }
-
-    @Override
     public void beginHandPlayer() {
-        players.takeCard(this.gameDeck);
+        player.takeCard(this.gameDeck);
+        player.takeCard(this.gameDeck);
+    }
+
+    @Override
+    public void playerDrawCard(Players players) {
         players.takeCard(this.gameDeck);
     }
 
     @Override
-    public void playerDrawCard() {
-        players.takeCard(this.gameDeck);
-    }
-
-    @Override
-    public boolean checkPlayerLose() {
+    public boolean checkScoreLose(Players players) {
         return players.getScore() > 21;
     }
     
-    public boolean check21() {
-       return this.players.getScore() == 21;
+    @Override
+    public boolean check21(Players players) {
+       return players.getScore() == 21;
     }
     
     @Override

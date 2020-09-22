@@ -13,11 +13,4 @@ public class Bank extends Players {
         super(hand, score);
     }
     
-    public void takeCard(Deck gameDeck, int n) {
-        for (int i = 0; i < n; i++) {
-            Card takenCard = gameDeck.hit();
-            this.hand.add(takenCard);
-            this.score += takenCard.valueOfCard(takenCard.getValue());
-        }
-    }
 }

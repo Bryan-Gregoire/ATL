@@ -24,26 +24,38 @@ public class Controller {
         boolean newRound = true;
         while (!end) {
             if (newRound) {
+                game.resetCards(game.getPlayer().getHand(), game.getGameDeck());
+                game.resetCards(game.getBank().getHand(), game.getGameDeck());
+                game.getGameDeck().shuffle();
                 game.beginHandPlayer();
                 newRound = false;
             }
+            
             view.displayPlayerCards(game.getPlayer().getHand());
-            if (game.checkPlayerLose()) {
+            view.displayScore(game.getPlayer().getScore());
+            
+            if (game.checkScoreLose(game.getPlayer())) {
                 view.displayMessage("Game over, you lose");
-                boolean again = view.askYesOrNo("Voulez vous rejoué ? : ");
-                if(again) {
+                boolean again = view.askYesOrNo("Do you want to play again ? : ");
+                if (again) {
                     newRound = true;
                 } else {
+                    end = true;
                     break;
                 }
             }
-            view.displayMessage("How much do you want to bet ? : ");
-            
+            int bet = view.askBet("How much do you want to bet ? :");
+            view.displayPossibleGain(bet);
 
             if (!view.askTakeCard()) {
-
+                while(game.getBank().getScore() < 17) {
+                    game.getBank().takeCard(game.getGameDeck());
+                }
+              if(game.getBank().getScore() > 21) {
+                  
+              }
             } else {
-                game.playerDrawCard();
+                game.getPlayer().takeCard(game.getGameDeck());
             }
         }
     }

@@ -25,6 +25,5 @@ public class Player extends Players {
 
     public void loseGold(int goldLose) {
         this.gold = this.gold - goldLose;
-    }
-    
+    } 
 }
