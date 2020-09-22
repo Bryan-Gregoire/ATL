@@ -67,4 +67,12 @@ public interface InterfaceView {
      */
     public void displayError(String errorMessage);
     
+    /**
+     * Ask how much the player want to bet.
+     * 
+     * @param message Display the given message.
+     * @return the given integer.
+     */
+    public int askBet(String message);
+    
 }

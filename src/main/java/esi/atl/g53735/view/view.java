@@ -45,6 +45,11 @@ public class View implements InterfaceView {
         System.out.println("Error : " + errorMessage);
     }
 
+    @Override
+    public int askBet(String message) {
+        return enterInteger("How much do you want bet ? : ");
+    }
+
     /**
      * Ask to enter a cardinal direction.
      *
@@ -64,5 +69,22 @@ public class View implements InterfaceView {
             ask = keyboard.nextLine().toUpperCase();
         }
         return ask.toUpperCase().equals("Y") || ask.toUpperCase().equals("YES");
+    }
+
+    /**
+     * Ask a integer, while it is not a integer, ask again.
+     *
+     * @param message the given message to display.
+     * @return the given integer.
+     */
+    private int enterInteger(String message) {
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println(message);
+        while (!keyboard.hasNextInt()) {
+            keyboard.next();
+            System.out.println("not an integer, try again");
+            System.out.print(message);
+        }
+        return keyboard.nextInt();
     }
 }

@@ -27,11 +27,18 @@ public class Controller {
                 game.beginHandPlayer();
                 newRound = false;
             }
+            view.displayPlayerCards(game.getPlayer().getHand());
             if (game.checkPlayerLose()) {
                 view.displayMessage("Game over, you lose");
                 boolean again = view.askYesOrNo("Voulez vous rejoué ? : ");
+                if(again) {
+                    newRound = true;
+                } else {
+                    break;
+                }
             }
-            view.displayPlayerCards(game.getPlayer().getHand());
+            view.displayMessage("How much do you want to bet ? : ");
+            
 
             if (!view.askTakeCard()) {
 

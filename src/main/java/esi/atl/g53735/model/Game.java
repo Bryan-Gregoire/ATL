@@ -5,13 +5,15 @@
  */
 package esi.atl.g53735.model;
 
+import java.util.List;
+
 /**
  *
  * @author g53735
  */
 public class Game implements Model {
 
-    private Player player;
+    private Players players;
     private Bank bank;
     private Deck gameDeck;
 
@@ -26,23 +28,35 @@ public class Game implements Model {
     }
 
     @Override
-    public Player getPlayer() {
-        return this.player;
+    public Players getPlayer() {
+        return this.players;
     }
 
     @Override
     public void beginHandPlayer() {
-        player.takeCard(this.gameDeck);
-        player.takeCard(this.gameDeck);
+        players.takeCard(this.gameDeck);
+        players.takeCard(this.gameDeck);
     }
 
     @Override
     public void playerDrawCard() {
-        player.takeCard(this.gameDeck);
+        players.takeCard(this.gameDeck);
     }
 
     @Override
     public boolean checkPlayerLose() {
-        return player.getScore() > 21;
+        return players.getScore() > 21;
+    }
+    
+    public boolean check21() {
+       return this.players.getScore() == 21;
+    }
+    
+    @Override
+    public void resetCards(List<Card> hand, Deck gameDeck) {
+        for (int i = hand.size()-1; i > 0; i--) {
+            Card card = hand.remove(i);
+            gameDeck.getList().add(card);
+        }
     }
 }
