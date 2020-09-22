@@ -1,6 +1,5 @@
 package esi.atl.g53735.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,8 +8,7 @@ import java.util.List;
  */
 public class Bank extends Players {
 
-    public Bank(List<Card> hand, int score) {
-        super(hand, score);
+    public Bank(List<Card> hand) {
+        super(hand, 0);
     }
-    
 }

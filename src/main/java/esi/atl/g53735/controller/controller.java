@@ -1,7 +1,6 @@
 package esi.atl.g53735.controller;
 
 import esi.atl.g53735.model.Model;
-import esi.atl.g53735.model.Player;
 import esi.atl.g53735.view.InterfaceView;
 import esi.atl.g53735.view.View;
 
@@ -23,37 +22,71 @@ public class Controller {
         boolean end = false;
         boolean newRound = true;
         while (!end) {
+            int bet = 0;
+            if (game.getGold() == 0) {
+                break;
+            }
+
             if (newRound) {
+                view.displayWallet(game.getGold());
                 game.resetCards(game.getPlayer().getHand(), game.getGameDeck());
                 game.resetCards(game.getBank().getHand(), game.getGameDeck());
                 game.getGameDeck().shuffle();
                 game.beginHandPlayer();
+                bet = view.askBet();
+                while (bet > game.getGold()) {
+                    view.displayMessage("Not enough in the wallet");
+                    bet = view.askBet();
+                }
+                view.displayPossibleGain(bet);
                 newRound = false;
             }
-            
+
             view.displayPlayerCards(game.getPlayer().getHand());
             view.displayScore(game.getPlayer().getScore());
-            
-            if (game.checkScoreLose(game.getPlayer())) {
-                view.displayMessage("Game over, you lose");
-                boolean again = view.askYesOrNo("Do you want to play again ? : ");
+            view.displayWallet(game.getGold());
+
+            if (game.checkAbove21(game.getPlayer())) {
+                view.displayMessage("you lose this round");
+                view.displayWallet(game.getGold());
+                boolean again
+                        = view.askYesOrNo("Do you want to play again ? : ");
                 if (again) {
                     newRound = true;
                 } else {
-                    end = true;
                     break;
                 }
             }
-            int bet = view.askBet("How much do you want to bet ? :");
-            view.displayPossibleGain(bet);
 
             if (!view.askTakeCard()) {
-                while(game.getBank().getScore() < 17) {
-                    game.getBank().takeCard(game.getGameDeck());
+                while (game.getBank().getScore() < 17) {
+                    game.playerDrawCard(game.getBank());
                 }
-              if(game.getBank().getScore() > 21) {
-                  
-              }
+                if (game.checkAbove21(game.getBank()) || game.getPlayer()
+                        .getScore() > game.getPlayer().getScore()) {
+                    view.displayMessage("You won the round");
+                    game.winGold(bet);
+                    view.displayWallet(game.getGold());
+                    boolean again
+                            = view.askYesOrNo("Do you want to play again ? : ");
+                    if (again) {
+                        newRound = true;
+                    } else {
+                        end = true;
+                    }
+                } else if (game.getPlayer().getScore()
+                        <= game.getBank().getScore()) {
+                    view.displayMessage("The bank won this round");
+                    game.loseGold(bet);
+                    view.displayWallet(game.getGold());
+                    boolean again
+                            = view.askYesOrNo("Do you want to play again ? : ");
+                    if (again) {
+                        newRound = true;
+                    } else {
+                        end = true;
+                    }
+                }
             } else {
                 game.getPlayer().takeCard(game.getGameDeck());
             }

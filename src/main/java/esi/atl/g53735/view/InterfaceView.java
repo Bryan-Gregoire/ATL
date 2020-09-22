@@ -22,14 +22,7 @@ public interface InterfaceView {
      * 
      * @param playerDeck player cards. 
      */
-    public void displayPlayerCards(List playerDeck);
-    
-    /**
-     * Display the taken card.
-     * 
-     * @param card the taken card. 
-     */
-    public void displayTakenCard(Card card);
+    public void displayPlayerCards(List playerDeck); 
     
     /**
      * Display the score of the player.
@@ -37,6 +30,8 @@ public interface InterfaceView {
      * @param score the score.
      */
     public void displayScore(int score);
+    
+    public void displayWallet(int gold);
     
     /**
      * Ask yes or no.
@@ -73,6 +68,6 @@ public interface InterfaceView {
      * @param message Display the given message.
      * @return the given integer.
      */
-    public int askBet(String message);
+    public int askBet();
     
 }

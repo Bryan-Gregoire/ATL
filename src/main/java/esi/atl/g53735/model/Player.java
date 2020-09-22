@@ -10,9 +10,9 @@ public class Player extends Players {
 
     private int gold;
 
-    public Player(int gold, List<Card> hand, int score) {
-        super(hand, score);
-        this.gold = gold;
+    public Player(List<Card> hand) {
+        super(hand, 0);
+        this.gold = 1000;
     }
 
     public int getGold() {

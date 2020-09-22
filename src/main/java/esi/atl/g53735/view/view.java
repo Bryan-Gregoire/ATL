@@ -1,6 +1,5 @@
 package esi.atl.g53735.view;
 
-import esi.atl.g53735.model.Card;
 import java.util.List;
 import java.util.Scanner;
 
@@ -26,8 +25,8 @@ public class View implements InterfaceView {
     }
 
     @Override
-    public void displayTakenCard(Card card) {
-        System.out.print("The drawen card is  : " + card.toString());
+    public void displayWallet(int gold) {
+        System.out.println("You have " + gold + " gold in your wallet");
     }
 
     @Override
@@ -46,7 +45,7 @@ public class View implements InterfaceView {
     }
 
     @Override
-    public int askBet(String message) {
+    public int askBet() {
         return enterInteger("How much do you want bet ? : ");
     }
 
