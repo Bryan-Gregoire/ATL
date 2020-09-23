@@ -24,12 +24,16 @@ public interface InterfaceView {
      */
     public void displayPlayerCards(List playerDeck); 
     
+    public void displayBankCards(List bankHand);
+    
     /**
      * Display the score of the player.
      * 
      * @param score the score.
      */
     public void displayScore(int score);
+    
+    public void displayBankScore(int score);
     
     public void displayWallet(int gold);
     

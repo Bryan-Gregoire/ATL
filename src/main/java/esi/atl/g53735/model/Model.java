@@ -29,4 +29,8 @@ public interface Model {
     public void loseGold(int gold);
 
     public int getGold();
+    
+    public int getGoldWithBet(int bet);
+    
+    public void resetScore();
 }

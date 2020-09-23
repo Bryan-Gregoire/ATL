@@ -21,8 +21,10 @@ public class Game implements Model {
         this.player = player;
         this.bank = bank;
         this.gameDeck = gameDeck;
+
+        
     }
-    
+
     @Override
     public Deck getGameDeck() {
         return this.gameDeck;
@@ -33,14 +35,24 @@ public class Game implements Model {
         return player;
     }
     
+    public void resetScore() {
+        player.resetScore();
+        bank.resetScore();
+    }
+
     @Override
     public Bank getBank() {
         return this.bank;
     }
-    
+
     @Override
     public int getGold() {
         return this.player.getGold();
+    }
+    
+    @Override
+    public int getGoldWithBet(int bet) {
+        return this.getPlayer().getGoldWithBet(bet);
     }
 
     @Override
@@ -58,25 +70,25 @@ public class Game implements Model {
     public boolean checkAbove21(Players players) {
         return players.getScore() > 21;
     }
-    
+
     @Override
     public boolean check21(Players players) {
-       return players.getScore() == 21;
+        return players.getScore() == 21;
     }
-    
+
     @Override
     public void resetCards(List<Card> hand, Deck gameDeck) {
-        for (int i = hand.size()-1; i > 0; i--) {
+        for (int i = hand.size() - 1; i > 0; i--) {
             Card card = hand.remove(i);
             gameDeck.getList().add(card);
         }
     }
-    
+
     @Override
     public void winGold(int gold) {
         this.player.winGold(gold);
     }
-    
+
     @Override
     public void loseGold(int gold) {
         this.player.loseGold(gold);

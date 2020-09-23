@@ -18,12 +18,16 @@ public class Player extends Players {
     public int getGold() {
         return gold;
     }
+    
+    public int getGoldWithBet(int bet){
+        return this.gold -= bet;
+    }
 
     public void winGold(int goldWin) {
-        this.gold = this.gold + goldWin;
+        this.gold += goldWin;
     }
 
     public void loseGold(int goldLose) {
-        this.gold = this.gold - goldLose;
+        this.gold -= goldLose;
     } 
 }

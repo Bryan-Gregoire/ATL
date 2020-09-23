@@ -18,10 +18,19 @@ public class View implements InterfaceView {
     public void displayScore(int score) {
         System.out.println("You have a score of : " + score);
     }
+    
+    public void displayBankScore(int score) {
+        System.out.println("The bank have a score of " + score);
+    }
 
     @Override
     public void displayPlayerCards(List playerHand) {
         System.out.println("The cards in your hand: " + playerHand.toString());
+    }
+    
+    @Override
+    public void displayBankCards(List bankHand) {
+        System.out.println("The cards of the bank : " + bankHand.toString());
     }
 
     @Override
@@ -61,10 +70,9 @@ public class View implements InterfaceView {
         System.out.println(message);
         String ask = keyboard.nextLine().toUpperCase();
         while (!"Y".equals(ask) && !"YES".equals(ask)
-                && !"N".equals(ask) && !"NO".equals(ask)
-                && !"NON".equals(ask)) {
+                && !"N".equals(ask) && !"NO".equals(ask)) {
             System.out.println("This is not correct");
-            System.out.println("Enter y/yes or n/no/non: ");
+            System.out.println("Enter y/yes or n/no: ");
             ask = keyboard.nextLine().toUpperCase();
         }
         return ask.toUpperCase().equals("Y") || ask.toUpperCase().equals("YES");

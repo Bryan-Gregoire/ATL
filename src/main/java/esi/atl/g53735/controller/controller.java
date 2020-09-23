@@ -24,20 +24,17 @@ public class Controller {
         while (!end) {
             int bet = 0;
             if (game.getGold() == 0) {
+                view.displayMessage("Game over, you are broke");
                 break;
             }
 
             if (newRound) {
-                view.displayWallet(game.getGold());
-                game.resetCards(game.getPlayer().getHand(), game.getGameDeck());
-                game.resetCards(game.getBank().getHand(), game.getGameDeck());
-                game.getGameDeck().shuffle();
-                game.beginHandPlayer();
                 bet = view.askBet();
-                while (bet > game.getGold()|| bet <= 0) {
+                while (bet > game.getGold() || bet <= 0) {
                     view.displayMessage("Not enough in the wallet");
                     bet = view.askBet();
                 }
+                beginNewRound(bet);
                 view.displayPossibleGain(bet);
                 newRound = false;
             }
@@ -46,31 +43,19 @@ public class Controller {
             view.displayScore(game.getPlayer().getScore());
             view.displayWallet(game.getGold());
 
-            if (game.checkAbove21(game.getPlayer())) {
-                view.displayMessage("you lose this round");
-                game.loseGold(bet);
-                view.displayWallet(game.getGold());
-                boolean again
-                        = view.askYesOrNo("Do you want to play again ? : ");
-                if (again) {
-                    newRound = true;
-                } else {
-                    break;
-                }
-            }
-
             if (!view.askTakeCard()) {
                 while (game.getBank().getScore() < 17) {
                     game.playerDrawCard(game.getBank());
                 }
+                view.displayBankCards(game.getBank().getHand());
+                view.displayBankScore(game.getBank().getScore());
                 if (game.checkAbove21(game.getBank()) || game.getPlayer()
                         .getScore() > game.getPlayer().getScore()) {
                     view.displayMessage("You won the round");
                     game.winGold(bet);
                     view.displayWallet(game.getGold());
-                    boolean again
-                            = view.askYesOrNo("Do you want to play again ? : ");
-                    if (again) {
+                    if (view.askYesOrNo("Do you want to play again ?"
+                            + "(y/yes or n/no) : ")) {
                         newRound = true;
                     } else {
                         end = true;
@@ -80,9 +65,8 @@ public class Controller {
                     view.displayMessage("The bank won this round");
                     game.loseGold(bet);
                     view.displayWallet(game.getGold());
-                    boolean again
-                            = view.askYesOrNo("Do you want to play again ? : ");
-                    if (again) {
+                    if (view.askYesOrNo("Do you want to play again ?"
+                            + "(y/yes or n/no) : ")) {
                         newRound = true;
                     } else {
                         end = true;
@@ -91,6 +75,28 @@ public class Controller {
             } else {
                 game.getPlayer().takeCard(game.getGameDeck());
             }
+            if (game.checkAbove21(game.getPlayer())) {
+                view.displayMessage("you lose this round");
+                game.loseGold(bet);
+                view.displayWallet(game.getGold());
+                boolean again
+                        = view.askYesOrNo("Do you want to play again ?"
+                                + "(y/yes or n/no) : ");
+                if (again) {
+                    newRound = true;
+                } else {
+                    end = true;
+                }
+            }
         }
+    }
+
+    public void beginNewRound(int bet) {
+        view.displayWallet(game.getGoldWithBet(bet));
+        game.resetCards(game.getPlayer().getHand(), game.getGameDeck());
+        game.resetCards(game.getBank().getHand(), game.getGameDeck());
+        game.getGameDeck().shuffle();
+        game.resetScore();
+        game.beginHandPlayer();
     }
 }
