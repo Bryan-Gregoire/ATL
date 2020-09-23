@@ -34,7 +34,7 @@ public class Controller {
                 game.getGameDeck().shuffle();
                 game.beginHandPlayer();
                 bet = view.askBet();
-                while (bet > game.getGold()) {
+                while (bet > game.getGold()|| bet <= 0) {
                     view.displayMessage("Not enough in the wallet");
                     bet = view.askBet();
                 }
@@ -48,6 +48,7 @@ public class Controller {
 
             if (game.checkAbove21(game.getPlayer())) {
                 view.displayMessage("you lose this round");
+                game.loseGold(bet);
                 view.displayWallet(game.getGold());
                 boolean again
                         = view.askYesOrNo("Do you want to play again ? : ");

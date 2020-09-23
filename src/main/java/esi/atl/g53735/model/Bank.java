@@ -11,4 +11,6 @@ public class Bank extends Players {
     public Bank(List<Card> hand) {
         super(hand, 0);
     }
+    
+    
 }
