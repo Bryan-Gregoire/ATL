@@ -23,7 +23,7 @@ public class Controller {
         boolean newRound = true;
         while (!end) {
             int bet = 0;
-            if (game.getGold() == 0) {
+            if (game.getGold() <= 0) {
                 view.displayMessage("Game over, you are broke");
                 break;
             }
@@ -37,13 +37,16 @@ public class Controller {
                 beginNewRound(bet);
                 view.displayPossibleGain(bet);
                 newRound = false;
+            } else {
+                view.displayWallet(game.getGold());
             }
 
             view.displayPlayerCards(game.getPlayer().getHand());
             view.displayScore(game.getPlayer().getScore());
-            view.displayWallet(game.getGold());
 
-            if (!view.askTakeCard()) {
+            if (view.askTakeCard()) {
+                game.getPlayer().takeCard(game.getGameDeck());
+            } else {
                 while (game.getBank().getScore() < 17) {
                     game.playerDrawCard(game.getBank());
                 }
@@ -58,7 +61,7 @@ public class Controller {
                             + "(y/yes or n/no) : ")) {
                         newRound = true;
                     } else {
-                        end = true;
+                        break;
                     }
                 } else if (game.getPlayer().getScore()
                         <= game.getBank().getScore()) {
@@ -69,20 +72,16 @@ public class Controller {
                             + "(y/yes or n/no) : ")) {
                         newRound = true;
                     } else {
-                        end = true;
+                        break;
                     }
                 }
-            } else {
-                game.getPlayer().takeCard(game.getGameDeck());
             }
             if (game.checkAbove21(game.getPlayer())) {
-                view.displayMessage("you lose this round");
+                view.displayMessage("you lost this round");
                 game.loseGold(bet);
                 view.displayWallet(game.getGold());
-                boolean again
-                        = view.askYesOrNo("Do you want to play again ?"
-                                + "(y/yes or n/no) : ");
-                if (again) {
+                if (view.askYesOrNo("Do you want to play again ?"
+                        + "(y/yes or n/no) : ")) {
                     newRound = true;
                 } else {
                     end = true;
