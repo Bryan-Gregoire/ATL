@@ -9,43 +9,42 @@ import esi.atl.g53735.view.View;
  * @author g53735
  */
 public class Controller {
-
+    
     private final Model game;
     private final InterfaceView view;
-
+    
     public Controller(Model game, View interfaceView) {
         this.game = game;
         this.view = interfaceView;
     }
-
+    
     public void startGame() {
         boolean end = false;
         boolean newRound = true;
         while (!end) {
-            int bet = 0;
             if (game.getGold() <= 0) {
                 view.displayMessage("Game over, you are broke");
                 break;
             }
-
+            
             if (newRound) {
-                bet = view.askBet();
-                while (bet > game.getGold() || bet <= 0) {
-                    view.displayMessage("Not enough in the wallet");
-                    bet = view.askBet();
+                game.setBet(view.askBet());
+                while (game.getBet() > game.getGold() || game.getBet() <= 0) {
+                    view.displayMessage("The bet is not correct");
+                    game.setBet(view.askBet());
                 }
-                beginNewRound(bet);
-                view.displayPossibleGain(bet);
+                beginNewRound(game.getBet());
+                view.displayPossibleGain(game.getBet());
                 newRound = false;
             } else {
-                view.displayWallet(game.getGold());
+                view.displayWalletMinusBet(game.getGold(), game.getBet());
             }
-
+            
             view.displayPlayerCards(game.getPlayer().getHand());
             view.displayScore(game.getPlayer().getScore());
-
+            
             if (view.askTakeCard()) {
-                game.getPlayer().takeCard(game.getGameDeck());
+                game.playerDrawCard(game.getPlayer());
             } else {
                 while (game.getBank().getScore() < 17) {
                     game.playerDrawCard(game.getBank());
@@ -53,9 +52,9 @@ public class Controller {
                 view.displayBankCards(game.getBank().getHand());
                 view.displayBankScore(game.getBank().getScore());
                 if (game.checkAbove21(game.getBank()) || game.getPlayer()
-                        .getScore() > game.getPlayer().getScore()) {
+                        .getScore() > game.getBank().getScore()) {
                     view.displayMessage("You won the round");
-                    game.winGold(bet);
+                    game.winGold();
                     view.displayWallet(game.getGold());
                     if (view.askYesOrNo("Do you want to play again ?"
                             + "(y/yes or n/no) : ")) {
@@ -66,7 +65,7 @@ public class Controller {
                 } else if (game.getPlayer().getScore()
                         <= game.getBank().getScore()) {
                     view.displayMessage("The bank won this round");
-                    game.loseGold(bet);
+                    game.loseGold();
                     view.displayWallet(game.getGold());
                     if (view.askYesOrNo("Do you want to play again ?"
                             + "(y/yes or n/no) : ")) {
@@ -78,7 +77,7 @@ public class Controller {
             }
             if (game.checkAbove21(game.getPlayer())) {
                 view.displayMessage("you lost this round");
-                game.loseGold(bet);
+                game.loseGold();
                 view.displayWallet(game.getGold());
                 if (view.askYesOrNo("Do you want to play again ?"
                         + "(y/yes or n/no) : ")) {
@@ -88,10 +87,11 @@ public class Controller {
                 }
             }
         }
+        view.displayMessage("GAME OVER, Thanks for playing");
     }
-
+    
     public void beginNewRound(int bet) {
-        view.displayWallet(game.getGoldWithBet(bet));
+        view.displayWalletMinusBet(game.getGold(), bet);
         game.resetCards(game.getPlayer().getHand(), game.getGameDeck());
         game.resetCards(game.getBank().getHand(), game.getGameDeck());
         game.getGameDeck().shuffle();

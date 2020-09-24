@@ -37,6 +37,8 @@ public interface InterfaceView {
     
     public void displayWallet(int gold);
     
+    public void displayWalletMinusBet(int wallet, int bet);
+    
     /**
      * Ask yes or no.
      * 

@@ -22,15 +22,17 @@ public interface Model {
 
     public void resetCards(List<Card> hand, Deck gameDeck);
 
-    public boolean check21(Players players);
+    public boolean checkIs21(Players players);
 
-    public void winGold(int gold);
+    public void winGold();
 
-    public void loseGold(int gold);
+    public void loseGold();
 
     public int getGold();
+
+    public void setBet(int bet);
     
-    public int getGoldWithBet(int bet);
+    public int getBet();
     
     public void resetScore();
 }

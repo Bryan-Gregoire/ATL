@@ -19,10 +19,6 @@ public class Player extends Players {
         return gold;
     }
     
-    public int getGoldWithBet(int bet){
-        return this.gold -= bet;
-    }
-
     public void winGold(int goldWin) {
         this.gold += goldWin;
     }

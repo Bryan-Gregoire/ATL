@@ -19,6 +19,7 @@ public class View implements InterfaceView {
         System.out.println("You have a score of : " + score);
     }
     
+    @Override
     public void displayBankScore(int score) {
         System.out.println("The bank have a score of " + score);
     }
@@ -36,6 +37,11 @@ public class View implements InterfaceView {
     @Override
     public void displayWallet(int gold) {
         System.out.println("You have " + gold + " gold in your wallet");
+    }
+    
+    @Override
+    public void displayWalletMinusBet(int wallet, int bet) {
+        System.out.println("You have " + (wallet-bet) + " gold in your wallet");
     }
 
     @Override
