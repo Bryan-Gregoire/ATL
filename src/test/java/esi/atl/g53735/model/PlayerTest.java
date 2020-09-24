@@ -10,9 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class PlayerTest {
 
-    public PlayerTest() {
-    }
-
+    
     /**
      * Test of getGold method, of class Player.
      */

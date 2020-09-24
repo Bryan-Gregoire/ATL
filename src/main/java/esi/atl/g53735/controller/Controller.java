@@ -46,7 +46,7 @@ public class Controller {
                     view.displayMessage("The bet is not correct");
                     game.setBet(view.askBet());
                 }
-                beginNewRound(game.getBet());
+                beginNewRound();
                 view.displayPossibleGain(game.getBet());
                 newRound = false;
             } else {
@@ -109,8 +109,8 @@ public class Controller {
      *
      * @param bet the given bet.
      */
-    public void beginNewRound(int bet) {
-        view.displayWalletMinusBet(game.getGold(), bet);
+    public void beginNewRound() {
+        view.displayWalletMinusBet(game.getGold(), game.getBet());
         game.resetCards(game.getPlayer().getHand(), game.getGameDeck());
         game.resetCards(game.getBank().getHand(), game.getGameDeck());
         game.getGameDeck().shuffle();

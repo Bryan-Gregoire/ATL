@@ -1,5 +1,6 @@
-package esi.atl.g53735.controller;
+package esi.atl.g53735.main;
 
+import esi.atl.g53735.controller.Controller;
 import esi.atl.g53735.model.Bank;
 import esi.atl.g53735.model.Deck;
 import esi.atl.g53735.model.Game;

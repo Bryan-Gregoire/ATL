@@ -140,7 +140,7 @@ public class Game implements Model {
      */
     @Override
     public void resetCards(List<Card> hand, Deck gameDeck) {
-        for (int i = hand.size() - 1; i > 0; i--) {
+        for (int i = hand.size() - 1; i >= 0; i--) {
             Card card = hand.remove(i);
             gameDeck.getList().add(card);
         }
