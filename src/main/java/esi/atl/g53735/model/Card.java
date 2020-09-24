@@ -52,6 +52,12 @@ public class Card {
         return value + " of " + color;
     }
 
+    /**
+     * The value of a card.
+     * 
+     * @param value the value.
+     * @return the value.
+     */
     public int valueOfCard(Value value) {
         switch (value) {
             case ACE:

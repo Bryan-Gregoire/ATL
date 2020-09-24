@@ -8,7 +8,8 @@ import esi.atl.g53735.view.View;
 import java.util.ArrayList;
 
 /**
- *
+ * The main
+ * 
  * @author Utilisateur
  */
 public class Main {

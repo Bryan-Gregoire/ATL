@@ -14,6 +14,12 @@ public interface Model {
 
     public Bank getBank();
 
+    public int getGold();
+
+    public int getBet();
+
+    public void setBet(int bet);
+
     public void beginHandPlayer();
 
     public void playerDrawCard(Players players);
@@ -22,17 +28,9 @@ public interface Model {
 
     public void resetCards(List<Card> hand, Deck gameDeck);
 
-    public boolean checkIs21(Players players);
-
     public void winGold();
 
     public void loseGold();
 
-    public int getGold();
-
-    public void setBet(int bet);
-    
-    public int getBet();
-    
     public void resetScore();
 }
