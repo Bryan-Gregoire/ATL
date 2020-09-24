@@ -1,6 +1,5 @@
 package esi.atl.g53735.model;
 
-import esi.atl.g53735.model.Card;
 import java.util.ArrayList;
 import java.util.Collections;
 

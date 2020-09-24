@@ -32,6 +32,8 @@ public class Controller {
     public void startGame() {
         boolean end = false;
         boolean newRound = true;
+        view.displayMessage("Welcome to the game Blackjack");
+        view.displayWallet(game.getGold());
         while (!end) {
             if (game.getGold() <= 0) {
                 view.displayMessage("GAME OVER, you are broke");
