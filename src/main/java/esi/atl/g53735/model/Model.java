@@ -39,4 +39,6 @@ public interface Model {
     public boolean notCorrectBet();
 
     public void startOfRound();
+
+    public boolean bankScoreUnder17();
 }

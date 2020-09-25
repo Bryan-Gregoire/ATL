@@ -57,7 +57,7 @@ public class Controller {
                 if (view.askTakeCard()) {
                     game.playerDrawCard(game.getPlayer());
                 } else {
-                    while (game.getBank().getScore() < 17) {
+                    while (game.bankScoreUnder17()) {   
                         game.playerDrawCard(game.getBank());
                     }
                     view.displayBankCards(game.getBank().getHand());

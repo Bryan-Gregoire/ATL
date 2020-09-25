@@ -183,6 +183,10 @@ public class Game implements Model {
         return this.bet > getGold() || getBet() <= 0;
     }
 
+    /**
+     * Start of a round.
+     * 
+     */
     @Override
     public void startOfRound() {
         resetCards(this.player.getHand(), this.gameDeck);
@@ -190,5 +194,15 @@ public class Game implements Model {
         this.gameDeck.shuffle();
         resetScore();
         beginHandPlayer();
+    }
+
+    /**
+     * Check if the scre of the bank is under 17.
+     * 
+     * @return true if bank has a score under 17 else false.
+     */
+    @Override
+    public boolean bankScoreUnder17() {
+        return bank.getScore() < 17;
     }
 }
