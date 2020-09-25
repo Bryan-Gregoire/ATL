@@ -17,4 +17,9 @@ public class Bank extends Players {
     public Bank(List<Card> hand) {
         super(hand, 0);
     }
+
+    @Override
+    public String toString() {
+        return "Bank";
+    }
 }

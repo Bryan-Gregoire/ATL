@@ -41,4 +41,6 @@ public interface Model {
     public void startOfRound();
 
     public boolean bankScoreUnder17();
+    
+    public boolean checkPlayerWin();
 }

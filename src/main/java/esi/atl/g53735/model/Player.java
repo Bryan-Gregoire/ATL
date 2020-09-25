@@ -47,4 +47,9 @@ public class Player extends Players {
     public void loseGold(int goldLose) {
         this.gold -= goldLose;
     }
+
+    @Override
+    public String toString() {
+        return "You";
+    }
 }

@@ -185,7 +185,7 @@ public class Game implements Model {
 
     /**
      * Start of a round.
-     * 
+     *
      */
     @Override
     public void startOfRound() {
@@ -198,11 +198,22 @@ public class Game implements Model {
 
     /**
      * Check if the scre of the bank is under 17.
-     * 
+     *
      * @return true if bank has a score under 17 else false.
      */
     @Override
     public boolean bankScoreUnder17() {
         return bank.getScore() < 17;
+    }
+
+    /**
+     * Check if the player won the round.
+     *
+     * @return true if the player won else false.
+     */
+    @Override
+    public boolean checkPlayerWin() {
+        return checkAbove21(this.bank)
+                || this.player.getScore() > this.bank.getScore();
     }
 }

@@ -52,29 +52,13 @@ public class Controller {
                 }
 
                 view.displayPlayerCards(game.getPlayer().getHand());
-                view.displayScore(game.getPlayer().getScore());
+                view.displayScore(game.getPlayer());
 
                 if (view.askTakeCard()) {
                     game.playerDrawCard(game.getPlayer());
-                } else {
-                    while (game.bankScoreUnder17()) {   
-                        game.playerDrawCard(game.getBank());
-                    }
-                    view.displayBankCards(game.getBank().getHand());
-                    view.displayBankScore(game.getBank().getScore());
-                    if (game.checkAbove21(game.getBank()) || game.getPlayer()
-                            .getScore() > game.getBank().getScore()) {
-                        view.displayMessage("You won the round");
-                        game.winGold();
-                        view.displayWallet(game.getGold());
-                        if (view.askYesOrNo("Do you want to play again ?"
-                                + "(y/yes or n/no) : ")) {
-                            newRound = true;
-                        } else {
-                            break;
-                        }
-                    } else if (game.getPlayer().getScore()
-                            <= game.getBank().getScore()) {
+                    if (game.checkAbove21(game.getPlayer())) {
+                        view.displayPlayerCards(game.getPlayer().getHand());
+                        view.displayScore(game.getPlayer());
                         view.displayMessage("The bank won this round");
                         game.loseGold();
                         view.displayWallet(game.getGold());
@@ -82,19 +66,35 @@ public class Controller {
                                 + "(y/yes or n/no) : ")) {
                             newRound = true;
                         } else {
-                            break;
+                            end = true;
                         }
                     }
-                }
-                if (game.checkAbove21(game.getPlayer())) {
-                    view.displayMessage("you lost this round");
-                    game.loseGold();
-                    view.displayWallet(game.getGold());
-                    if (view.askYesOrNo("Do you want to play again ?"
-                            + "(y/yes or n/no) : ")) {
-                        newRound = true;
+                } else {
+                    while (game.bankScoreUnder17()) {
+                        game.playerDrawCard(game.getBank());
+                    }
+                    view.displayBankCards(game.getBank().getHand());
+                    view.displayScore(game.getBank());
+                    if (game.checkPlayerWin()) {
+                        view.displayMessage("You won the round");
+                        game.winGold();
+                        view.displayWallet(game.getGold());
+                        if (view.askYesOrNo("Do you want to play again ?"
+                                + "(y/yes or n/no) : ")) {
+                            newRound = true;
+                        } else {
+                            end = true;
+                        }
                     } else {
-                        end = true;
+                        view.displayMessage("The bank won this round");
+                        game.loseGold();
+                        view.displayWallet(game.getGold());
+                        if (view.askYesOrNo("Do you want to play again ?"
+                                + "(y/yes or n/no) : ")) {
+                            newRound = true;
+                        } else {
+                            end = true;
+                        }
                     }
                 }
             }
