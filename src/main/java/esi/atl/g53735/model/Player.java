@@ -48,6 +48,11 @@ public class Player extends Players {
         this.gold -= goldLose;
     }
 
+    /**
+     * A string that represent the player.
+     * 
+     * @return the string. 
+     */
     @Override
     public String toString() {
         return "You";

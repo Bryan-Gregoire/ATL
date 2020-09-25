@@ -18,6 +18,11 @@ public class Bank extends Players {
         super(hand, 0);
     }
 
+    /**
+     * String represent the bank.
+     * 
+     * @return the string.
+     */
     @Override
     public String toString() {
         return "Bank";
