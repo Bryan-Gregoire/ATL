@@ -33,4 +33,10 @@ public interface Model {
     public void loseGold();
 
     public void resetScore();
+
+    public boolean checkBroke();
+
+    public boolean notCorrectBet();
+
+    public void startOfRound();
 }

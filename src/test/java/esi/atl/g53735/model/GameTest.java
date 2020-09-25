@@ -1,7 +1,6 @@
 package esi.atl.g53735.model;
 
 import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -316,5 +315,97 @@ public class GameTest {
         int result = instance.getGold();
         int expResult = 750;
         assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of che checkBroke method, of class Game.
+     */
+    @Test
+    public void testcheckBroke() {
+        Game instance = new Game(player, bank, gameDeck);
+        boolean result = instance.checkBroke();
+        assertFalse(result);
+    }
+
+    /**
+     * Test of che checkBroke method, of class Game.
+     */
+    @Test
+    public void testcheckBroke2() {
+        Game instance = new Game(player, bank, gameDeck);
+        instance.setBet(500);
+        instance.loseGold();
+        boolean result = instance.checkBroke();
+        assertFalse(result);
+    }
+
+    /**
+     * Test of che checkBroke method, of class Game.
+     */
+    @Test
+    public void testcheckBroke3() {
+        Game instance = new Game(player, bank, gameDeck);
+        instance.setBet(1000);
+        instance.loseGold();
+        boolean result = instance.checkBroke();
+        assertTrue(result);
+    }
+
+    /**
+     * Test of che checkBroke method, of class Game.
+     */
+    @Test
+    public void testcheckBroke4() {
+        Game instance = new Game(player, bank, gameDeck);
+        instance.setBet(25000);
+        instance.loseGold();
+        boolean result = instance.checkBroke();
+        assertTrue(result);
+    }
+
+    /**
+     * Test of che NotCorrectBet method, of class Game.
+     */
+    @Test
+    public void testNotCorrectBet() {
+        Game instance = new Game(player, bank, gameDeck);
+        instance.setBet(999);
+        boolean result = instance.notCorrectBet();
+        assertFalse(result);
+    }
+
+    /**
+     * Test of che NotCorrectBet method, of class Game.
+     */
+    @Test
+    public void testNotCorrectBet2() {
+        Game instance = new Game(player, bank, gameDeck);
+        instance.setBet(0);
+        boolean result = instance.notCorrectBet();
+        assertTrue(result);
+    }
+
+    /**
+     * Test of che NotCorrectBet method, of class Game.
+     */
+    @Test
+    public void testNotCorrectBet3() {
+        Game instance = new Game(player, bank, gameDeck);
+        instance.setBet(1500);
+        boolean result = instance.notCorrectBet();
+        assertTrue(result);
+    }
+    
+    /**
+     * Test of che NotCorrectBet method, of class Game.
+     */
+    @Test
+    public void testNotCorrectBet4() {
+        Game instance = new Game(player, bank, gameDeck);
+        instance.setBet(750);
+        instance.loseGold();
+        instance.setBet(500);
+        boolean result = instance.notCorrectBet();
+        assertTrue(result);
     }
 }

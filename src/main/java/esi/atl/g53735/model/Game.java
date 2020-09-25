@@ -20,7 +20,7 @@ public class Game implements Model {
 
     /**
      * Constructor of the Game.
-     * 
+     *
      * @param player player of the game.
      * @param bank the bank of the game.
      * @param gameDeck the game deck.
@@ -34,8 +34,8 @@ public class Game implements Model {
 
     /**
      * Get the game deck.
-     * 
-     * @return the deck. 
+     *
+     * @return the deck.
      */
     @Override
     public Deck getGameDeck() {
@@ -44,8 +44,8 @@ public class Game implements Model {
 
     /**
      * Get the player of the game.
-     * 
-     * @return the player. 
+     *
+     * @return the player.
      */
     @Override
     public Player getPlayer() {
@@ -54,8 +54,8 @@ public class Game implements Model {
 
     /**
      * Get the bet.
-     * 
-     * @return the bet. 
+     *
+     * @return the bet.
      */
     @Override
     public int getBet() {
@@ -64,8 +64,8 @@ public class Game implements Model {
 
     /**
      * Set a bet.
-     * 
-     * @param bet the bet. 
+     *
+     * @param bet the bet.
      */
     @Override
     public void setBet(int bet) {
@@ -74,7 +74,7 @@ public class Game implements Model {
 
     /**
      * Reset the score of the player and the bank.
-     * 
+     *
      */
     @Override
     public void resetScore() {
@@ -84,7 +84,7 @@ public class Game implements Model {
 
     /**
      * Get the bank.
-     * 
+     *
      * @return the bank.
      */
     @Override
@@ -94,7 +94,7 @@ public class Game implements Model {
 
     /**
      * Get the money of the player.
-     * 
+     *
      * @return the money.
      */
     @Override
@@ -113,8 +113,8 @@ public class Game implements Model {
 
     /**
      * Make the player draw a card.
-     * 
-     * @param players the player who draws. 
+     *
+     * @param players the player who draws.
      */
     @Override
     public void playerDrawCard(Players players) {
@@ -123,7 +123,7 @@ public class Game implements Model {
 
     /**
      * Check if the score of the player is above 21.
-     * 
+     *
      * @param players the given player.
      * @return true if it is above 21 else false.
      */
@@ -134,7 +134,7 @@ public class Game implements Model {
 
     /**
      * Return the player and bank cards to the game deck.
-     * 
+     *
      * @param hand the cards of the player.
      * @param gameDeck the deck of the game.
      */
@@ -161,5 +161,34 @@ public class Game implements Model {
     @Override
     public void loseGold() {
         this.player.loseGold(this.bet);
+    }
+
+    /**
+     * Check if the player has money.
+     *
+     * @return true if the player has no money else false.
+     */
+    @Override
+    public boolean checkBroke() {
+        return player.getGold() <= 0;
+    }
+
+    /**
+     * Check if the bet is correct.
+     *
+     * @return true if the bet is not correct else false.
+     */
+    @Override
+    public boolean notCorrectBet() {
+        return this.bet > getGold() || getBet() <= 0;
+    }
+
+    @Override
+    public void startOfRound() {
+        resetCards(this.player.getHand(), this.gameDeck);
+        resetCards(this.bank.getHand(), this.gameDeck);
+        this.gameDeck.shuffle();
+        resetScore();
+        beginHandPlayer();
     }
 }
