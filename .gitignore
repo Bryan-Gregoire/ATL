@@ -8,3 +8,5 @@ nbdist/
 nbactions.xml
 nb-configuration.xml
 /Blackjack/nbproject/
+/Blackjack/target/
+/AsciiPaint/target/
