@@ -30,5 +30,7 @@ public class AsciPaint {
         drawing.addShapeAt(new Square(new Point(x, y), side, color));
     }
     
-    
+//    public String asAscii() {
+//        
+//    }
 }

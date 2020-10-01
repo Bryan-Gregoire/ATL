@@ -14,20 +14,16 @@ public class Point {
         this.y = y;
     }
 
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public Point move(double dx, double dy) {
+    public void move(double dx, double dy) {
         x += dx;
         y += dy;
-        return this;
     }
 
+//    public double distanceTo(Point other) {
+//        
+//    }
+    
+    
     @Override
     public String toString() {
         return "(" + x + ", " + y + ")";
