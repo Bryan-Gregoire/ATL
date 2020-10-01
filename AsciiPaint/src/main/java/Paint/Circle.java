@@ -2,24 +2,28 @@ package Paint;
 
 /**
  * Represent a circle.
- * 
+ *
  * @author g53735
  */
-public class Circle implements Shape {
-
+public class Circle extends ColoredShape {
+    
+    private Point center;
+    private double radius;
+    
+    public Circle(Point center, double radius, char color) {
+        super(color);
+        this.center = center;
+        this.radius = radius;
+    }
+    
     @Override
     public void move(double dx, double dy) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.center.move(dx, dy);
     }
-
+    
     @Override
     public boolean isInside(Point p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public char getColor() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.center.equals(p);
     }
     
 }

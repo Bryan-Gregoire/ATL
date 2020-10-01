@@ -1,5 +1,6 @@
 package Paint;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,10 +14,37 @@ public class Drawing {
     private final int height;
     private final int weight;
 
-    public Drawing(int height, int weight, List<Shape> shapes) {
+    public Drawing(int height, int weight) {
         this.height = height;
         this.weight = weight;
-        this.shapes = shapes;
+        this.shapes = new ArrayList<>();
+    }
+
+    public Drawing() {
+        this.height = 0;
+        this.weight = 0;
+        this.shapes = new ArrayList<>();
+    }
+
+    int getHeight() {
+        return height;
+    }
+
+    int getWeight() {
+        return weight;
+    }
+
+    public void addShapeAt(Shape shape) {
+        this.shapes.add(shape);
+    }
+
+    public Shape getShape(Point p) {
+        for (Shape shape : shapes) {
+            if (shape.equals(p)) {
+                return shape;
+            }
+        }
+        return null;
     }
 
     public void drawing() {
@@ -24,10 +52,13 @@ public class Drawing {
             for (int j = 0; j < weight; j++) {
                 for (Shape shape : shapes) {
                     if (shape.isInside(new Point(i, j))) {
-
+                        System.out.println(shape.getColor());
+                    } else {
+                        System.out.println(" ");
                     }
                 }
             }
+            System.out.println("");
         }
     }
 
