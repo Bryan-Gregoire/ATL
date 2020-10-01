@@ -11,11 +11,11 @@ public class Rectangle extends ColoredShape {
     private double width;
     private double height;
 
-    public Rectangle(Point upperLeft, double width, double height, char color) {
+    public Rectangle(Point upperLeft, double height, double width, char color) {
         super(color);
         this.upperLeft = upperLeft;
-        this.width = width;
         this.height = height;
+        this.width = width;
     }
 
     @Override

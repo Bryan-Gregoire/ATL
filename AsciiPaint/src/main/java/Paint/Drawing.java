@@ -12,17 +12,17 @@ public class Drawing {
 
     private final List<Shape> shapes;
     private final int height;
-    private final int weight;
+    private final int width;
 
-    public Drawing(int height, int weight) {
+    public Drawing(int height, int width) {
         this.height = height;
-        this.weight = weight;
+        this.width = width;
         this.shapes = new ArrayList<>();
     }
 
     public Drawing() {
-        this.height = 0;
-        this.weight = 0;
+        this.height = 5;
+        this.width = 5;
         this.shapes = new ArrayList<>();
     }
 
@@ -30,8 +30,8 @@ public class Drawing {
         return height;
     }
 
-    int getWeight() {
-        return weight;
+    int getWidth() {
+        return width;
     }
 
     public void addShapeAt(Shape shape) {
@@ -49,7 +49,7 @@ public class Drawing {
 
     public void drawing() {
         for (int i = 0; i < height; i++) {
-            for (int j = 0; j < weight; j++) {
+            for (int j = 0; j < width; j++) {
                 for (Shape shape : shapes) {
                     if (shape.isInside(new Point(i, j))) {
                         System.out.println(shape.getColor());
