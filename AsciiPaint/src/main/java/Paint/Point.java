@@ -1,5 +1,7 @@
 package Paint;
 
+import java.lang.Math;
+
 /**
  *
  * @author g53735
@@ -19,10 +21,18 @@ public class Point {
         y += dy;
     }
 
-//    public double distanceTo(Point other) {
-//        
-//    }
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
     
+    public double distanceTo(Point other) {
+        return Math.sqrt(
+                Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
+    }
     
     @Override
     public String toString() {

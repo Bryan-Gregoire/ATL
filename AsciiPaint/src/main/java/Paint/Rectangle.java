@@ -25,6 +25,6 @@ public class Rectangle extends ColoredShape {
 
     @Override
     public boolean isInside(Point p) {
-        return this.upperLeft.equals(p);
+        return true;
     }
 }
