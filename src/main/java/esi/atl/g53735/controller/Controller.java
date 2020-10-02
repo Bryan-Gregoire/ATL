@@ -70,6 +70,7 @@ public class Controller {
                         }
                     }
                 } else {
+                    //@pbt ça, ça doit être dans le modèle
                     while (game.bankScoreUnder17()) {
                         game.playerDrawCard(game.getBank());
                     }

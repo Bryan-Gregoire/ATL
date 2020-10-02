@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) {
+        //@pbt ce doit être bcp plus lisible
         Controller controller = new Controller(new Game(new Player
         (new ArrayList<>()),
                 new Bank(new ArrayList<>()), new Deck()), new View());

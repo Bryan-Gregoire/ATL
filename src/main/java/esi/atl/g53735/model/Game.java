@@ -212,3 +212,5 @@ public class Game implements Model {
                 || this.player.getScore() > this.bank.getScore();
     }
 }
+
+//@pbt le modèle n'est pas assez « défensif » / privé

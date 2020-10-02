@@ -25,6 +25,7 @@ public class Deck {
         }
     }
    
+    //@pbt est-ce pertinent de donner la liste de cartes ? (defensive)
     public ArrayList<Card> getList() {
         return list;
     }

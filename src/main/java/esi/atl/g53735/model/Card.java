@@ -6,6 +6,8 @@ package esi.atl.g53735.model;
  * @author Utilisateur
  */
 public class Card {
+    
+    //@ptb imutable
 
     private Color color;
     private Value value;
@@ -59,6 +61,7 @@ public class Card {
      * @return the value.
      */
     public int valueOfCard(Value value) {
+        //@pbt dans value
         switch (value) {
             case ACE:
                 return 1;
