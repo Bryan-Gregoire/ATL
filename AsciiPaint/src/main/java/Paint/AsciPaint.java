@@ -29,8 +29,19 @@ public class AsciPaint {
     public void newSquare(int x, int y, double side, char color) {
         drawing.addShapeAt(new Square(new Point(x, y), side, color));
     }
-    
-//    public String asAscii() {
-//        
-//    }
+
+    public String asAscii() {
+        String draw = "";
+        for (int i = 0; i < drawing.getHeight(); i++) {
+            for (int j = 0; j < drawing.getWidth(); j++) {
+                Shape shape = drawing.getShape(new Point(i, j));
+                if (shape == null) {
+                    draw += " ";
+                } else {
+                    draw += shape.getColor();
+                }
+            }
+        }
+        return draw;
+    }
 }

@@ -40,7 +40,7 @@ public class Drawing {
 
     public Shape getShape(Point p) {
         for (Shape shape : shapes) {
-            if (shape.equals(p)) {
+            if (shape.isInside(p)) {
                 return shape;
             }
         }

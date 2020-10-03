@@ -25,6 +25,9 @@ public class Rectangle extends ColoredShape {
 
     @Override
     public boolean isInside(Point p) {
-        return true;
+        return (this.upperLeft.getX() <= p.getX()
+                && (this.upperLeft.getX() + this.width) >= p.getX())
+                && (this.upperLeft.getY() <= p.getY()
+                && ((this.upperLeft.getY() + this.height) >= p.getY()));
     }
 }
