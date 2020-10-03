@@ -21,8 +21,8 @@ public class Drawing {
     }
 
     public Drawing() {
-        this.height = 5;
-        this.width = 5;
+        this.height = 50;
+        this.width = 50;
         this.shapes = new ArrayList<>();
     }
 
@@ -45,21 +45,6 @@ public class Drawing {
             }
         }
         return null;
-    }
-
-    public void drawing() {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                for (Shape shape : shapes) {
-                    if (shape.isInside(new Point(i, j))) {
-                        System.out.println(shape.getColor());
-                    } else {
-                        System.out.println(" ");
-                    }
-                }
-            }
-            System.out.println("");
-        }
     }
 
 }
