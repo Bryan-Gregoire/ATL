@@ -1,8 +1,8 @@
-package Paint;
+package esi.atl.g53735.Model;
 
 /**
  *
- * @author Utilisateur
+ * @author g53735
  */
 public abstract class ColoredShape implements Shape {
 

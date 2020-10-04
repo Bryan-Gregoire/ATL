@@ -1,4 +1,4 @@
-package Paint;
+package esi.atl.g53735.Model;
 
 /**
  * Represent a square.
@@ -11,4 +11,8 @@ public class Square extends Rectangle {
         super(upperLeft, side, side, color);
     }
 
+    @Override
+    public String toString() {
+        return "square";
+    }  
 }

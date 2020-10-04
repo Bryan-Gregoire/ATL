@@ -1,4 +1,4 @@
-package Paint;
+package esi.atl.g53735.Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +21,8 @@ public class Drawing {
     }
 
     public Drawing() {
-        this.height = 50;
-        this.width = 50;
+        this.height = 30;
+        this.width = 30;
         this.shapes = new ArrayList<>();
     }
 
@@ -38,7 +38,7 @@ public class Drawing {
         this.shapes.add(shape);
     }
 
-    public Shape getShape(Point p) {
+    public Shape getShapeAt(Point p) {
         for (Shape shape : shapes) {
             if (shape.isInside(p)) {
                 return shape;
@@ -46,5 +46,4 @@ public class Drawing {
         }
         return null;
     }
-
 }

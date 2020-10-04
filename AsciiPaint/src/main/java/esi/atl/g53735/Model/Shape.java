@@ -1,4 +1,4 @@
-package Paint;
+package esi.atl.g53735.Model;
 
 
 

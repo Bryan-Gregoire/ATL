@@ -1,4 +1,4 @@
-package Paint;
+package esi.atl.g53735.Model;
 
 /**
  * Represent the rectangle.
@@ -30,4 +30,10 @@ public class Rectangle extends ColoredShape {
                 && (this.upperLeft.getY() <= p.getY()
                 && ((this.upperLeft.getY() + this.height) >= p.getY()));
     }
+
+    @Override
+    public String toString() {
+        return "rectangle";
+    }
+
 }
