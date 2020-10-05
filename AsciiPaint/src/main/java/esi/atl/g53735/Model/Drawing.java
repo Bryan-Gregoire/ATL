@@ -20,7 +20,7 @@ public class Drawing {
      */
     public Drawing() {
         this.height = 20;
-        this.width = 20;
+        this.width = 50;
         this.shapes = new ArrayList<>();
     }
 

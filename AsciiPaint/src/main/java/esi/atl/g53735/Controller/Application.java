@@ -12,9 +12,9 @@ import java.util.Scanner;
  */
 public class Application {
 
-    private Model paint;
-    private InterfaceView view;
-    private Scanner keyboard;
+    private final Model paint;
+    private final InterfaceView view;
+    private final Scanner keyboard;
 
     public Application(View interfaceView) {
         this.paint = new AsciiPaint();
@@ -23,36 +23,35 @@ public class Application {
     }
 
     public void start() {
-        view.displayMessage("what shape do you want to add? "
-                + "(Rectangle, square or circle)");
+        view.displayMessage("what shapes do you want to add? "
+                + "(Rectangles, squares or circles)");
         view.displayMessage("A command is written as: add "
-                + "wantedShape positionOfShape DimensionOrRadius colorOfShape");
+                + "wantedShape positionOfShape (height width Or Radius) "
+                + "colorOfShape");
         String askCommand = keyboard.nextLine().toLowerCase();
         String[] command = askCommand.split(" ");
-        boolean add = true;
-        while (add) {
-            if ("show".equals(command[0])) {
-                view.displayShape(this.paint.asAscii());
-                if (!askYesOrNo()) {
-                    add = false;
-                }
-            } else {
-                while (!chechAddOrShowCommand(command)
-                        || !checkCorrectShape(command)
-                        || !checkCorrectPoint(command)
-                        || !checkDimensionShape(command)
-                        || !checkColorShape(command)) {
+        boolean end = false;
+        while (!end) {
+            while (!end && ((!checkIsAdd(command)
+                    || !checkIsShape(command)
+                    || !checkIsPoint(command)
+                    || !checkIsDimension(command)
+                    || !checkIsColor(command)))) {
+                if (checkIsShow(command)) {
+                    end = true;
+                } else {
                     command = askCommand();
-                    if ("show".equals(command[0])) {
-                        view.displayShape(this.paint.asAscii());
-                        if (!askYesOrNo()) {
-                            add = false;
-                        }
-                    }
                 }
+            }
+            if (!checkIsShow(command)) {
                 addShape(command);
+                askCommand = keyboard.nextLine().toLowerCase();
+                command = askCommand.split(" ");
+            } else {
+                view.displayShape(this.paint.asAscii());
             }
         }
+        view.displayMessage("Good bye :)");
     }
 
     private String[] askCommand() {
@@ -62,17 +61,21 @@ public class Application {
         return command;
     }
 
-    private boolean chechAddOrShowCommand(String[] command) {
-        return "add".equals(command[0]);
+    private boolean checkIsAdd(String[] command) {
+        return "add".equals(command[0]) && command.length > 1;
     }
 
-    private boolean checkCorrectShape(String[] command) {
-        return "rentangle".equals(command[1])
+    private boolean checkIsShow(String[] command) {
+        return "show".equals(command[0]);
+    }
+
+    private boolean checkIsShape(String[] command) {
+        return "rectangle".equals(command[1])
                 || "circle".equals(command[1])
                 || "square".equals(command[1]);
     }
 
-    private boolean checkCorrectPoint(String[] command) {
+    private boolean checkIsPoint(String[] command) {
         try {
             Integer.parseInt(command[2]);
             Integer.parseInt(command[3]);
@@ -82,12 +85,12 @@ public class Application {
         return true;
     }
 
-    private boolean checkDimensionShape(String[] command) {
+    private boolean checkIsDimension(String[] command) {
         switch (command[1]) {
             case "rectangle":
                 try {
-                Integer.parseInt(command[4]);
-                Integer.parseInt(command[5]);
+                Double.parseDouble(command[4]);
+                Double.parseDouble(command[5]);
             } catch (NumberFormatException e) {
                 return false;
             }
@@ -105,26 +108,9 @@ public class Application {
         }
     }
 
-    private boolean checkColorShape(String[] command) {
+    private boolean checkIsColor(String[] command) {
         return command[command.length - 1].length() < 2
                 && command[command.length - 1].length() > 0;
-    }
-
-    /**
-     * Ask to enter a cardinal direction.
-     *
-     * @param message The given message.
-     * @return the given direction.
-     */
-    private boolean askYesOrNo() {
-        view.displayMessage("Do you want to add a shape(y/yes n/no) ? : ");
-        String ask = keyboard.nextLine().toLowerCase();
-        while (!"y".equals(ask) && !"yes".equals(ask)
-                && !"no".equals(ask) && !"no".equals(ask)) {
-            view.displayMessage("Enter y/yes or n/no: ");
-            ask = keyboard.nextLine().toLowerCase();
-        }
-        return ask.toLowerCase().equals("y") || ask.toLowerCase().equals("yes");
     }
 
     private void addShape(String[] command) {
