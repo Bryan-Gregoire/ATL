@@ -14,26 +14,51 @@ public class Drawing {
     private final int height;
     private final int width;
 
+    /**
+     * Constructor of Drawing.
+     * 
+     */
     public Drawing() {
         this.height = 20;
         this.width = 20;
         this.shapes = new ArrayList<>();
     }
 
+    /**
+     * Constructor of Drawing.
+     * 
+     * @param height the height.
+     * @param width the width.
+     */
     public Drawing(int height, int width) {
         this.height = height;
         this.width = width;
         this.shapes = new ArrayList<>();
     }
 
+    /**
+     * Get the height.
+     * 
+     * @return the height.
+     */
     int getHeight() {
         return height;
     }
 
+    /**
+     * Get the width.
+     * 
+     * @return the width. 
+     */
     int getWidth() {
         return width;
     }
 
+    /**
+     * Add the given shape.
+     * 
+     * @param shape the given shape to add.
+     */
     public void addShape(Shape shape) {
         this.shapes.add(shape);
     }

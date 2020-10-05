@@ -1,10 +1,9 @@
 package esi.atl.g53735.View;
 
-import esi.atl.g53735.Model.Shape;
-
 /**
- *
- * @author Utilisateur
+ * The interface of view.
+ * 
+ * @author g53735
  */
 public interface InterfaceView {
 
