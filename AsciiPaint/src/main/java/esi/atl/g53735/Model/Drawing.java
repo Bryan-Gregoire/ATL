@@ -14,15 +14,15 @@ public class Drawing {
     private final int height;
     private final int width;
 
-    public Drawing(int height, int width) {
-        this.height = height;
-        this.width = width;
+    public Drawing() {
+        this.height = 20;
+        this.width = 20;
         this.shapes = new ArrayList<>();
     }
 
-    public Drawing() {
-        this.height = 30;
-        this.width = 30;
+    public Drawing(int height, int width) {
+        this.height = height;
+        this.width = width;
         this.shapes = new ArrayList<>();
     }
 
@@ -34,7 +34,7 @@ public class Drawing {
         return width;
     }
 
-    public void addShapeAt(Shape shape) {
+    public void addShape(Shape shape) {
         this.shapes.add(shape);
     }
 
