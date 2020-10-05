@@ -109,8 +109,7 @@ public class Application {
     }
 
     private boolean checkIsColor(String[] command) {
-        return command[command.length - 1].length() < 2
-                && command[command.length - 1].length() > 0;
+        return command[command.length - 1].length() == 1;
     }
 
     private void addShape(String[] command) {

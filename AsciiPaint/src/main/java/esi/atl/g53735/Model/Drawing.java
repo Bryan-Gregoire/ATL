@@ -19,8 +19,8 @@ public class Drawing {
      * 
      */
     public Drawing() {
-        this.height = 20;
-        this.width = 50;
+        this.height = 40;
+        this.width = 40;
         this.shapes = new ArrayList<>();
     }
 
