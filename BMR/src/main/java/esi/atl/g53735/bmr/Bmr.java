@@ -1,6 +1,7 @@
 package esi.atl.g53735.bmr;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -38,6 +39,7 @@ public class Bmr extends Application {
         HBox hbox = new HBox();
         GridPane rootLeft = new GridPane();
         GridPane rootRight = new GridPane();
+        Platform.runLater(() -> vbox.requestFocus());
 
         rootLeft.setPadding(new Insets(8));
         rootRight.setPadding(new Insets(8));
