@@ -1,6 +1,8 @@
 package esi.atl.g53735.bmr;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -50,9 +52,7 @@ public class Bmr extends Application {
         rootRight.setHgap(12);
         rootRight.setVgap(10);
 
-        Button button = new Button("Calcul du BMR");
-        button.setPrefWidth(480);
-
+        // Coté gauche
         Text titleLeft = new Text("Données");
         titleLeft.setUnderline(true);
         titleLeft.setFill(Color.BLACK);
@@ -89,11 +89,15 @@ public class Bmr extends Application {
         ToggleGroup genderGroup = new ToggleGroup();
 
         RadioButton female = new RadioButton("Femme");
+        female.setUserData("Femme");
+
         female.setToggleGroup(genderGroup);
         GridPane.setConstraints(female, 1, 4);
 
         RadioButton male = new RadioButton("Homme");
+        male.setUserData("Homme");
         male.setToggleGroup(genderGroup);
+
         GridPane.setConstraints(male, 1, 4);
         male.setPadding(new Insets(0, 0, 0, 68));
 
@@ -103,10 +107,11 @@ public class Bmr extends Application {
         box.setValue("Actif");
         GridPane.setConstraints(box, 1, 5);
 
-        // Coté gauche
         rootLeft.getChildren().addAll(titleLeft, size, weight, age, gender,
                 lifeStyle, sizePrompt, weightPrompt, agePrompt, male, female,
                 box);
+        //fin coté gauche
+        // Coté droit
 
         Text titleRight = new Text("Résultats");
         titleRight.setUnderline(true);
@@ -128,11 +133,50 @@ public class Bmr extends Application {
         GridPane.setConstraints(caloriesField, 1, 2);
         caloriesField.setEditable(false);
 
-        // Coté droit
         rootRight.getChildren().addAll(titleRight, bmr, bmrField, calories,
                 caloriesField);
+        //fin coté droit
 
-        //button.setOnAction(e -> getLifeStyleChoice(box)); // qd je click sur le button je retourne le niveau d'activité.
+        Button button = new Button("Calcul du BMR");
+        button.setPrefWidth(480);
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                if (buttonFailed(sizePrompt, weightPrompt, agePrompt,
+                        genderGroup)) {
+                    bmrField.setText("Failed!");
+                    bmrField.setStyle("-fx-text-fill: red; -fx-font-size: "
+                            + "12;");
+                    caloriesField.setText("Failed!");
+                    caloriesField.setStyle("-fx-text-fill: red; -fx-font-size: "
+                            + "12;");
+                } else {
+                    int size = Integer.parseInt(sizePrompt.getText());
+                    int weight = Integer.parseInt(weightPrompt.getText());
+                    int age = Integer.parseInt(agePrompt.getText());
+                    double activityLevel = getLevelActivity(box);
+                    double calories;
+                    double bmr;
+                    if (genderGroup.getSelectedToggle().getUserData().toString()
+                            .equals("Femme")) {
+                        bmr = (9.6 * weight) + (1.8 * size) - (4.7 * age) + 655;
+                        calories = bmr * activityLevel;
+                    } else {
+                        bmr = (13.7 * weight) + (5 * size) - (6.8 * age) + 66;
+                        calories = bmr * activityLevel;
+                    }
+                    bmrField.setText(bmr + "");
+                    bmrField.setStyle("-fx-text-fill: black; "
+                            + "-fx-font-size: 12;");
+                    caloriesField.setText(calories + "");
+                    caloriesField.setStyle("-fx-text-fill: black; "
+                            + "-fx-font-size: 12;");
+                }
+
+            }
+
+        });
+
         hbox.getChildren().addAll(rootLeft, rootRight);
         vbox.getChildren().addAll(hbox, button);
 
@@ -143,19 +187,30 @@ public class Bmr extends Application {
         primaryStage.show();
     }
 
-//    private Double getLifeStyleChoice(ChoiceBox<String> box) {
-//        switch (box.getValue()) {
-//            case "Sédentaire":
-//                return 1.2;
-//            case "Peu actif":
-//                return 1.375;
-//            case "Actif":
-//                return 1.55;
-//            case "Fort actif":
-//                return 1.725;
-//            case "Extrêmement actif":
-//                return 1.9;
-//        }
-//        return null;
-//    }
+    private Double getLevelActivity(ChoiceBox<String> box) {
+        switch (box.getValue()) {
+            case "Sédentaire":
+                return 1.2;
+            case "Peu actif":
+                return 1.375;
+            case "Actif":
+                return 1.55;
+            case "Fort actif":
+                return 1.725;
+            case "Extrêmement actif":
+                return 1.9;
+        }
+        return null;
+    }
+
+    private boolean buttonFailed(TextField sizePrompt, TextField weightPrompt,
+            TextField agePrompt, ToggleGroup genderGroup) {
+        return sizePrompt.getText().isEmpty()
+                || weightPrompt.getText().isEmpty()
+                || agePrompt.getText().isEmpty()
+                || genderGroup.getSelectedToggle() == null
+                || !weightPrompt.getText().matches("\\d*")
+                || !agePrompt.getText().matches("\\d*")
+                || !sizePrompt.getText().matches("\\d*");
+    }
 }
