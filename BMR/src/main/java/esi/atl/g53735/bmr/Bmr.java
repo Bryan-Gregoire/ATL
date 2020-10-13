@@ -92,28 +92,29 @@ public class Bmr extends Application {
         agePrompt.setPromptText("Age en années");
         GridPane.setConstraints(agePrompt, 1, 3);
 
+        HBox sexBox = new HBox(10);
+        GridPane.setConstraints(sexBox, 1, 4);
+
         ToggleGroup genderGroup = new ToggleGroup();
 
         RadioButton female = new RadioButton("Femme");
         female.setUserData("Femme");
         female.setToggleGroup(genderGroup);
-        GridPane.setConstraints(female, 1, 4);
+        GridPane.setConstraints(female, 0, 0);
 
         RadioButton male = new RadioButton("Homme");
         male.setUserData("Homme");
         male.setToggleGroup(genderGroup);
-        GridPane.setConstraints(male, 1, 4);
-        male.setPadding(new Insets(0, 0, 0, 68));
+        GridPane.setConstraints(male, 1, 0);
 
-        ChoiceBox<String> box = new ChoiceBox<>();
-        box.getItems().addAll("Sédentaire", "Peu actif", "Actif", "Fort actif",
-                "Extrêmement actif");
-        box.setValue("Actif");
+        ChoiceBox<ActivityEnum> box = new ChoiceBox<>();
+        box.getItems().addAll(ActivityEnum.values());
+        box.setValue(ActivityEnum.ACTIF);
         GridPane.setConstraints(box, 1, 5);
 
+        sexBox.getChildren().addAll(female, male);
         rootLeft.getChildren().addAll(titleLeft, size, weight, age, gender,
-                lifeStyle, sizePrompt, weightPrompt, agePrompt, male, female,
-                box);
+                lifeStyle, sizePrompt, weightPrompt, agePrompt, sexBox, box);
         //fin coté gauche
         // Coté droit
 
@@ -198,17 +199,17 @@ public class Bmr extends Application {
      * @param box the string.
      * @return the level of activity.
      */
-    private Double getLevelActivity(ChoiceBox<String> box) {
+    private Double getLevelActivity(ChoiceBox<ActivityEnum> box) {
         switch (box.getValue()) {
-            case "Sédentaire":
+            case SEDENTAIRE:
                 return 1.2;
-            case "Peu actif":
+            case PEUACTIF:
                 return 1.375;
-            case "Actif":
+            case ACTIF:
                 return 1.55;
-            case "Fort actif":
+            case FORTACTIF:
                 return 1.725;
-            case "Extrêmement actif":
+            case EXTREMENTACTIF:
                 return 1.9;
         }
         return null;
