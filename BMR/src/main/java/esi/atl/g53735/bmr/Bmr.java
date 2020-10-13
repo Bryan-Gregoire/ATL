@@ -1,7 +1,6 @@
 package esi.atl.g53735.bmr;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -23,6 +22,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
+ * Represent the calculator of BMR.
  *
  * @author g53735
  */
@@ -32,6 +32,11 @@ public class Bmr extends Application {
         launch(args);
     }
 
+    /**
+     * Start of the calculator.
+     *
+     * @param primaryStage
+     */
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Calcul du BMR");
@@ -39,7 +44,6 @@ public class Bmr extends Application {
         HBox hbox = new HBox();
         GridPane rootLeft = new GridPane();
         GridPane rootRight = new GridPane();
-        Platform.runLater(() -> vbox.requestFocus());
 
         rootLeft.setPadding(new Insets(8));
         rootRight.setPadding(new Insets(8));
@@ -92,14 +96,12 @@ public class Bmr extends Application {
 
         RadioButton female = new RadioButton("Femme");
         female.setUserData("Femme");
-
         female.setToggleGroup(genderGroup);
         GridPane.setConstraints(female, 1, 4);
 
         RadioButton male = new RadioButton("Homme");
         male.setUserData("Homme");
         male.setToggleGroup(genderGroup);
-
         GridPane.setConstraints(male, 1, 4);
         male.setPadding(new Insets(0, 0, 0, 68));
 
@@ -187,8 +189,15 @@ public class Bmr extends Application {
         scene.setFill(Color.LIGHTGRAY);
         primaryStage.setScene(scene);
         primaryStage.show();
+        vbox.requestFocus();
     }
 
+    /**
+     * String represent the level of activity.
+     *
+     * @param box the string.
+     * @return the level of activity.
+     */
     private Double getLevelActivity(ChoiceBox<String> box) {
         switch (box.getValue()) {
             case "Sédentaire":
@@ -205,6 +214,15 @@ public class Bmr extends Application {
         return null;
     }
 
+    /**
+     * Check if the data is valid.
+     *
+     * @param sizePrompt the TextField of the size.
+     * @param weightPrompt the TextField of the weight.
+     * @param agePrompt The TextField of the Age.
+     * @param genderGroup The group of button of the sex.
+     * @return true if it is not valid otherwise false.
+     */
     private boolean buttonFailed(TextField sizePrompt, TextField weightPrompt,
             TextField agePrompt, ToggleGroup genderGroup) {
         return sizePrompt.getText().isEmpty()
