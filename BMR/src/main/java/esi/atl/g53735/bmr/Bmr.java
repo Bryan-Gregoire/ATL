@@ -80,17 +80,17 @@ public class Bmr extends Application {
         Label lifeStyle = new Label("Style de vie");
         GridPane.setConstraints(lifeStyle, 0, 5);
 
-        TextField sizePrompt = new TextField();
-        sizePrompt.setPromptText("Taille en cm");
-        GridPane.setConstraints(sizePrompt, 1, 1);
+        TextField sizeField = new TextField();
+        sizeField.setPromptText("Taille en cm");
+        GridPane.setConstraints(sizeField, 1, 1);
 
-        TextField weightPrompt = new TextField();
-        weightPrompt.setPromptText("Poids en kg");
-        GridPane.setConstraints(weightPrompt, 1, 2);
+        TextField weightField = new TextField();
+        weightField.setPromptText("Poids en kg");
+        GridPane.setConstraints(weightField, 1, 2);
 
-        TextField agePrompt = new TextField();
-        agePrompt.setPromptText("Age en années");
-        GridPane.setConstraints(agePrompt, 1, 3);
+        TextField ageField = new TextField();
+        ageField.setPromptText("Age en années");
+        GridPane.setConstraints(ageField, 1, 3);
 
         HBox sexBox = new HBox(10);
         GridPane.setConstraints(sexBox, 1, 4);
@@ -114,7 +114,7 @@ public class Bmr extends Application {
 
         sexBox.getChildren().addAll(female, male);
         rootLeft.getChildren().addAll(titleLeft, size, weight, age, gender,
-                lifeStyle, sizePrompt, weightPrompt, agePrompt, sexBox, box);
+                lifeStyle, sizeField, weightField, ageField, sexBox, box);
         //fin coté gauche
         // Coté droit
 
@@ -128,6 +128,8 @@ public class Bmr extends Application {
         GridPane.setConstraints(bmr, 0, 1);
 
         TextField bmrField = new TextField();
+        bmrField.setPromptText("Résultats du BMR");
+        bmrField.setMouseTransparent(true);
         GridPane.setConstraints(bmrField, 1, 1);
         bmrField.setEditable(false);
 
@@ -135,6 +137,8 @@ public class Bmr extends Application {
         GridPane.setConstraints(calories, 0, 2);
 
         TextField caloriesField = new TextField();
+        caloriesField.setPromptText("Dépense en calories");
+        caloriesField.setMouseTransparent(true);
         GridPane.setConstraints(caloriesField, 1, 2);
         caloriesField.setEditable(false);
 
@@ -147,35 +151,25 @@ public class Bmr extends Application {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
-                if (buttonFailed(sizePrompt, weightPrompt, agePrompt,
+                if (resultFailed(sizeField, weightField, ageField,
                         genderGroup)) {
-                    bmrField.setText("Failed!");
-                    bmrField.setStyle("-fx-text-fill: red; -fx-font-size: "
-                            + "12;");
-                    caloriesField.setText("Failed!");
-                    caloriesField.setStyle("-fx-text-fill: red; -fx-font-size: "
-                            + "12;");
+                    failedStyle(bmrField, caloriesField);
                 } else {
-                    int size = Integer.parseInt(sizePrompt.getText());
-                    int weight = Integer.parseInt(weightPrompt.getText());
-                    int age = Integer.parseInt(agePrompt.getText());
-                    double activityLevel = getLevelActivity(box);
+                    int size = Integer.parseInt(sizeField.getText());
+                    int weight = Integer.parseInt(weightField.getText());
+                    int age = Integer.parseInt(ageField.getText());
                     double calories;
                     double bmr;
                     if (genderGroup.getSelectedToggle().getUserData().toString()
                             .equals("Femme")) {
-                        bmr = (9.6 * weight) + (1.8 * size) - (4.7 * age) + 655;
-                        calories = bmr * activityLevel;
+                        bmr = femaleBMR(weight, size, age);
+                        calories = caloriesResult(bmr, box);
                     } else {
-                        bmr = (13.7 * weight) + (5 * size) - (6.8 * age) + 66;
-                        calories = bmr * activityLevel;
+                        bmr = maleBMR(weight, size, age);
+                        calories = caloriesResult(bmr, box);
                     }
-                    bmrField.setText(bmr + "");
-                    bmrField.setStyle("-fx-text-fill: black; "
-                            + "-fx-font-size: 12;");
-                    caloriesField.setText(calories + "");
-                    caloriesField.setStyle("-fx-text-fill: black; "
-                            + "-fx-font-size: 12;");
+                    setTextResult(bmrField, bmr, caloriesField, calories);
+
                 }
 
             }
@@ -218,20 +212,110 @@ public class Bmr extends Application {
     /**
      * Check if the data is valid.
      *
-     * @param sizePrompt the TextField of the size.
-     * @param weightPrompt the TextField of the weight.
-     * @param agePrompt The TextField of the Age.
+     * @param sizeField the TextField of the size.
+     * @param weightField the TextField of the weight.
+     * @param ageField The TextField of the Age.
      * @param genderGroup The group of button of the sex.
      * @return true if it is not valid otherwise false.
      */
-    private boolean buttonFailed(TextField sizePrompt, TextField weightPrompt,
-            TextField agePrompt, ToggleGroup genderGroup) {
-        return sizePrompt.getText().isEmpty()
-                || weightPrompt.getText().isEmpty()
-                || agePrompt.getText().isEmpty()
+    private boolean resultFailed(TextField sizeField, TextField weightField,
+            TextField ageField, ToggleGroup genderGroup) {
+        return sizeField.getText().isEmpty()
+                || weightField.getText().isEmpty()
+                || ageField.getText().isEmpty()
                 || genderGroup.getSelectedToggle() == null
-                || !weightPrompt.getText().matches("\\d*")
-                || !agePrompt.getText().matches("\\d*")
-                || !sizePrompt.getText().matches("\\d*");
+                || falseData(sizeField, weightField, ageField);
+    }
+
+    /**
+     * Calculate the bmr of the female.
+     *
+     * @param weight the weight of the female.
+     * @param size the size of the female.
+     * @param age the age of the female.
+     * @return the bmr.
+     */
+    private double femaleBMR(int weight, int size, int age) {
+        return (9.6 * weight) + (1.8 * size) - (4.7 * age) + 655;
+    }
+
+    /**
+     * Calculate the bmr of the male.
+     *
+     * @param weight the weight of the male.
+     * @param size the size of the male.
+     * @param age the age of the male.
+     * @return the bmr.
+     */
+    private double maleBMR(int weight, int size, int age) {
+        return (13.7 * weight) + (5 * size) - (6.8 * age) + 66;
+    }
+
+    /**
+     * Calculate calorie expenditure.
+     *
+     * @param bmr the bmr.
+     * @param box the ChoiceBox of the Activity level.
+     * @return the number of calories.
+     */
+    private double caloriesResult(double bmr, ChoiceBox<ActivityEnum> box) {
+        return bmr * getLevelActivity(box);
+    }
+
+    /**
+     * Set a text and set a style to text.
+     *
+     * @param bmr The field to set.
+     * @param calories The field to set.
+     */
+    private void failedStyle(TextField bmr, TextField calories) {
+        bmr.setText("Failed!");
+        bmr.setStyle("-fx-text-fill: red; -fx-font-size: "
+                + "12;");
+        calories.setText("Failed!");
+        calories.setStyle("-fx-text-fill: red; -fx-font-size: "
+                + "12;");
+    }
+
+    /**
+     * Set the results in the given TextFields.
+     *
+     * @param bmrField field to set the BMR result.
+     * @param bmr the result of the BMR.
+     * @param caloriesField field to set the calories result.
+     * @param calories the result of calories.
+     */
+    private void setTextResult(TextField bmrField, double bmr,
+            TextField caloriesField, double calories) {
+        bmrField.setText(bmr + "");
+        bmrField.setStyle("-fx-text-fill: black; "
+                + "-fx-font-size: 12;");
+        caloriesField.setText(calories + "");
+        caloriesField.setStyle("-fx-text-fill: black; "
+                + "-fx-font-size: 12;");
+    }
+
+    /**
+     * Check if the data is realistic.
+     *
+     * @param sizeField TextField of the size.
+     * @param weightField TextField of the weight.
+     * @param ageField TextField of the age.
+     * @return true if data is not realistic else false.
+     */
+    private boolean falseData(TextField sizeField, TextField weightField,
+            TextField ageField) {
+        int size;
+        int weight;
+        int age;
+        try {
+            size = Integer.parseInt(sizeField.getText());
+            weight = Integer.parseInt(weightField.getText());
+            age = Integer.parseInt(ageField.getText());
+        } catch (NumberFormatException e) {
+            return true;
+        }
+        return size > 300 || size < 1 || weight > 1000 || weight < 1
+                || age > 200 || age < 1;
     }
 }
