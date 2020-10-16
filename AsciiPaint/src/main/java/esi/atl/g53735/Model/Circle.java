@@ -19,6 +19,7 @@ public class Circle extends ColoredShape {
      */
     public Circle(Point center, double radius, char color) {
         super(color);
+        //@pbt defensive
         this.center = center;
         this.radius = radius;
     }

@@ -19,6 +19,7 @@ public class Drawing {
      * 
      */
     public Drawing() {
+        //@pbt beter call this(40, 40)
         this.height = 40;
         this.width = 40;
         this.shapes = new ArrayList<>();

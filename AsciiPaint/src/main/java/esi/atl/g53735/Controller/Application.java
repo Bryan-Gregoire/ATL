@@ -98,7 +98,7 @@ public class Application {
             case "square":
             case "circle":
                 try {
-                Double.parseDouble(command[4]);
+                Double.parseDouble(command[3]);
             } catch (NumberFormatException e) {
                 return false;
             }
@@ -109,6 +109,7 @@ public class Application {
     }
 
     private boolean checkIsColor(String[] command) {
+        //@pbt ?
         return command[command.length - 1].length() == 1;
     }
 
