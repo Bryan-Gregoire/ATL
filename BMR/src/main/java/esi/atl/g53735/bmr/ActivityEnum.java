@@ -6,7 +6,7 @@ package esi.atl.g53735.bmr;
  */
 public enum ActivityEnum {
     SEDENTAIRE, PEUACTIF, ACTIF, FORTACTIF, EXTREMENTACTIF;
-
+    
     @Override
     public String toString() {
         switch (this) {

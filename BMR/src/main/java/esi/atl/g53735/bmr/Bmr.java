@@ -228,24 +228,24 @@ public class Bmr extends Application {
     }
 
     /**
-     * Calculate the bmr of the female.
+     * Calculate the BMR of the female.
      *
      * @param weight the weight of the female.
      * @param size the size of the female.
      * @param age the age of the female.
-     * @return the bmr.
+     * @return the BMR.
      */
     private double femaleBMR(int weight, int size, int age) {
         return (9.6 * weight) + (1.8 * size) - (4.7 * age) + 655;
     }
 
     /**
-     * Calculate the bmr of the male.
+     * Calculate the BMR of the male.
      *
      * @param weight the weight of the male.
      * @param size the size of the male.
      * @param age the age of the male.
-     * @return the bmr.
+     * @return the BMR.
      */
     private double maleBMR(int weight, int size, int age) {
         return (13.7 * weight) + (5 * size) - (6.8 * age) + 66;
@@ -254,7 +254,7 @@ public class Bmr extends Application {
     /**
      * Calculate calorie expenditure.
      *
-     * @param bmr the bmr.
+     * @param bmr the BMR.
      * @param box the ChoiceBox of the Activity level.
      * @return the number of calories.
      */
@@ -315,7 +315,7 @@ public class Bmr extends Application {
         } catch (NumberFormatException e) {
             return true;
         }
-        return size > 300 || size < 1 || weight > 1000 || weight < 1
-                || age > 200 || age < 1;
+        return size > 300 || size < 50 || weight > 500 || weight < 10
+                || age > 80 || age < 1;
     }
 }
