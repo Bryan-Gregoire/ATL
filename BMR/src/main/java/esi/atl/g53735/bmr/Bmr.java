@@ -7,12 +7,17 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -48,7 +53,7 @@ public class Bmr extends Application {
         rootLeft.setPadding(new Insets(8));
         rootRight.setPadding(new Insets(8));
 
-        vbox.setAlignment(Pos.CENTER);
+        vbox.setAlignment(Pos.BASELINE_CENTER);
         hbox.setAlignment(Pos.CENTER);
         rootLeft.setAlignment(Pos.CENTER_LEFT);
         rootRight.setAlignment(Pos.BASELINE_RIGHT);
@@ -57,6 +62,22 @@ public class Bmr extends Application {
         rootLeft.setVgap(10);
         rootRight.setHgap(12);
         rootRight.setVgap(10);
+
+        //Menu
+        MenuBar menuBar = new MenuBar();
+        Menu menuFile = new Menu("File");
+
+        MenuItem exit = new MenuItem("Exit");
+        exit.addEventHandler(ActionEvent.ACTION,
+                new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                System.exit(0);
+            }
+        });
+        menuFile.getItems().add(exit);
+        menuBar.getMenus().addAll(menuFile);
+        //Fin Menu
 
         // Coté gauche
         Text titleLeft = new Text("Données");
@@ -146,13 +167,22 @@ public class Bmr extends Application {
                 caloriesField);
         //fin coté droit
 
-        Button button = new Button("Calcul du BMR");
-        button.setPrefWidth(480);
-        button.setOnAction(new EventHandler<ActionEvent>() {
+        //boutons du bas
+        Alert inputZero = new Alert(Alert.AlertType.ERROR);
+        inputZero.setTitle("Erreur");
+        inputZero.setHeaderText("Erreur #0");
+        inputZero.setContentText("0 n'est pas un nombre valide "
+                + "pour une donnée");
+
+        Button calculate = new Button("Calcul du BMR");
+        calculate.setPrefWidth(480);
+        calculate.addEventHandler(ActionEvent.ACTION,
+                new EventHandler<ActionEvent>() {
+
             @Override
             public void handle(ActionEvent t) {
                 if (resultFailed(sizeField, weightField, ageField,
-                        genderGroup)) {
+                        genderGroup, inputZero)) {
                     failedStyle(bmrField, caloriesField);
                 } else {
                     int size = Integer.parseInt(sizeField.getText());
@@ -176,10 +206,38 @@ public class Bmr extends Application {
 
         });
 
-        hbox.getChildren().addAll(rootLeft, rootRight);
-        vbox.getChildren().addAll(hbox, button);
+        Button clear = new Button("Effacer les données");
+        clear.setPrefWidth(480);
+        clear.addEventHandler(ActionEvent.ACTION,
+                new EventHandler<ActionEvent>() {
 
-        Scene scene = new Scene(vbox, 750, 500);
+            @Override
+            public void handle(ActionEvent t) {
+                sizeField.clear();
+                weightField.clear();
+                ageField.clear();
+                genderGroup.selectToggle(null);
+                bmrField.clear();
+                caloriesField.clear();
+            }
+        });
+
+        vbox.addEventFilter(KeyEvent.KEY_TYPED,
+                new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (!event.getCharacter().matches("\\d{0,3}")) {
+                    event.consume();
+
+                }
+            }
+        });
+        //Fin bouton bas
+
+        hbox.getChildren().addAll(rootLeft, rootRight);
+        vbox.getChildren().addAll(menuBar, hbox, calculate, clear);
+
+        Scene scene = new Scene(vbox, 750, 400);
         scene.setCursor(Cursor.HAND);
         scene.setFill(Color.LIGHTGRAY);
         primaryStage.setScene(scene);
@@ -219,12 +277,12 @@ public class Bmr extends Application {
      * @return true if it is not valid otherwise false.
      */
     private boolean resultFailed(TextField sizeField, TextField weightField,
-            TextField ageField, ToggleGroup genderGroup) {
+            TextField ageField, ToggleGroup genderGroup, Alert alert) {
         return sizeField.getText().isEmpty()
                 || weightField.getText().isEmpty()
                 || ageField.getText().isEmpty()
                 || genderGroup.getSelectedToggle() == null
-                || falseData(sizeField, weightField, ageField);
+                || falseData(sizeField, weightField, ageField, alert);
     }
 
     /**
@@ -304,18 +362,16 @@ public class Bmr extends Application {
      * @return true if data is not realistic else false.
      */
     private boolean falseData(TextField sizeField, TextField weightField,
-            TextField ageField) {
-        int size;
-        int weight;
-        int age;
-        try {
-            size = Integer.parseInt(sizeField.getText());
-            weight = Integer.parseInt(weightField.getText());
-            age = Integer.parseInt(ageField.getText());
-        } catch (NumberFormatException e) {
+            TextField ageField, Alert alert) {
+        int size = Integer.parseInt(sizeField.getText());
+        int weight = Integer.parseInt(weightField.getText());
+        int age = Integer.parseInt(ageField.getText());
+
+        if (size == 0 || weight == 0 || age == 0) {
+            alert.showAndWait();
             return true;
         }
-        return size > 300 || size < 50 || weight > 500 || weight < 10
-                || age > 80 || age < 1;
+
+        return size > 300 || weight > 500 || age > 80;
     }
 }
