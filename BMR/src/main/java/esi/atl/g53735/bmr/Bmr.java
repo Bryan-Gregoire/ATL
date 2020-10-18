@@ -222,11 +222,34 @@ public class Bmr extends Application {
             }
         });
 
-        vbox.addEventFilter(KeyEvent.KEY_TYPED,
+        sizeField.addEventFilter(KeyEvent.KEY_TYPED,
                 new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (!event.getCharacter().matches("\\d{0,3}")) {
+                if (!event.getCharacter().matches("\\d") 
+                        || sizeField.getText().length() > 2) {
+                    event.consume();
+
+                }
+            }
+        });
+        weightField.addEventFilter(KeyEvent.KEY_TYPED,
+                new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (!event.getCharacter().matches("\\d") 
+                        || weightField.getText().length() > 2) {
+                    event.consume();
+
+                }
+            }
+        });
+        ageField.addEventFilter(KeyEvent.KEY_TYPED,
+                new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (!event.getCharacter().matches("\\d") 
+                        || ageField.getText().length() > 1) {
                     event.consume();
 
                 }
