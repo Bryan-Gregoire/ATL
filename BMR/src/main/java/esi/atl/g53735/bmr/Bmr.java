@@ -167,13 +167,20 @@ public class Bmr extends Application {
                 caloriesField);
         //fin coté droit
 
-        //boutons du bas
+        //Alertes Pour calcule 
         Alert inputZero = new Alert(Alert.AlertType.ERROR);
         inputZero.setTitle("Erreur");
         inputZero.setHeaderText("Erreur #0");
         inputZero.setContentText("0 n'est pas un nombre valide "
                 + "pour une donnée");
 
+        Alert negatif = new Alert(Alert.AlertType.ERROR);
+        negatif.setTitle("Erreur #-1");
+        negatif.setHeaderText("Résultat négatif");
+        negatif.setContentText("Le résultat du BMR est négatif");
+        //Fin Alertes
+
+        //boutons du bas
         Button calculate = new Button("Calcul du BMR");
         calculate.setPrefWidth(480);
         calculate.addEventHandler(ActionEvent.ACTION,
@@ -198,12 +205,14 @@ public class Bmr extends Application {
                         bmr = maleBMR(weight, size, age);
                         calories = caloriesResult(bmr, box);
                     }
-                    setTextResult(bmrField, bmr, caloriesField, calories);
-
+                    if (underZero(bmr)) {
+                        failedStyle(bmrField, caloriesField);
+                        negatif.showAndWait();
+                    } else {
+                        setTextResult(bmrField, bmr, caloriesField, calories);
+                    }
                 }
-
             }
-
         });
 
         Button clear = new Button("Effacer les données");
@@ -226,7 +235,7 @@ public class Bmr extends Application {
                 new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (!event.getCharacter().matches("\\d") 
+                if (!event.getCharacter().matches("\\d")
                         || sizeField.getText().length() > 2) {
                     event.consume();
 
@@ -237,7 +246,7 @@ public class Bmr extends Application {
                 new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (!event.getCharacter().matches("\\d") 
+                if (!event.getCharacter().matches("\\d")
                         || weightField.getText().length() > 2) {
                     event.consume();
 
@@ -248,7 +257,7 @@ public class Bmr extends Application {
                 new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (!event.getCharacter().matches("\\d") 
+                if (!event.getCharacter().matches("\\d")
                         || ageField.getText().length() > 1) {
                     event.consume();
 
@@ -330,6 +339,16 @@ public class Bmr extends Application {
      */
     private double maleBMR(int weight, int size, int age) {
         return (13.7 * weight) + (5 * size) - (6.8 * age) + 66;
+    }
+
+    /**
+     * Check if the result of BMR is negative.
+     *
+     * @param bmr the BMR.
+     * @return true if it is under zero else false.
+     */
+    private boolean underZero(double bmr) {
+        return bmr < 0;
     }
 
     /**
