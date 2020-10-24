@@ -9,11 +9,15 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -42,15 +46,23 @@ public class View extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Calcul du BMR");
-        VBox vbox = new VBox(20);
+        BorderPane root = new BorderPane();
+        HBox containAll = new HBox();
+        
+        VBox leftContain = new VBox(10);      
+        VBox rightContain = new VBox(10);
+        
         HBox hbox = new HBox();
         rootLeft = new BMRData();
         rootRight = new BMResult();
         bmrFacade = new BMRFacade();
         
-        vbox.setAlignment(Pos.BASELINE_CENTER);
+        leftContain.setAlignment(Pos.CENTER);
+        rightContain.setAlignment(Pos.CENTER);
         hbox.setAlignment(Pos.CENTER);
-
+        
+        containAll.setAlignment(Pos.CENTER);
+        
         //Menu
         MenuBar menuBar = new MenuBar();
         Menu menuFile = new Menu("File");
@@ -130,16 +142,38 @@ public class View extends Application {
                 rootRight.clearResult();
             }
         });
+        
+        LineChart chart1;
+        XYChart.Series series1 = new XYChart.Series();
+        NumberAxis xAxis = new NumberAxis();
+        NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Weight(kg)");
+        yAxis.setLabel("BMR");
+        series1.setName("MenData");
+        chart1 = new LineChart(xAxis, yAxis);
+        series1.getData().add(new XYChart.Data<>(1, 20));
+        series1.getData().add(new XYChart.Data<>(2, 100));
+        series1.getData().add(new XYChart.Data<>(3, 80));
+        series1.getData().add(new XYChart.Data<>(4, 180));
+        series1.getData().add(new XYChart.Data<>(5, 20));
+        series1.getData().add(new XYChart.Data<>(6, -10));
+        chart1.getData().add(series1);
 
         //Fin bouton bas
         hbox.getChildren().addAll(rootLeft, rootRight);
-        vbox.getChildren().addAll(menuBar, hbox, calculate, clear);
+        leftContain.getChildren().addAll(hbox, calculate, clear);
         
-        Scene scene = new Scene(vbox, 750, 400);
+        rightContain.getChildren().add(chart1);
+        
+        containAll.getChildren().addAll(leftContain,rightContain);
+        root.setTop(menuBar);
+        root.setCenter(containAll);
+        
+        Scene scene = new Scene(root, 1000, 600);
         scene.setCursor(Cursor.HAND);
         scene.setFill(Color.LIGHTGRAY);
         primaryStage.setScene(scene);
         primaryStage.show();
-        vbox.requestFocus();
+        leftContain.requestFocus();
     }
 }
