@@ -1,5 +1,8 @@
-package esi.atl.g53735.bmr;
+package esi.atl.g53735.bmr.view;
 
+import esi.atl.g53735.bmr.model.ActivityLevel;
+import esi.atl.g53735.bmr.model.BMRFacade;
+import esi.atl.g53735.bmr.model.Gender;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,8 +24,12 @@ import javafx.stage.Stage;
  *
  * @author g53735
  */
-public class Bmr extends Application {
-
+public class View extends Application {
+    
+    private BMRFacade bmrFacade;
+    private BMRData rootLeft;
+    private BMResult rootRight;
+    
     public static void main(String[] args) {
         launch(args);
     }
@@ -37,16 +44,17 @@ public class Bmr extends Application {
         primaryStage.setTitle("Calcul du BMR");
         VBox vbox = new VBox(20);
         HBox hbox = new HBox();
-        BMRData rootLeft = new BMRData();
-        BMResult rootRight = new BMResult();
-
+        rootLeft = new BMRData();
+        rootRight = new BMResult();
+        bmrFacade = new BMRFacade();
+        
         vbox.setAlignment(Pos.BASELINE_CENTER);
         hbox.setAlignment(Pos.CENTER);
 
         //Menu
         MenuBar menuBar = new MenuBar();
         Menu menuFile = new Menu("File");
-
+        
         MenuItem exit = new MenuItem("Exit");
         exit.addEventHandler(ActionEvent.ACTION,
                 new EventHandler<ActionEvent>() {
@@ -65,7 +73,7 @@ public class Bmr extends Application {
         errorZero.setHeaderText("Erreur #0");
         errorZero.setContentText("0 n'est pas un nombre valide "
                 + "pour une donnée");
-
+        
         Alert negatif = new Alert(Alert.AlertType.ERROR);
         negatif.setTitle("Erreur #-1");
         negatif.setHeaderText("Résultat négatif");
@@ -77,27 +85,31 @@ public class Bmr extends Application {
         calculate.setPrefWidth(480);
         calculate.addEventHandler(ActionEvent.ACTION,
                 new EventHandler<ActionEvent>() {
-
+            
             @Override
             public void handle(ActionEvent t) {
-
+                
                 if (rootLeft.notValidData(errorZero)) {
                     rootRight.setError("Failed !");
                 } else {
                     int size = rootLeft.getSize();
                     int weight = rootLeft.getWeight();
                     int age = rootLeft.getAge();
-                    double levelActivity = rootLeft.getLevelActivity();
+                    ActivityLevel activity = rootLeft.getActivity();
+                    Gender gender = rootLeft.getGender();
+                    bmrFacade.setData(size, weight, age, activity, gender);
+                    
                     double calories;
                     double bmr;
+                    
                     if (rootLeft.isFemale()) {
-                        bmr = rootRight.femaleBMR(weight, size, age);
-                        calories = rootRight.caloriesResult(bmr, levelActivity);
+                        bmr = bmrFacade.femaleBMR();
+                        calories = bmrFacade.caloriesResult(bmr);
                     } else {
-                        bmr = rootRight.maleBMR(weight, size, age);
-                        calories = rootRight.caloriesResult(bmr, levelActivity);
+                        bmr = bmrFacade.maleBMR();
+                        calories = bmrFacade.caloriesResult(bmr);
                     }
-                    if (rootRight.BMRUnderZero(bmr)) {
+                    if (bmrFacade.BMRUnderZero(bmr)) {
                         rootRight.setError("Failed !");
                         negatif.showAndWait();
                     } else {
@@ -106,12 +118,12 @@ public class Bmr extends Application {
                 }
             }
         });
-
+        
         Button clear = new Button("Effacer les données");
         clear.setPrefWidth(480);
         clear.addEventHandler(ActionEvent.ACTION,
                 new EventHandler<ActionEvent>() {
-
+            
             @Override
             public void handle(ActionEvent t) {
                 rootLeft.clearData();
@@ -122,7 +134,7 @@ public class Bmr extends Application {
         //Fin bouton bas
         hbox.getChildren().addAll(rootLeft, rootRight);
         vbox.getChildren().addAll(menuBar, hbox, calculate, clear);
-
+        
         Scene scene = new Scene(vbox, 750, 400);
         scene.setCursor(Cursor.HAND);
         scene.setFill(Color.LIGHTGRAY);

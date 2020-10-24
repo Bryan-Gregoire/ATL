@@ -1,4 +1,4 @@
-package esi.atl.g53735.bmr;
+package esi.atl.g53735.bmr.view;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,8 +15,8 @@ import javafx.scene.text.Text;
  */
 public class BMResult extends GridPane {
 
-    private TextField bmrField;
-    private TextField caloriesField;
+    private final TextField bmrField;
+    private final TextField caloriesField;
 
     public BMResult() {
         this.setHgap(12);
@@ -84,50 +84,4 @@ public class BMResult extends GridPane {
         caloriesField.setStyle("-fx-text-fill: black; "
                 + "-fx-font-size: 12;");
     }
-
-    /**
-     * Calculate the BMR of the female.
-     *
-     * @param weight the weight of the female.
-     * @param size the size of the female.
-     * @param age the age of the female.
-     * @return the BMR.
-     */
-    public double femaleBMR(int weight, int size, int age) {
-        return (9.6 * weight) + (1.8 * size) - (4.7 * age) + 655;
-    }
-
-    /**
-     * Calculate the BMR of the male.
-     *
-     * @param weight the weight of the male.
-     * @param size the size of the male.
-     * @param age the age of the male.
-     * @return the BMR.
-     */
-    public double maleBMR(int weight, int size, int age) {
-        return (13.7 * weight) + (5 * size) - (6.8 * age) + 66;
-    }
-
-    /**
-     * Check if the result of BMR is negative.
-     *
-     * @param bmr the BMR.
-     * @return true if it is under zero else false.
-     */
-    public boolean BMRUnderZero(double bmr) {
-        return bmr < 0;
-    }
-
-    /**
-     * Calculate calorie expenditure.
-     *
-     * @param bmr the BMR.
-     * @param levelActivity the level of activity.
-     * @return the number of calories.
-     */
-    public double caloriesResult(double bmr, double levelActivity) {
-        return bmr * levelActivity;
-    }
-
 }

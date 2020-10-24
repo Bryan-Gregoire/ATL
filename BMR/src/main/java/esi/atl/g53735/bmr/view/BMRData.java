@@ -1,5 +1,7 @@
-package esi.atl.g53735.bmr;
+package esi.atl.g53735.bmr.view;
 
+import esi.atl.g53735.bmr.model.ActivityLevel;
+import esi.atl.g53735.bmr.model.Gender;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,8 +27,8 @@ public class BMRData extends GridPane {
     private TextField sizeField;
     private TextField weightField;
     private TextField ageField;
-    private ToggleGroup genderGroup;
-    ChoiceBox<ActivityEnum> box;
+    private final ToggleGroup genderGroup;
+    ChoiceBox<ActivityLevel> box;
 
     public BMRData() {
 
@@ -106,19 +108,19 @@ public class BMRData extends GridPane {
 
         genderGroup = new ToggleGroup();
 
-        RadioButton female = new RadioButton("Femme");
-        female.setUserData("Femme");
+        RadioButton female = new RadioButton(Gender.FEMME.toString());
+        female.setUserData(Gender.FEMME);
         female.setToggleGroup(genderGroup);
         GridPane.setConstraints(female, 0, 0);
 
-        RadioButton male = new RadioButton("Homme");
-        male.setUserData("Homme");
+        RadioButton male = new RadioButton(Gender.HOMME.toString());
+        male.setUserData(Gender.HOMME);
         male.setToggleGroup(genderGroup);
         GridPane.setConstraints(male, 1, 0);
 
         box = new ChoiceBox<>();
-        box.getItems().addAll(ActivityEnum.values());
-        box.setValue(ActivityEnum.ACTIF);
+        box.getItems().addAll(ActivityLevel.values());
+        box.setValue(ActivityLevel.ACTIF);
         GridPane.setConstraints(box, 1, 5);
 
         sexBox.getChildren().addAll(female, male);
@@ -138,6 +140,14 @@ public class BMRData extends GridPane {
         return Integer.parseInt(ageField.getText());
     }
 
+    public ActivityLevel getActivity() {
+        return box.getValue();
+    }
+    
+    public Gender getGender() {
+       return (Gender) genderGroup.getSelectedToggle().getUserData();
+    }
+
     public boolean dataEmpty() {
         return sizeField.getText().isEmpty()
                 || weightField.getText().isEmpty()
@@ -146,34 +156,13 @@ public class BMRData extends GridPane {
     }
 
     public boolean isFemale() {
-        return genderGroup.getSelectedToggle().getUserData().toString()
-                .equals("Femme");
+        return genderGroup.getSelectedToggle().getUserData().
+                equals(Gender.FEMME);
     }
 
     public boolean isMale() {
-        return genderGroup.getSelectedToggle().getUserData().toString()
-                .equals("Homme");
-    }
-
-    /**
-     * String represent the level of activity.
-     *
-     * @return the level of activity.
-     */
-    public Double getLevelActivity() {
-        switch (box.getValue()) {
-            case SEDENTAIRE:
-                return 1.2;
-            case PEUACTIF:
-                return 1.375;
-            case ACTIF:
-                return 1.55;
-            case FORTACTIF:
-                return 1.725;
-            case EXTREMENTACTIF:
-                return 1.9;
-        }
-        return null;
+        return genderGroup.getSelectedToggle().getUserData().
+                equals(Gender.HOMME);
     }
 
     public void clearData() {
@@ -186,6 +175,7 @@ public class BMRData extends GridPane {
     /**
      * Check if the data is valid.
      *
+     * @param alert
      * @return true if it is not valid otherwise false.
      */
     public boolean notValidData(Alert alert) {
