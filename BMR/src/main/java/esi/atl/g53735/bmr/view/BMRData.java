@@ -33,7 +33,7 @@ public class BMRData extends GridPane {
     public BMRData() {
 
         this.setHgap(12);
-        this.setVgap(10);
+        this.setVgap(12);
         this.setPadding(new Insets(8));
         this.setAlignment(Pos.CENTER_LEFT);
 
@@ -147,7 +147,7 @@ public class BMRData extends GridPane {
     public Gender getGender() {
        return (Gender) genderGroup.getSelectedToggle().getUserData();
     }
-
+    
     public boolean dataEmpty() {
         return sizeField.getText().isEmpty()
                 || weightField.getText().isEmpty()

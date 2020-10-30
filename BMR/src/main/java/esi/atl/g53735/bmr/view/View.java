@@ -3,6 +3,8 @@ package esi.atl.g53735.bmr.view;
 import esi.atl.g53735.bmr.model.ActivityLevel;
 import esi.atl.g53735.bmr.model.BMRFacade;
 import esi.atl.g53735.bmr.model.Gender;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -28,12 +30,15 @@ import javafx.stage.Stage;
  *
  * @author g53735
  */
-public class View extends Application {
-    
+public class View extends Application implements PropertyChangeListener {
+
     private BMRFacade bmrFacade;
     private BMRData rootLeft;
     private BMResult rootRight;
-    
+    private LineChart chart1;
+    private XYChart.Series series1;
+    private XYChart.Series series2;
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -48,25 +53,25 @@ public class View extends Application {
         primaryStage.setTitle("Calcul du BMR");
         BorderPane root = new BorderPane();
         HBox containAll = new HBox();
-        
-        VBox leftContain = new VBox(10);      
+
+        VBox leftContain = new VBox(10);
         VBox rightContain = new VBox(10);
-        
+
         HBox hbox = new HBox();
         rootLeft = new BMRData();
         rootRight = new BMResult();
         bmrFacade = new BMRFacade();
-        
+        bmrFacade.addPropertChangeListener(this);
+
         leftContain.setAlignment(Pos.CENTER);
-        rightContain.setAlignment(Pos.CENTER);
         hbox.setAlignment(Pos.CENTER);
-        
+        rightContain.setAlignment(Pos.CENTER);
         containAll.setAlignment(Pos.CENTER);
-        
+
         //Menu
         MenuBar menuBar = new MenuBar();
         Menu menuFile = new Menu("File");
-        
+
         MenuItem exit = new MenuItem("Exit");
         exit.addEventHandler(ActionEvent.ACTION,
                 new EventHandler<ActionEvent>() {
@@ -85,7 +90,7 @@ public class View extends Application {
         errorZero.setHeaderText("Erreur #0");
         errorZero.setContentText("0 n'est pas un nombre valide "
                 + "pour une donnée");
-        
+
         Alert negatif = new Alert(Alert.AlertType.ERROR);
         negatif.setTitle("Erreur #-1");
         negatif.setHeaderText("Résultat négatif");
@@ -97,10 +102,10 @@ public class View extends Application {
         calculate.setPrefWidth(480);
         calculate.addEventHandler(ActionEvent.ACTION,
                 new EventHandler<ActionEvent>() {
-            
+
             @Override
             public void handle(ActionEvent t) {
-                
+
                 if (rootLeft.notValidData(errorZero)) {
                     rootRight.setError("Failed !");
                 } else {
@@ -110,70 +115,76 @@ public class View extends Application {
                     ActivityLevel activity = rootLeft.getActivity();
                     Gender gender = rootLeft.getGender();
                     bmrFacade.setData(size, weight, age, activity, gender);
-                    
-                    double calories;
-                    double bmr;
-                    
-                    if (rootLeft.isFemale()) {
-                        bmr = bmrFacade.femaleBMR();
-                        calories = bmrFacade.caloriesResult(bmr);
-                    } else {
-                        bmr = bmrFacade.maleBMR();
-                        calories = bmrFacade.caloriesResult(bmr);
-                    }
-                    if (bmrFacade.BMRUnderZero(bmr)) {
+                    try {
+                        double bmr = bmrFacade.calculBMR();
+                        bmrFacade.caloriesResult(bmr);
+                    } catch (IllegalStateException e) {
                         rootRight.setError("Failed !");
                         negatif.showAndWait();
-                    } else {
-                        rootRight.setResults(bmr, calories);
                     }
                 }
             }
         });
-        
+
         Button clear = new Button("Effacer les données");
         clear.setPrefWidth(480);
         clear.addEventHandler(ActionEvent.ACTION,
                 new EventHandler<ActionEvent>() {
-            
+
             @Override
             public void handle(ActionEvent t) {
                 rootLeft.clearData();
                 rootRight.clearResult();
             }
         });
-        
-        LineChart chart1;
-        XYChart.Series series1 = new XYChart.Series();
+
+        series1 = new XYChart.Series();
+        series2 = new XYChart.Series();
         NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Weight(kg)");
         yAxis.setLabel("BMR");
         series1.setName("MenData");
+        series2.setName("WomenData");
         chart1 = new LineChart(xAxis, yAxis);
-        series1.getData().add(new XYChart.Data<>(1, 20));
-        series1.getData().add(new XYChart.Data<>(2, 100));
-        series1.getData().add(new XYChart.Data<>(3, 80));
-        series1.getData().add(new XYChart.Data<>(4, 180));
-        series1.getData().add(new XYChart.Data<>(5, 20));
-        series1.getData().add(new XYChart.Data<>(6, -10));
-        chart1.getData().add(series1);
+        chart1.setTitle("BMR index Vs Weight");
+        chart1.getData().addAll(series1, series2);
 
-        //Fin bouton bas
+        //Fin bouton du bas
         hbox.getChildren().addAll(rootLeft, rootRight);
         leftContain.getChildren().addAll(hbox, calculate, clear);
-        
+
         rightContain.getChildren().add(chart1);
-        
-        containAll.getChildren().addAll(leftContain,rightContain);
+
+        containAll.getChildren().addAll(leftContain, rightContain);
         root.setTop(menuBar);
         root.setCenter(containAll);
-        
+
         Scene scene = new Scene(root, 1000, 600);
         scene.setCursor(Cursor.HAND);
         scene.setFill(Color.LIGHTGRAY);
         primaryStage.setScene(scene);
         primaryStage.show();
         leftContain.requestFocus();
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals(BMRFacade.CALCUL_BMR)) {
+            System.out.println("BMR");
+            if (bmrFacade.getGenderPerson().equals(Gender.HOMME)) {
+                series1.getData().add(new XYChart.Data<>(
+                        bmrFacade.getWeightPerson(), evt.getNewValue()));
+            } else {
+                series2.getData().add(new XYChart.Data<>(
+                        bmrFacade.getWeightPerson(), evt.getNewValue()));
+            }
+            rootRight.setBMR((double) evt.getNewValue());
+
+        }
+        if (evt.getPropertyName().equals(BMRFacade.CALCUL_CALORIE)) {
+            System.out.println("CALORIES");
+            rootRight.setCalories((double) evt.getNewValue());
+        }
     }
 }

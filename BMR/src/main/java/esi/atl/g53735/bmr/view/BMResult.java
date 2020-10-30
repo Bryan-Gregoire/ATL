@@ -52,6 +52,16 @@ public class BMResult extends GridPane {
                 caloriesField);
     }
 
+    public void setBMR(double bmr) {
+        bmrField.setText(bmr + "");
+        bmrField.setStyle("-fx-text-fill: black;");
+    }
+
+    public void setCalories(double calories) {
+        caloriesField.setText(calories + "");
+        caloriesField.setStyle("-fx-text-fill: black; ");
+    }
+
     public void clearResult() {
         bmrField.clear();
         caloriesField.clear();
@@ -68,20 +78,5 @@ public class BMResult extends GridPane {
         caloriesField.setText(message);
         caloriesField.setStyle("-fx-text-fill: red; -fx-font-size: "
                 + "12;");
-    }
-
-    /**
-     * Set the results in the given TextFields.
-     *
-     * @param bmr the result of the BMR.
-     * @param calories the result of calories.
-     */
-    public void setResults(double bmr, double calories) {
-        bmrField.setText(bmr + "");
-        bmrField.setStyle("-fx-text-fill: black; "
-                + "-fx-font-size: 12;");
-        caloriesField.setText(calories + "");
-        caloriesField.setStyle("-fx-text-fill: black; "
-                + "-fx-font-size: 12;");
     }
 }
