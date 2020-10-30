@@ -19,8 +19,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
+ * Represent the data.
  *
- * @author Utilisateur
+ * @author g53735
  */
 public class BMRData extends GridPane {
 
@@ -30,6 +31,10 @@ public class BMRData extends GridPane {
     private final ToggleGroup genderGroup;
     ChoiceBox<ActivityLevel> box;
 
+    /**
+     * Constructor of BMRData.
+     *
+     */
     public BMRData() {
 
         this.setHgap(12);
@@ -128,26 +133,56 @@ public class BMRData extends GridPane {
                 lifeStyle, sizeField, weightField, ageField, sexBox, box);
     }
 
+    /**
+     * Get the height of the height field.
+     *
+     * @return the height.
+     */
     public int getSize() {
         return Integer.parseInt(sizeField.getText());
     }
 
+    /**
+     * Get the weight of the weight field.
+     *
+     * @return the weight.
+     */
     public int getWeight() {
         return Integer.parseInt(weightField.getText());
     }
 
+    /**
+     * Get the age of the age field.
+     *
+     * @return the age.
+     */
     public int getAge() {
         return Integer.parseInt(ageField.getText());
     }
 
+    /**
+     * Get the selected level of activity.
+     *
+     * @return the level of activity.
+     */
     public ActivityLevel getActivity() {
         return box.getValue();
     }
-    
+
+    /**
+     * Get the selected gender.
+     *
+     * @return the gender.
+     */
     public Gender getGender() {
-       return (Gender) genderGroup.getSelectedToggle().getUserData();
+        return (Gender) genderGroup.getSelectedToggle().getUserData();
     }
-    
+
+    /**
+     * Check if a data is empty.
+     *
+     * @return True if is empty else false.
+     */
     public boolean dataEmpty() {
         return sizeField.getText().isEmpty()
                 || weightField.getText().isEmpty()
@@ -155,39 +190,10 @@ public class BMRData extends GridPane {
                 || genderGroup.getSelectedToggle() == null;
     }
 
-    public boolean isFemale() {
-        return genderGroup.getSelectedToggle().getUserData().
-                equals(Gender.FEMME);
-    }
-
-    public boolean isMale() {
-        return genderGroup.getSelectedToggle().getUserData().
-                equals(Gender.HOMME);
-    }
-
-    public void clearData() {
-        sizeField.clear();
-        weightField.clear();
-        ageField.clear();
-        genderGroup.selectToggle(null);
-    }
-
-    /**
-     * Check if the data is valid.
-     *
-     * @param alert
-     * @return true if it is not valid otherwise false.
-     */
-    public boolean notValidData(Alert alert) {
-        return this.dataEmpty() || falseData(alert);
-    }
-
     /**
      * Check if the data is realistic.
      *
-     * @param sizeField TextField of the size.
-     * @param weightField TextField of the weight.
-     * @param ageField TextField of the age.
+     * @param alert the given alert to show.
      * @return true if data is not realistic else false.
      */
     private boolean falseData(Alert alert) {
@@ -199,5 +205,27 @@ public class BMRData extends GridPane {
             return true;
         }
         return size > 300 || weight > 500 || age > 80;
+    }
+
+    /**
+     * Check data is valid.
+     *
+     * @param alert the given alert.
+     *
+     * @return true if it is not valid otherwise false.
+     */
+    public boolean notValidData(Alert alert) {
+        return this.dataEmpty() || falseData(alert);
+    }
+
+    /**
+     * Clear data.
+     *
+     */
+    public void clearData() {
+        sizeField.clear();
+        weightField.clear();
+        ageField.clear();
+        genderGroup.selectToggle(null);
     }
 }

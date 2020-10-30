@@ -4,8 +4,9 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 /**
+ * Represent the facade of the model.
  *
- * @author Utilisateur
+ * @author g53735
  */
 public class BMRFacade {
 
@@ -14,11 +15,24 @@ public class BMRFacade {
     private final Person person;
     private PropertyChangeSupport pcs;
 
+    /**
+     * Constructor of BMRFacade.
+     *
+     */
     public BMRFacade() {
         this.person = new Person();
         this.pcs = new PropertyChangeSupport(this);
     }
 
+    /**
+     * Set the data's of a person.
+     *
+     * @param size the height of a person.
+     * @param weight the weight of a person.
+     * @param age the age of a person.
+     * @param activity the activity of a person.
+     * @param gender the gender of a person.
+     */
     public void setData(int size, int weight, int age, ActivityLevel activity,
             Gender gender) {
         person.setSize(size);
@@ -29,20 +43,35 @@ public class BMRFacade {
 
     }
 
+    /**
+     * Get the weight of a person.
+     *
+     * @return the weight.
+     */
     public int getWeightPerson() {
         return person.getWeight();
     }
-    
+
+    /**
+     * Get the gender of a person.
+     *
+     * @return the gender.
+     */
     public Gender getGenderPerson() {
         return person.getGender();
     }
-    
+
+    /**
+     * Get the height of a person.
+     *
+     * @return the height.
+     */
     public int getHeightPerson() {
         return person.getSize();
     }
 
     /**
-     * Calculate the BMR of the female.
+     * Calculate the BMR of the gender female.
      *
      * @return the BMR.
      */
@@ -83,15 +112,30 @@ public class BMRFacade {
         return calories;
     }
 
+    /**
+     * Calculate the BMR.
+     *
+     * @return the calculated BMR.
+     */
     public double calculBMR() {
         return person.getGender().equals(Gender.FEMME) ? femaleBMR()
                 : maleBMR();
     }
 
+    /**
+     * Add listener
+     *
+     * @param listener the listener.
+     */
     public void addPropertChangeListener(PropertyChangeListener listener) {
         pcs.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Remove listener.
+     *
+     * @param listener the listener.
+     */
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         pcs.removePropertyChangeListener(listener);
     }

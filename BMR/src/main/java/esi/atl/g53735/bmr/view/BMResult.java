@@ -10,14 +10,19 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
+ * Represent the part of the results.
  *
- * @author Utilisateur
+ * @author g53735
  */
 public class BMResult extends GridPane {
 
     private final TextField bmrField;
     private final TextField caloriesField;
 
+    /**
+     * Constructor of BMResult.
+     *
+     */
     public BMResult() {
         this.setHgap(12);
         this.setVgap(10);
@@ -52,25 +57,38 @@ public class BMResult extends GridPane {
                 caloriesField);
     }
 
+    /**
+     * Set the bmr in .
+     *
+     * @param bmr the bmr.
+     */
     public void setBMR(double bmr) {
         bmrField.setText(bmr + "");
         bmrField.setStyle("-fx-text-fill: black;");
     }
 
+    /**
+     * Set the calories in field.
+     *
+     * @param calories the calories.
+     */
     public void setCalories(double calories) {
         caloriesField.setText(calories + "");
         caloriesField.setStyle("-fx-text-fill: black; ");
     }
 
+    /**
+     * Clear the fields of the result.
+     */
     public void clearResult() {
         bmrField.clear();
         caloriesField.clear();
     }
 
     /**
-     * Set a text and set a style to text.
+     * Set a text for an error.
      *
-     * @param message
+     * @param message the given message to set.
      */
     public void setError(String message) {
         bmrField.setText(message);

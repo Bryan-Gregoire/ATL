@@ -9,7 +9,7 @@ import javafx.scene.layout.VBox;
 
 /**
  *
- * @author Utilisateur
+ * @author g53735
  */
 public class lineCharts extends VBox {
 
@@ -20,8 +20,12 @@ public class lineCharts extends VBox {
     private final XYChart.Series cmVsBMRMenSeries;
     private final XYChart.Series cmVsBMRWomenSeries;
 
+    /**
+     * Constructor of lineCharts.
+     *
+     */
     public lineCharts() {
-        
+
         kgVsBMRMenSeries = new XYChart.Series();
         kgVsBMRWomenSeries = new XYChart.Series();
         NumberAxis xAxis = new NumberAxis();
@@ -70,26 +74,62 @@ public class lineCharts extends VBox {
         this.getChildren().add(chartPane);
     }
 
+    /**
+     * Add a data to men serie in first chart.
+     *
+     * @param weight the given weight.
+     * @param bmr the given bmr.
+     */
     public void addKgVsBMRMenSeriesData(int weight, double bmr) {
         kgVsBMRMenSeries.getData().add(new XYChart.Data<>(weight, bmr));
     }
 
+    /**
+     * Add a data to women serie in first chart.
+     *
+     * @param weight the given weight.
+     * @param bmr the given bmr.
+     */
     public void addKgVsBMRWomenSeriesData(int weight, double bmr) {
         kgVsBMRWomenSeries.getData().add(new XYChart.Data<>(weight, bmr));
     }
 
+    /**
+     * Add a data to men serie in third chart.
+     *
+     * @param height the given height.
+     * @param bmr the given bmr.
+     */
     public void addCmVsBMRMenSeriesData(int height, double bmr) {
         cmVsBMRMenSeries.getData().add(new XYChart.Data<>(height, bmr));
     }
 
+    /**
+     * Add data to women serie in third chart.
+     *
+     * @param height the given height.
+     * @param bmr the given bmr.
+     */
     public void addCmVsBMRWomenSeriesData(int height, double bmr) {
         cmVsBMRWomenSeries.getData().add(new XYChart.Data<>(height, bmr));
     }
 
+    /**
+     * Add data to men serie in second chart.
+     *
+     * @param weight the given weight.
+     * @param calories the given calories.
+     */
     public void addKgVsCalMenSeriesData(int weight, double calories) {
         kgVsCalMenSeries.getData().add(new XYChart.Data<>(weight, calories));
     }
 
+    /**
+     * Add data to men serie in second chart.
+     *
+     * @param weight the given weight.
+     * @param calories the given calories.
+     */
     public void addKgVsCalWomenSeriesData(int weight, double calories) {
         kgVsCalWomenSeries.getData().add(new XYChart.Data<>(weight, calories));
     }

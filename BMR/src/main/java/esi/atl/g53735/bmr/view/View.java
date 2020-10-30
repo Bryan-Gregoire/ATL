@@ -22,7 +22,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
- * Represent the calculator of BMR.
+ * Represent the view of BMR.
  *
  * @author g53735
  */
@@ -38,9 +38,9 @@ public class View extends Application implements PropertyChangeListener {
     }
 
     /**
-     * Start of the calculator.
+     * Start of the view.
      *
-     * @param primaryStage
+     * @param primaryStage The primary stage.
      */
     @Override
     public void start(Stage primaryStage) {
@@ -147,6 +147,11 @@ public class View extends Application implements PropertyChangeListener {
         leftContain.requestFocus();
     }
 
+    /**
+     * Change property of event.
+     *
+     * @param evt the event.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(BMRFacade.CALCUL_BMR)) {
