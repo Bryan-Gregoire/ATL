@@ -11,15 +11,11 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -35,9 +31,7 @@ public class View extends Application implements PropertyChangeListener {
     private BMRFacade bmrFacade;
     private BMRData rootLeft;
     private BMResult rootRight;
-    private LineChart chart1;
-    private XYChart.Series series1;
-    private XYChart.Series series2;
+    private lineCharts tabCharts;
 
     public static void main(String[] args) {
         launch(args);
@@ -51,21 +45,21 @@ public class View extends Application implements PropertyChangeListener {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Calcul du BMR");
-        BorderPane root = new BorderPane();
+        VBox root = new VBox();
         HBox containAll = new HBox();
 
         VBox leftContain = new VBox(10);
-        VBox rightContain = new VBox(10);
+        tabCharts = new lineCharts();
 
-        HBox hbox = new HBox();
+        HBox gridContain = new HBox();
         rootLeft = new BMRData();
         rootRight = new BMResult();
         bmrFacade = new BMRFacade();
         bmrFacade.addPropertChangeListener(this);
 
+        gridContain.setAlignment(Pos.CENTER);
         leftContain.setAlignment(Pos.CENTER);
-        hbox.setAlignment(Pos.CENTER);
-        rightContain.setAlignment(Pos.CENTER);
+        tabCharts.setAlignment(Pos.CENTER);
         containAll.setAlignment(Pos.CENTER);
 
         //Menu
@@ -137,30 +131,15 @@ public class View extends Application implements PropertyChangeListener {
                 rootRight.clearResult();
             }
         });
-
-        series1 = new XYChart.Series();
-        series2 = new XYChart.Series();
-        NumberAxis xAxis = new NumberAxis();
-        NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel("Weight(kg)");
-        yAxis.setLabel("BMR");
-        series1.setName("MenData");
-        series2.setName("WomenData");
-        chart1 = new LineChart(xAxis, yAxis);
-        chart1.setTitle("BMR index Vs Weight");
-        chart1.getData().addAll(series1, series2);
-
         //Fin bouton du bas
-        hbox.getChildren().addAll(rootLeft, rootRight);
-        leftContain.getChildren().addAll(hbox, calculate, clear);
 
-        rightContain.getChildren().add(chart1);
+        gridContain.getChildren().addAll(rootLeft, rootRight);
+        leftContain.getChildren().addAll(gridContain, calculate, clear);
 
-        containAll.getChildren().addAll(leftContain, rightContain);
-        root.setTop(menuBar);
-        root.setCenter(containAll);
+        containAll.getChildren().addAll(leftContain, tabCharts);
+        root.getChildren().addAll(menuBar, containAll);
 
-        Scene scene = new Scene(root, 1000, 600);
+        Scene scene = new Scene(root, 1500, 750);
         scene.setCursor(Cursor.HAND);
         scene.setFill(Color.LIGHTGRAY);
         primaryStage.setScene(scene);
@@ -171,20 +150,28 @@ public class View extends Application implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(BMRFacade.CALCUL_BMR)) {
-            System.out.println("BMR");
             if (bmrFacade.getGenderPerson().equals(Gender.HOMME)) {
-                series1.getData().add(new XYChart.Data<>(
-                        bmrFacade.getWeightPerson(), evt.getNewValue()));
+                tabCharts.addKgVsBMRMenSeriesData(bmrFacade.getWeightPerson(),
+                        (double) evt.getNewValue());
+                tabCharts.addCmVsBMRMenSeriesData(bmrFacade.getHeightPerson(),
+                        (double) evt.getNewValue());
             } else {
-                series2.getData().add(new XYChart.Data<>(
-                        bmrFacade.getWeightPerson(), evt.getNewValue()));
+                tabCharts.addKgVsBMRWomenSeriesData(bmrFacade.getWeightPerson(),
+                        (double) evt.getNewValue());
+                tabCharts.addCmVsBMRWomenSeriesData(bmrFacade.getHeightPerson(),
+                        (double) evt.getNewValue());
             }
             rootRight.setBMR((double) evt.getNewValue());
-
         }
         if (evt.getPropertyName().equals(BMRFacade.CALCUL_CALORIE)) {
-            System.out.println("CALORIES");
-            rootRight.setCalories((double) evt.getNewValue());
+            if (bmrFacade.getGenderPerson().equals(Gender.HOMME)) {
+                tabCharts.addKgVsCalMenSeriesData(bmrFacade.getWeightPerson(),
+                        (double) evt.getNewValue());
+            } else {
+                tabCharts.addKgVsCalWomenSeriesData(bmrFacade.getWeightPerson(),
+                        (double) evt.getNewValue());
+            }
         }
+        rootRight.setCalories((double) evt.getNewValue());
     }
 }

@@ -70,6 +70,7 @@ public class BMResult extends GridPane {
     /**
      * Set a text and set a style to text.
      *
+     * @param message
      */
     public void setError(String message) {
         bmrField.setText(message);

@@ -36,6 +36,10 @@ public class BMRFacade {
     public Gender getGenderPerson() {
         return person.getGender();
     }
+    
+    public int getHeightPerson() {
+        return person.getSize();
+    }
 
     /**
      * Calculate the BMR of the female.
