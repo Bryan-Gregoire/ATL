@@ -1,0 +1,32 @@
+package esi.atl.g53735.controller;
+
+import esi.atl.g53735.model.Direction;
+import esi.atl.g53735.view.InterfaceView;
+import esi.atl.g53735.model.Model;
+import esi.atl.g53735.view.View;
+
+/**
+ * The Controller represents the dynamics of the game and the update of the View
+ * as you go along.
+ *
+ * @author g53735
+ */
+public class Controller {
+
+    private final Model game;
+    private final InterfaceView view;
+
+    public Controller(Model game, View InterfaceView) {
+        this.game = game;
+        this.view = InterfaceView;
+    }
+
+    public void startGame() {
+        this.view.displayBoard(this.game.getBoard());
+        Direction direction = this.view.askDirection();
+        game.move(direction);
+        this.view.displayBoard(this.game.getBoard());
+
+    }
+
+}
