@@ -37,7 +37,7 @@ public class View implements InterfaceView {
         int colCount = board.getNbColumn();
         for (int line = 0; line < lineCount; line++) {
             for (int col = 0; col < colCount; col++) {
-                int value = board.getSquareValue(line, col);
+                int value = board.getValue(line, col);
                 if (value == 0) {
                     System.out.print(" |   " + value);
                 } else if (value > 0 && value < 10) {

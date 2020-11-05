@@ -1,54 +1,30 @@
 package esi.atl.g53735.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Random;
 
 /**
- * Game board, made up of squares.
+ * Game board, made up of board.
  *
  * @author g53735
  */
-public class Board {
+public final class Board {
 
-    private final Square[][] squares;
+    private final int[][] board;
+    private ArrayList<Integer> freePlaces = new ArrayList<>();
 
     /**
      * Constructor of the game board.
      *
      */
     public Board() {
-        this.squares = new Square[][]{
-            {new Square(), new Square(), new Square(), new Square()},
-            {new Square(), new Square(), new Square(), new Square()},
-            {new Square(), new Square(), new Square(), new Square()},
-            {new Square(), new Square(), new Square(), new Square()}
+        this.board = new int[][]{
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0}
         };
-    }
-
-    /**
-     * get the value of the square of a given position.
-     *
-     * @param lg the line which the square is.
-     * @param col the column which the square is.
-     *
-     * @return the value of the square.
-     */
-    public int getSquareValue(int lg, int col) {
-        return getSquare(lg, col).getValue();
-    }
-
-    /**
-     * Get a square of a given position.
-     *
-     * @param lg the line which the square is.
-     * @param col the column which the square is.
-     *
-     * @return the square.
-     */
-    public Square getSquare(int lg, int col) {
-        return this.squares[lg][col];
+        addFreePlaces();
+        setRandomValueBoard();
     }
 
     /**
@@ -56,8 +32,20 @@ public class Board {
      *
      * @return square.
      */
-    public Square[][] getSquares() {
-        return squares;
+    public int[][] getBoard() {
+        return board;
+    }
+
+    /**
+     * get the value of a given position in the board.
+     *
+     * @param lg the line which the value is.
+     * @param col the column which the value is.
+     *
+     * @return the value of the square.
+     */
+    public int getValue(int lg, int col) {
+        return this.board[lg][col];
     }
 
     /**
@@ -66,7 +54,7 @@ public class Board {
      * @return the number of rows.
      */
     public int getNbRow() {
-        return this.squares.length;
+        return this.board.length;
     }
 
     /**
@@ -75,7 +63,7 @@ public class Board {
      * @return the number of columns.
      */
     public int getNbColumn() {
-        return this.squares[0].length;
+        return this.board[0].length;
     }
 
     /**
@@ -85,8 +73,8 @@ public class Board {
      * @param col the column which the square is.
      * @param value the given value to set.
      */
-    public void setSquareValue(int lg, int col, int value) {
-        this.squares[lg][col].setValue(value);
+    public void setValue(int lg, int col, int value) {
+        this.board[lg][col] = value;
     }
 
     public int randomValue() {
@@ -94,46 +82,34 @@ public class Board {
         return rand < 9 ? 2 : 4;
     }
 
-    public boolean freePlace() {
+    public void addFreePlaces() {
+        freePlaces.clear();
+        int place = 0;
         for (int i = 0; i < getNbRow(); i++) {
             for (int j = 0; j < getNbColumn(); j++) {
-                if (getSquareValue(i, j) == 0) {
-                    return true;
+                if (getValue(i, j) == 0) {
+                    this.freePlaces.add(place);
                 }
+                place++;
             }
         }
-        return false;
     }
 
     public void setRandomValueBoard() {
-        int lg = (int) (Math.random() * 4);
-        int col = (int) (Math.random() * 4);
-        if (getSquare(lg, col).getValue() == 0) {
-            setSquareValue(lg, col, randomValue());
-        } else {
-            boolean end = false;
-            int last = 1;
-            while (last <= getNbRow() * getNbColumn() && !end) {
-                lg++;
-                col++;
-                if (lg >= getNbRow()) {
-                    lg = 0;
-                }
-                if (col >= getNbColumn()) {
-                    col = 0;
-                }
-                if (getSquareValue(lg, col) == 0) {
-                    setSquareValue(lg, col, randomValue());
-                    end = true;
-                }
-                last++;
+        if (!freePlaces.isEmpty()) {
+            if (freePlaces.size() == 1) {
+                setValue(freePlaces.get(0) / getNbRow(),
+                        freePlaces.get(0) % getNbColumn(), randomValue());
             }
+            int insertFreePlace = (int) (Math.random() * freePlaces.size());
+            int lg = freePlaces.get(insertFreePlace) / getNbRow();
+            int col = freePlaces.get(insertFreePlace) % getNbColumn();
+            setValue(lg, col, randomValue());
         }
-
     }
 
     public int doubleValues(int lg, int col) {
-        return getSquareValue(lg, col) * 2;
+        return getValue(lg, col) * 2;
     }
 
     public void moveValues(Direction direction) {
@@ -143,71 +119,61 @@ public class Board {
                 moveUp();
                 break;
             case DOWN:
-                moveDownSum();
                 break;
             case LEFT:
-                moveLeft();
+                break;
             case RIGHT:
-                moveRight();
+                break;
         }
     }
 
     private void sumBeforeUp() {
         int nbRow = getNbRow();
         int nbCol = getNbColumn();
-        int lgSum = 1;
         boolean out = false;
         for (int lg = 0; lg < nbRow; lg++) {
+            int lgSum = lg + 1;
             for (int col = 0; col < nbCol; col++) {
-                if (getSquareValue(lg, col) != 0) {
+                if (getValue(lg, col) != 0) {
                     while (!out && lgSum < nbRow) {
-                        if (getSquareValue(lg, col)
-                                == getSquareValue(lgSum, col)) {
-                            setSquareValue(lg, col, doubleValues(lg, col));
-                            setSquareValue(lgSum, col, 0);
+                        if (getValue(lgSum, col) > 0 && getValue(lg, col)
+                                != getValue(lgSum, col)) {
+                            out = true;
+                        } else if (getValue(lg, col)
+                                == getValue(lgSum, col)) {
+                            setValue(lg, col, doubleValues(lg, col));
+                            setValue(lgSum, col, 0);
                             out = true;
                         }
                         lgSum++;
                     }
                 }
-                lgSum = lg + 1;
                 out = false;
+                lgSum = lg + 1;
             }
         }
     }
 
     private void moveUp() {
-        boolean out = false;
         int nbRow = getNbRow();
         int nbCol = getNbColumn();
-        int lgMove = 1;
+        boolean out = false;
         for (int lg = 0; lg < nbRow; lg++) {
+            int lgMove = lg + 1;
             for (int col = 0; col < nbCol; col++) {
-                if (getSquareValue(lg, col) == 0) {
+                if (getValue(lg, col) == 0) {
                     while (!out && lgMove < nbRow) {
-                        if (getSquareValue(lgMove, col) != 0) {
-                            setSquareValue(lg, col, getSquareValue(lgMove, col));
-                            setSquareValue(lgMove, col, 0);
+                        if (getValue(lgMove, col) != 0) {
+                            setValue(lg, col, getValue(lgMove, col));
+                            setValue(lgMove, col, 0);
                             out = true;
                         }
                         lgMove++;
                     }
                 }
+                lgMove = lg + 1;
             }
-            lgMove = lg + 1;
             out = false;
         }
-    }
-
-    private void moveDownSum() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void moveLeft() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void moveRight() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

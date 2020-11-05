@@ -1,6 +1,7 @@
 package esi.atl.g53735.controller;
 
 import esi.atl.g53735.model.Direction;
+import esi.atl.g53735.model.LevelStatus;
 import esi.atl.g53735.view.InterfaceView;
 import esi.atl.g53735.model.Model;
 import esi.atl.g53735.view.View;
@@ -23,9 +24,11 @@ public class Controller {
 
     public void startGame() {
         this.view.displayBoard(this.game.getBoard());
-        Direction direction = this.view.askDirection();
-        game.move(direction);
-        this.view.displayBoard(this.game.getBoard());
+        while (game.getStatus() == LevelStatus.IN_PROGRESS) {
+            Direction direction = this.view.askDirection();
+            game.move(direction);
+            this.view.displayBoard(this.game.getBoard());
+        }
 
     }
 

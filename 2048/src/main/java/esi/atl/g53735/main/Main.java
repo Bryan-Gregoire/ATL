@@ -12,8 +12,8 @@ import esi.atl.g53735.view.View;
 public class Main {
     
     public static void main(String[] args) {
-        System.out.println("              2048             ");
-        System.out.println("=================================");
+        System.out.println("           2048");
+        System.out.println("===========================");
         Controller controller = new Controller(new Game(), new View());
         controller.startGame();
     }
