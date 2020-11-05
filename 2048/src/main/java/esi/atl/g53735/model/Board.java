@@ -115,10 +115,10 @@ public final class Board {
     public void moveValues(Direction direction) {
         switch (direction) {
             case UP:
-                sumBeforeUp();
                 moveUp();
                 break;
             case DOWN:
+                moveDown();
                 break;
             case LEFT:
                 break;
@@ -127,53 +127,99 @@ public final class Board {
         }
     }
 
-    private void sumBeforeUp() {
+    private void moveUp() {
+        for (int col = 0; col < getNbColumn(); col++) {
+            sumUp(col);
+            moveAllUp(col);
+        }
+    }
+
+    private void sumUp(int col) {
         int nbRow = getNbRow();
-        int nbCol = getNbColumn();
-        boolean out = false;
-        for (int lg = 0; lg < nbRow; lg++) {
+        for (int lg = 0; lg < nbRow - 1; lg++) {
+            boolean out = false;
             int lgSum = lg + 1;
-            for (int col = 0; col < nbCol; col++) {
-                if (getValue(lg, col) != 0) {
-                    while (!out && lgSum < nbRow) {
-                        if (getValue(lgSum, col) > 0 && getValue(lg, col)
-                                != getValue(lgSum, col)) {
-                            out = true;
-                        } else if (getValue(lg, col)
-                                == getValue(lgSum, col)) {
-                            setValue(lg, col, doubleValues(lg, col));
-                            setValue(lgSum, col, 0);
-                            out = true;
-                        }
-                        lgSum++;
+            if (getValue(lg, col) != 0) {
+                while (!out && lgSum < nbRow) {
+                    if (getValue(lgSum, col) > 0 && getValue(lg, col)
+                            != getValue(lgSum, col)) {
+                        out = true;
+                    } else if (getValue(lg, col)
+                            == getValue(lgSum, col)) {
+                        setValue(lg, col, doubleValues(lg, col));
+                        setValue(lgSum, col, 0);
+                        lg++;
+                        out = true;
                     }
+                    lgSum++;
                 }
-                out = false;
-                lgSum = lg + 1;
             }
         }
     }
 
-    private void moveUp() {
+    private void moveAllUp(int col) {
         int nbRow = getNbRow();
-        int nbCol = getNbColumn();
-        boolean out = false;
-        for (int lg = 0; lg < nbRow; lg++) {
+        for (int lg = 0; lg < nbRow - 1; lg++) {
+            boolean out = false;
             int lgMove = lg + 1;
-            for (int col = 0; col < nbCol; col++) {
-                if (getValue(lg, col) == 0) {
-                    while (!out && lgMove < nbRow) {
-                        if (getValue(lgMove, col) != 0) {
-                            setValue(lg, col, getValue(lgMove, col));
-                            setValue(lgMove, col, 0);
-                            out = true;
-                        }
-                        lgMove++;
+            if (getValue(lg, col) == 0) {
+                while (!out && lgMove < nbRow) {
+                    if (getValue(lgMove, col) != 0) {
+                        setValue(lg, col, getValue(lgMove, col));
+                        setValue(lgMove, col, 0);
+                        out = true;
                     }
+                    lgMove++;
                 }
-                lgMove = lg + 1;
             }
-            out = false;
+        }
+    }
+
+    private void moveDown() {
+        for (int col = 0; col < getNbColumn(); col++) {
+            sumDown(col);
+            moveAllDown(col);
+        }
+    }
+
+    private void sumDown(int col) {
+        int nbRow = getNbRow();
+        for (int lg = nbRow - 1; lg >= 1; lg--) {
+            boolean out = false;
+            int lgSum = lg - 1;
+            if (getValue(lg, col) != 0) {
+                while (!out && lgSum >= 0) {
+                    if (getValue(lgSum, col) > 0 && getValue(lg, col)
+                            != getValue(lgSum, col)) {
+                        out = true;
+                    } else if (getValue(lg, col)
+                            == getValue(lgSum, col)) {
+                        setValue(lg, col, doubleValues(lg, col));
+                        setValue(lgSum, col, 0);
+                        lg--;
+                        out = true;
+                    }
+                    lgSum--;
+                }
+            }
+        }
+    }
+
+    private void moveAllDown(int col) {
+        int nbRow = getNbRow();
+        for (int lg = nbRow - 1; lg >= 1; lg--) {
+            boolean out = false;
+            int lgMove = lg - 1;
+            if (getValue(lg, col) == 0) {
+                while (!out && lgMove >= 0) {
+                    if (getValue(lgMove, col) != 0) {
+                        setValue(lg, col, getValue(lgMove, col));
+                        setValue(lgMove, col, 0);
+                        out = true;
+                    }
+                    lgMove--;
+                }
+            }
         }
     }
 }
