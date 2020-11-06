@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public final class Board {
 
     private final int[][] board;
-    private ArrayList<Integer> freePlaces = new ArrayList<>();
+    private final ArrayList<Integer> freePlaces = new ArrayList<>();
 
     /**
      * Constructor of the game board.
@@ -121,8 +121,10 @@ public final class Board {
                 moveDown();
                 break;
             case LEFT:
+                moveleft();
                 break;
             case RIGHT:
+                moveRight();
                 break;
         }
     }
@@ -138,20 +140,20 @@ public final class Board {
         int nbRow = getNbRow();
         for (int lg = 0; lg < nbRow - 1; lg++) {
             boolean out = false;
-            int lgSum = lg + 1;
+            int nextLg = lg + 1;
             if (getValue(lg, col) != 0) {
-                while (!out && lgSum < nbRow) {
-                    if (getValue(lgSum, col) > 0 && getValue(lg, col)
-                            != getValue(lgSum, col)) {
+                while (!out && nextLg < nbRow) {
+                    if (getValue(nextLg, col) > 0 && getValue(lg, col)
+                            != getValue(nextLg, col)) {
                         out = true;
                     } else if (getValue(lg, col)
-                            == getValue(lgSum, col)) {
+                            == getValue(nextLg, col)) {
                         setValue(lg, col, doubleValues(lg, col));
-                        setValue(lgSum, col, 0);
+                        setValue(nextLg, col, 0);
                         lg++;
                         out = true;
                     }
-                    lgSum++;
+                    nextLg++;
                 }
             }
         }
@@ -186,20 +188,20 @@ public final class Board {
         int nbRow = getNbRow();
         for (int lg = nbRow - 1; lg >= 1; lg--) {
             boolean out = false;
-            int lgSum = lg - 1;
+            int nextLg = lg - 1;
             if (getValue(lg, col) != 0) {
-                while (!out && lgSum >= 0) {
-                    if (getValue(lgSum, col) > 0 && getValue(lg, col)
-                            != getValue(lgSum, col)) {
+                while (!out && nextLg >= 0) {
+                    if (getValue(nextLg, col) > 0 && getValue(lg, col)
+                            != getValue(nextLg, col)) {
                         out = true;
                     } else if (getValue(lg, col)
-                            == getValue(lgSum, col)) {
+                            == getValue(nextLg, col)) {
                         setValue(lg, col, doubleValues(lg, col));
-                        setValue(lgSum, col, 0);
+                        setValue(nextLg, col, 0);
                         lg--;
                         out = true;
                     }
-                    lgSum--;
+                    nextLg--;
                 }
             }
         }
@@ -218,6 +220,107 @@ public final class Board {
                         out = true;
                     }
                     lgMove--;
+                }
+            }
+        }
+    }
+
+    private void moveleft() {
+        for (int lg = 0; lg < getNbRow(); lg++) {
+            sumLeft(lg);
+            moveAllLeft(lg);
+        }
+    }
+
+    private void sumLeft(int lg) {
+        for (int col = 0; col < getNbColumn() - 1; col++) {
+            boolean out = false;
+            int nextCol = col + 1;
+            if (getValue(lg, col) != 0) {
+                while (!out && nextCol < getNbColumn()) {
+                    if (getValue(lg, nextCol) > 0 && getValue(lg, col)
+                            != getValue(lg, nextCol)) {
+                        out = true;
+                    } else if (getValue(lg, col) == getValue(lg, nextCol)) {
+                        setValue(lg, col, doubleValues(lg, col));
+                        setValue(lg, nextCol, 0);
+                        col++;
+                        out = true;
+                    }
+                    nextCol++;
+                }
+            }
+        }
+    }
+
+    private void moveAllLeft(int lg) {
+        int nbCol = getNbColumn();
+        for (int col = 0; col < nbCol - 1; col++) {
+            boolean out = false;
+            int nextCol = col + 1;
+            if (getValue(lg, col) == 0) {
+                while (!out && nextCol < nbCol) {
+                    if (getValue(lg, nextCol) != 0) {
+                        setValue(lg, col, getValue(lg, nextCol));
+                        setValue(lg, nextCol, 0);
+                        out = true;
+                    }
+                    nextCol++;
+                }
+                if (nextCol >= nbCol) { // Si plus de nombres a déplacer. 
+                    col = nbCol;      // Aller a la fin pour sortir du for.
+                }
+            }
+        }
+    }
+
+    private void moveRight() {
+        for (int lg = 0; lg < getNbRow(); lg++) {
+            sumRight(lg);
+            moveAllRight(lg);
+        }
+    }
+
+    private void sumRight(int lg) {
+        for (int col = getNbColumn() - 1; col > 0; col--) {
+            boolean out = false;
+            int beforeCol = col - 1;
+            if (getValue(lg, col) != 0) {
+                while (!out && beforeCol >= 0) {
+                    if (getValue(lg, beforeCol) > 0 && getValue(lg, col)
+                            != getValue(lg, beforeCol)) {
+                        out = true;
+                    } else if (getValue(lg, col) == getValue(lg, beforeCol)) {
+                        setValue(lg, col, doubleValues(lg, col));
+                        setValue(lg, beforeCol, 0);
+                        col--;
+                        out = true;
+                    }
+                    beforeCol--;
+                }
+                if (beforeCol < 0) { // Plus de nombres a Additionner
+                    col = 0;    // Aller au début de mes col pour sortir du for.
+                }
+            }
+        }
+    }
+
+    private void moveAllRight(int lg) {
+        int nbCol = getNbColumn();
+        for (int col = nbCol - 1; col > 0; col--) {
+            boolean out = false;
+            int beforeCol = col - 1;
+            if (getValue(lg, col) == 0) {
+                while (!out && beforeCol >= 0) {
+                    if (getValue(lg, beforeCol) != 0) {
+                        setValue(lg, col, getValue(lg, beforeCol));
+                        setValue(lg, beforeCol, 0);
+                        out = true;
+                    }
+                    beforeCol--;
+                }
+                if (beforeCol < 0) { // Si plus de nombres a déplacer. 
+                    col = 0;      // Aller a la fin pour sortir du for.
                 }
             }
         }
