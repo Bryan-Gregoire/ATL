@@ -13,7 +13,7 @@ import esi.atl.g53735.view.View;
  * @author g53735
  */
 public class Controller {
-    
+
     private final Model game;
     private final InterfaceView view;
 
@@ -33,6 +33,7 @@ public class Controller {
      *
      */
     public void startGame() {
+        this.game.startStatus();
         view.displayCurrentScore(game.getScore());
         this.view.displayBoard(this.game.getBoard());
         while (game.getStatus() == LevelStatus.IN_PROGRESS) {
@@ -40,15 +41,14 @@ public class Controller {
             game.move(direction);
             view.displayCurrentScore(game.getScore());
             this.view.displayBoard(this.game.getBoard());
-            this.game.setNewLevelStatus();
         }
-        
+
         if (game.getStatus() == LevelStatus.WIN) {
-            view.displayMessage("Congratulations, YOU WON !!!");
+            view.displayMessage("GAME OVER, YOU WON !");
         }
-        if(game.getStatus() == LevelStatus.FAIL) {
+        if (game.getStatus() == LevelStatus.FAIL) {
             view.displayMessage("GAME OVER, You lost !");
         }
     }
-    
+
 }

@@ -14,6 +14,8 @@ public interface Model {
     public int getScore();
     
     public void setNewLevelStatus();
+    
+    public void startStatus();
 
     public void move(Direction direction);
 }

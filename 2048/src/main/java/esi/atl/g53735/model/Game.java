@@ -49,15 +49,25 @@ public class Game implements Model {
     public LevelStatus getStatus() {
         return status;
     }
-    
+
+    /**
+     * Indicate that the game started.
+     */
+    @Override
+    public void startStatus() {
+        this.status = LevelStatus.IN_PROGRESS;
+    }
+
     /**
      * Check and set the new status of the game.
-     * 
+     *
      */
     @Override
     public void setNewLevelStatus() {
-        if(this.board.winEnd()) {
+        if (this.board.winEnd()) {
             this.status = LevelStatus.WIN;
+        } else if (this.board.loseEnd()) {
+            this.status = LevelStatus.FAIL;
         }
     }
 
@@ -71,5 +81,6 @@ public class Game implements Model {
         board.moveValues(direction);
         board.addFreePlaces();
         board.setRandomValueBoard();
+        setNewLevelStatus();
     }
 }

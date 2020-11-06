@@ -113,6 +113,44 @@ public final class Board {
     }
 
     /**
+     * Check if it is possible to move.
+     *
+     * @return true if it is no possible to move otherwise false.
+     */
+    public boolean loseEnd() {
+        if (this.freePlaces.isEmpty()) {
+            return !hasSameNeighbour();
+        }
+        return false;
+    }
+
+    /**
+     * check if the neighbor on the right or on the bottom has the same value as
+     * the one chosen in the board. Ignore the last column and the last row.
+     *
+     * @return true if a value has a neigbor of the same value otherwise false.
+     */
+    private boolean hasSameNeighbour() {
+        int nbLg = getNbRow(); // 4 
+        int nbCol = getNbColumn(); // 4
+        for (int lg = 0; lg < nbLg; lg++) {
+            for (int col = 0; col < nbCol; col++) {
+                if (col < nbCol - 1) {
+                    if (getValue(lg, col) == getValue(lg, col + 1)) {
+                        return true;
+                    }
+                }
+                if (lg < nbLg - 1) {
+                    if (getValue(lg, col) == getValue(lg + 1, col)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Randomly have 2 or 4. more chance of having a 2.
      *
      * @return 2 or 4.
@@ -123,8 +161,8 @@ public final class Board {
     }
 
     /**
-     * Empty the list, then we add to the list the position of the free places
-     * on the board.
+     * Empty the list, add to the list the position of the free places on the
+     * board.
      *
      */
     public void addFreePlaces() {
@@ -156,6 +194,7 @@ public final class Board {
             int col = freePlaces.get(insertFreePlace) % getNbColumn();
             setValue(lg, col, randomValue());
         }
+        addFreePlaces();
     }
 
     /**
