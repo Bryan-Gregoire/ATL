@@ -11,6 +11,7 @@ public final class Board {
 
     private final int[][] board;
     private final ArrayList<Integer> freePlaces = new ArrayList<>();
+    private int score = 0;
 
     /**
      * Constructor of the game board.
@@ -67,6 +68,24 @@ public final class Board {
     }
 
     /**
+     * Get the score.
+     *
+     * @return the score.
+     */
+    public int getScore() {
+        return this.score;
+    }
+
+    /**
+     * Add the score with the given value.
+     *
+     * @param addToScore the given value.
+     */
+    public void sumScore(int addToScore) {
+        this.score += addToScore;
+    }
+
+    /**
      * Set a value in a square at a given position.
      *
      * @param lg the line which the square is.
@@ -77,11 +96,37 @@ public final class Board {
         this.board[lg][col] = value;
     }
 
+    /**
+     * Check if a value in the board is 2048.
+     *
+     * @return true if a value is 2048, otherwise false.
+     */
+    public boolean winEnd() {
+        for (int lg = 0; lg < getNbRow(); lg++) {
+            for (int col = 0; col < getNbColumn(); col++) {
+                if (getValue(lg, col) == 2048) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Randomly have 2 or 4. more chance of having a 2.
+     *
+     * @return 2 or 4.
+     */
     public int randomValue() {
         int rand = (int) (Math.random() * 10);
         return rand < 9 ? 2 : 4;
     }
 
+    /**
+     * Empty the list, then we add to the list the position of the free places
+     * on the board.
+     *
+     */
     public void addFreePlaces() {
         freePlaces.clear();
         int place = 0;
@@ -95,6 +140,11 @@ public final class Board {
         }
     }
 
+    /**
+     * If there is a free place in the board, a value 2 or 4 randomly chosen is
+     * placed randomly on the board.
+     *
+     */
     public void setRandomValueBoard() {
         if (!freePlaces.isEmpty()) {
             if (freePlaces.size() == 1) {
@@ -108,10 +158,22 @@ public final class Board {
         }
     }
 
+    /**
+     * Get the double of the value.
+     *
+     * @param lg the line of the board.
+     * @param col the column of the board.
+     * @return the double of the value.
+     */
     public int doubleValues(int lg, int col) {
         return getValue(lg, col) * 2;
     }
 
+    /**
+     * Move the values of the board in the given direction.
+     *
+     * @param direction the given direction.
+     */
     public void moveValues(Direction direction) {
         switch (direction) {
             case UP:
@@ -129,6 +191,9 @@ public final class Board {
         }
     }
 
+    /**
+     * Add the values and move them up.
+     */
     private void moveUp() {
         for (int col = 0; col < getNbColumn(); col++) {
             sumUp(col);
@@ -136,6 +201,14 @@ public final class Board {
         }
     }
 
+    /**
+     * Add the values of the board in the direction given. we add the values
+     * which are the same. We do not sum the values 0, if between 2 numbers
+     * which are the same there is a different number than these then there is
+     * no sum to do.
+     *
+     * @param col the column of the board.
+     */
     private void sumUp(int col) {
         int nbRow = getNbRow();
         for (int lg = 0; lg < nbRow - 1; lg++) {
@@ -150,6 +223,7 @@ public final class Board {
                             == getValue(nextLg, col)) {
                         setValue(lg, col, doubleValues(lg, col));
                         setValue(nextLg, col, 0);
+                        sumScore(getValue(lg, col));
                         lg++;
                         out = true;
                     }
@@ -159,6 +233,11 @@ public final class Board {
         }
     }
 
+    /**
+     * Move all the values on the board to the top, the values do not overlap.
+     *
+     * @param col the column of the board.
+     */
     private void moveAllUp(int col) {
         int nbRow = getNbRow();
         for (int lg = 0; lg < nbRow - 1; lg++) {
@@ -177,6 +256,9 @@ public final class Board {
         }
     }
 
+    /**
+     * Add the values and move them down.
+     */
     private void moveDown() {
         for (int col = 0; col < getNbColumn(); col++) {
             sumDown(col);
@@ -184,6 +266,14 @@ public final class Board {
         }
     }
 
+    /**
+     * Add the values of the board in the direction given. we add the values
+     * which are the same. We do not sum the values 0, if between 2 numbers
+     * which are the same there is a different number than these then there is
+     * no sum to do.
+     *
+     * @param col the column of the board.
+     */
     private void sumDown(int col) {
         int nbRow = getNbRow();
         for (int lg = nbRow - 1; lg >= 1; lg--) {
@@ -198,6 +288,7 @@ public final class Board {
                             == getValue(nextLg, col)) {
                         setValue(lg, col, doubleValues(lg, col));
                         setValue(nextLg, col, 0);
+                        sumScore(getValue(lg, col));
                         lg--;
                         out = true;
                     }
@@ -207,6 +298,12 @@ public final class Board {
         }
     }
 
+    /**
+     * Move all the values on the board to the bottom, the values do not
+     * overlap.
+     *
+     * @param col the column of the board.
+     */
     private void moveAllDown(int col) {
         int nbRow = getNbRow();
         for (int lg = nbRow - 1; lg >= 1; lg--) {
@@ -225,6 +322,9 @@ public final class Board {
         }
     }
 
+    /**
+     * Add the values and move them left.
+     */
     private void moveleft() {
         for (int lg = 0; lg < getNbRow(); lg++) {
             sumLeft(lg);
@@ -232,6 +332,14 @@ public final class Board {
         }
     }
 
+    /**
+     * Add the values of the board in the direction given. we add the values
+     * which are the same. We do not sum the values 0, if between 2 numbers
+     * which are the same there is a different number than these then there is
+     * no sum to do.
+     *
+     * @param lg the line of the board.
+     */
     private void sumLeft(int lg) {
         for (int col = 0; col < getNbColumn() - 1; col++) {
             boolean out = false;
@@ -244,6 +352,7 @@ public final class Board {
                     } else if (getValue(lg, col) == getValue(lg, nextCol)) {
                         setValue(lg, col, doubleValues(lg, col));
                         setValue(lg, nextCol, 0);
+                        sumScore(getValue(lg, col));
                         col++;
                         out = true;
                     }
@@ -253,6 +362,11 @@ public final class Board {
         }
     }
 
+    /**
+     * Move all the values on the board to the left, the values do not overlap.
+     *
+     * @param lg the line of the board.
+     */
     private void moveAllLeft(int lg) {
         int nbCol = getNbColumn();
         for (int col = 0; col < nbCol - 1; col++) {
@@ -274,6 +388,9 @@ public final class Board {
         }
     }
 
+    /**
+     * Add the values and move them right.
+     */
     private void moveRight() {
         for (int lg = 0; lg < getNbRow(); lg++) {
             sumRight(lg);
@@ -281,6 +398,14 @@ public final class Board {
         }
     }
 
+    /**
+     * Add the values of the board in the direction given. we add the values
+     * which are the same. We do not sum the values 0, if between 2 numbers
+     * which are the same there is a different number than these then there is
+     * no sum to do.
+     *
+     * @param lg the line of he game board.
+     */
     private void sumRight(int lg) {
         for (int col = getNbColumn() - 1; col > 0; col--) {
             boolean out = false;
@@ -293,6 +418,7 @@ public final class Board {
                     } else if (getValue(lg, col) == getValue(lg, beforeCol)) {
                         setValue(lg, col, doubleValues(lg, col));
                         setValue(lg, beforeCol, 0);
+                        sumScore(getValue(lg, col));
                         col--;
                         out = true;
                     }
@@ -305,6 +431,11 @@ public final class Board {
         }
     }
 
+    /**
+     * Move all the values on the board to the right, the values do not overlap.
+     *
+     * @param lg the line of the game board.
+     */
     private void moveAllRight(int lg) {
         int nbCol = getNbColumn();
         for (int col = nbCol - 1; col > 0; col--) {

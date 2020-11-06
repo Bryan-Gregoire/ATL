@@ -13,23 +13,42 @@ import esi.atl.g53735.view.View;
  * @author g53735
  */
 public class Controller {
-
+    
     private final Model game;
     private final InterfaceView view;
 
+    /**
+     * Constructor of the controller.
+     *
+     * @param game represent the model.
+     * @param InterfaceView represent the view.
+     */
     public Controller(Model game, View InterfaceView) {
         this.game = game;
         this.view = InterfaceView;
     }
 
+    /**
+     * Start a game.
+     *
+     */
     public void startGame() {
+        view.displayCurrentScore(game.getScore());
         this.view.displayBoard(this.game.getBoard());
         while (game.getStatus() == LevelStatus.IN_PROGRESS) {
             Direction direction = this.view.askDirection();
             game.move(direction);
+            view.displayCurrentScore(game.getScore());
             this.view.displayBoard(this.game.getBoard());
+            this.game.setNewLevelStatus();
         }
-
+        
+        if (game.getStatus() == LevelStatus.WIN) {
+            view.displayMessage("Congratulations, YOU WON !!!");
+        }
+        if(game.getStatus() == LevelStatus.FAIL) {
+            view.displayMessage("GAME OVER, You lost !");
+        }
     }
-
+    
 }

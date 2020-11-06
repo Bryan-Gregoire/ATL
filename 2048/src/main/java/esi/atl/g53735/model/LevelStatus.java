@@ -1,7 +1,7 @@
 package esi.atl.g53735.model;
 
 /**
- * Status of the game.
+ * State of the game.
  *
  * @author g53735
  */

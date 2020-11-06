@@ -31,6 +31,21 @@ public class View implements InterfaceView {
         System.out.println(message);
     }
 
+    /**
+     * Display the current score.
+     *
+     * @param score the score.
+     */
+    @Override
+    public void displayCurrentScore(int score) {
+        System.out.println("Score : " + score);
+    }
+
+    /**
+     * Displat the game board.
+     *
+     * @param board the board to display.
+     */
     @Override
     public void displayBoard(Board board) {
         int lineCount = board.getNbRow();
@@ -49,7 +64,7 @@ public class View implements InterfaceView {
                 } else if (value >= 1000 && value < 10000) {
                     System.out.print(" |" + value);
                 }
-                if(col == 3) {
+                if (col == 3) {
                     System.out.println(" |");
                 }
             }
@@ -64,7 +79,8 @@ public class View implements InterfaceView {
      */
     @Override
     public Direction askDirection() {
-        System.out.println("Which direction want to move(UP,DOWN,RIGHT,LEFT):");
+        System.out.println("Which direction want to move(U/UP,D/DOWN,R/RIGHT"
+                + ",L/LEFT) :");
         String dir = keyboard.nextLine().toUpperCase();
         while (!"U".equals(dir) && !"UP".equals(dir)
                 && !"D".equals(dir) && !"DOWN".equals(dir)
@@ -74,16 +90,16 @@ public class View implements InterfaceView {
             System.out.println("Enter a direction: ");
             dir = keyboard.nextLine().toUpperCase();
         }
-        return cardinalDirection(dir);
+        return senseDirection(dir);
     }
 
     /**
-     * If a given string corresponds to a cardinal direction.
+     * If a given string corresponds to a direction.
      *
-     * @param direction the given string.
-     * @return the cardinal direction.
+     * @param direction the given string which represent the direction.
+     * @return the direction.
      */
-    private Direction cardinalDirection(String direction) {
+    private Direction senseDirection(String direction) {
         switch (direction) {
             case "U":
             case "UP":
