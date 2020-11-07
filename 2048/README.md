@@ -5,11 +5,11 @@ this is a remake of the popular game 2048, it is a single-player game, the aime 
 
 ## Table of contents
 
--   [Instructions for gameplay](#Instructions-for-gameplay)
--   [Screenshots](#Screenshots)
--   [Built with](#Built-with)
--   [Status](#Status)
--   [Acknowledgements](#Acknowledgements)
+-   [Instructions for gameplay](#instructions-for-gameplay)
+-   [Screenshots](#screenshots)
+-   [Built with](#built-with)
+-   [Status](#status)
+-   [Acknowledgements](#acknowledgements)
 ## Instructions for gameplay
 
 You can move the tiles in four directions : up, down, left, and right. All numbers on the game board will slide into that direction until they hit the end of the board. 
