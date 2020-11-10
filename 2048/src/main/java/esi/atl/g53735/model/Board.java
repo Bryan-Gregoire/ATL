@@ -11,7 +11,6 @@ public final class Board {
 
     private final int[][] board;
     private final ArrayList<Integer> freePlaces = new ArrayList<>();
-    private int score = 0;
 
     /**
      * Constructor of the game board.
@@ -26,6 +25,10 @@ public final class Board {
         };
         addFreePlaces();
         setRandomValueBoard();
+    }
+
+    Board(int[][] board) {   // Pour les test.
+        this.board = board;
     }
 
     /**
@@ -65,24 +68,6 @@ public final class Board {
      */
     public int getNbColumn() {
         return this.board[0].length;
-    }
-
-    /**
-     * Get the score.
-     *
-     * @return the score.
-     */
-    public int getScore() {
-        return this.score;
-    }
-
-    /**
-     * Add the score with the given value.
-     *
-     * @param addToScore the given value.
-     */
-    public void sumScore(int addToScore) {
-        this.score += addToScore;
     }
 
     /**
@@ -212,32 +197,33 @@ public final class Board {
      * Move the values of the board in the given direction.
      *
      * @param direction the given direction.
+     * @return the value of the sum of the values.
      */
-    public void moveValues(Direction direction) {
+    public int moveValues(Direction direction) {
         switch (direction) {
             case UP:
-                moveUp();
-                break;
+                return moveUp();
             case DOWN:
-                moveDown();
-                break;
+                return moveDown();
             case LEFT:
-                moveleft();
-                break;
-            case RIGHT:
-                moveRight();
-                break;
+                return moveleft();
         }
+        return moveRight();
+
     }
 
     /**
-     * Add the values and move them up.
+     * Add the same values and move them up.
+     *
+     * @return the value of the sum of the values.
      */
-    private void moveUp() {
+    private int moveUp() {
+        int addToScore = 0;
         for (int col = 0; col < getNbColumn(); col++) {
-            sumUp(col);
+            addToScore += sumUp(col);
             moveAllUp(col);
         }
+        return addToScore;
     }
 
     /**
@@ -247,22 +233,23 @@ public final class Board {
      * no sum to do.
      *
      * @param col the column of the board.
+     * @return the value of the sum.
      */
-    private void sumUp(int col) {
+    private int sumUp(int col) {
         int nbRow = getNbRow();
+        int addToScore = 0;
         for (int lg = 0; lg < nbRow - 1; lg++) {
             boolean out = false;
             int nextLg = lg + 1;
             if (getValue(lg, col) != 0) {
                 while (!out && nextLg < nbRow) {
-                    if (getValue(nextLg, col) > 0 && getValue(lg, col)
-                            != getValue(nextLg, col)) {
+                    if (getValue(nextLg, col) > 0
+                            && getValue(lg, col) != getValue(nextLg, col)) {
                         out = true;
-                    } else if (getValue(lg, col)
-                            == getValue(nextLg, col)) {
+                    } else if (getValue(lg, col) == getValue(nextLg, col)) {
                         setValue(lg, col, doubleValues(lg, col));
                         setValue(nextLg, col, 0);
-                        sumScore(getValue(lg, col));
+                        addToScore += getValue(lg, col);
                         lg++;
                         out = true;
                     }
@@ -270,6 +257,7 @@ public final class Board {
                 }
             }
         }
+        return addToScore;
     }
 
     /**
@@ -296,13 +284,17 @@ public final class Board {
     }
 
     /**
-     * Add the values and move them down.
+     * Add the same values and move them down.
+     *
+     * @return the value of the sum of the values.
      */
-    private void moveDown() {
+    private int moveDown() {
+        int addToScore = 0;
         for (int col = 0; col < getNbColumn(); col++) {
-            sumDown(col);
+            addToScore += sumDown(col);
             moveAllDown(col);
         }
+        return addToScore;
     }
 
     /**
@@ -312,22 +304,23 @@ public final class Board {
      * no sum to do.
      *
      * @param col the column of the board.
+     * @return the value of the sum.
      */
-    private void sumDown(int col) {
+    private int sumDown(int col) {
         int nbRow = getNbRow();
+        int addToScore = 0;
         for (int lg = nbRow - 1; lg >= 1; lg--) {
             boolean out = false;
             int nextLg = lg - 1;
             if (getValue(lg, col) != 0) {
                 while (!out && nextLg >= 0) {
-                    if (getValue(nextLg, col) > 0 && getValue(lg, col)
-                            != getValue(nextLg, col)) {
+                    if (getValue(nextLg, col) > 0
+                            && getValue(lg, col) != getValue(nextLg, col)) {
                         out = true;
-                    } else if (getValue(lg, col)
-                            == getValue(nextLg, col)) {
+                    } else if (getValue(lg, col) == getValue(nextLg, col)) {
                         setValue(lg, col, doubleValues(lg, col));
                         setValue(nextLg, col, 0);
-                        sumScore(getValue(lg, col));
+                        addToScore += getValue(lg, col);
                         lg--;
                         out = true;
                     }
@@ -335,6 +328,7 @@ public final class Board {
                 }
             }
         }
+        return addToScore;
     }
 
     /**
@@ -362,13 +356,17 @@ public final class Board {
     }
 
     /**
-     * Add the values and move them left.
+     * Add the same values and move them left.
+     *
+     * @return the value of the sum of the values.
      */
-    private void moveleft() {
+    private int moveleft() {
+        int addToScore = 0;
         for (int lg = 0; lg < getNbRow(); lg++) {
-            sumLeft(lg);
+            addToScore += sumLeft(lg);
             moveAllLeft(lg);
         }
+        return addToScore;
     }
 
     /**
@@ -378,20 +376,22 @@ public final class Board {
      * no sum to do.
      *
      * @param lg the line of the board.
+     * @return the value of the sum.
      */
-    private void sumLeft(int lg) {
+    private int sumLeft(int lg) {
+        int addToScore = 0;
         for (int col = 0; col < getNbColumn() - 1; col++) {
             boolean out = false;
             int nextCol = col + 1;
             if (getValue(lg, col) != 0) {
                 while (!out && nextCol < getNbColumn()) {
-                    if (getValue(lg, nextCol) > 0 && getValue(lg, col)
-                            != getValue(lg, nextCol)) {
+                    if (getValue(lg, nextCol) > 0
+                            && getValue(lg, col) != getValue(lg, nextCol)) {
                         out = true;
                     } else if (getValue(lg, col) == getValue(lg, nextCol)) {
                         setValue(lg, col, doubleValues(lg, col));
                         setValue(lg, nextCol, 0);
-                        sumScore(getValue(lg, col));
+                        addToScore += getValue(lg, col);
                         col++;
                         out = true;
                     }
@@ -399,6 +399,7 @@ public final class Board {
                 }
             }
         }
+        return addToScore;
     }
 
     /**
@@ -428,13 +429,17 @@ public final class Board {
     }
 
     /**
-     * Add the values and move them right.
+     * Add the same values and move them right.
+     *
+     * @return the value of the sum of the values.
      */
-    private void moveRight() {
+    private int moveRight() {
+        int addToScore = 0;
         for (int lg = 0; lg < getNbRow(); lg++) {
-            sumRight(lg);
+            addToScore += sumRight(lg);
             moveAllRight(lg);
         }
+        return addToScore;
     }
 
     /**
@@ -444,20 +449,22 @@ public final class Board {
      * no sum to do.
      *
      * @param lg the line of he game board.
+     * @return the value of the sum.
      */
-    private void sumRight(int lg) {
+    private int sumRight(int lg) {
+        int addToScore = 0;
         for (int col = getNbColumn() - 1; col > 0; col--) {
             boolean out = false;
             int beforeCol = col - 1;
             if (getValue(lg, col) != 0) {
                 while (!out && beforeCol >= 0) {
-                    if (getValue(lg, beforeCol) > 0 && getValue(lg, col)
-                            != getValue(lg, beforeCol)) {
+                    if (getValue(lg, beforeCol) > 0
+                            && getValue(lg, col) != getValue(lg, beforeCol)) {
                         out = true;
                     } else if (getValue(lg, col) == getValue(lg, beforeCol)) {
                         setValue(lg, col, doubleValues(lg, col));
                         setValue(lg, beforeCol, 0);
-                        sumScore(getValue(lg, col));
+                        addToScore += getValue(lg, col);
                         col--;
                         out = true;
                     }
@@ -468,6 +475,7 @@ public final class Board {
                 }
             }
         }
+        return addToScore;
     }
 
     /**

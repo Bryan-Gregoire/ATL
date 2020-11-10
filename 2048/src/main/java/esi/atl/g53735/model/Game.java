@@ -10,6 +10,7 @@ public class Game implements Model {
 
     private final Board board;
     private LevelStatus status = LevelStatus.NOT_STARTED;
+    int score = 0;
 
     /**
      * Constructor of Game.
@@ -17,7 +18,6 @@ public class Game implements Model {
      */
     public Game() {
         this.board = new Board();
-        status = LevelStatus.IN_PROGRESS;
     }
 
     /**
@@ -37,7 +37,7 @@ public class Game implements Model {
      */
     @Override
     public int getScore() {
-        return this.board.getScore();
+        return this.score;
     }
 
     /**
@@ -48,6 +48,15 @@ public class Game implements Model {
     @Override
     public LevelStatus getStatus() {
         return status;
+    }
+
+    /**
+     * Add the given integer to the game score.
+     *
+     * @param addToScore the given integer.
+     */
+    private void addToScore(int addToScore) {
+        this.score += addToScore;
     }
 
     /**
@@ -78,7 +87,7 @@ public class Game implements Model {
      */
     @Override
     public void move(Direction direction) {
-        board.moveValues(direction);
+        addToScore(board.moveValues(direction));
         board.addFreePlaces();
         board.setRandomValueBoard();
         setNewLevelStatus();

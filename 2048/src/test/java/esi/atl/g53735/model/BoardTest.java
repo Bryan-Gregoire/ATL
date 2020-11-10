@@ -4,32 +4,25 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 /**
  *
- * @author Utilisateur
+ * @author g53735
  */
 public class BoardTest {
-
-    /**
-     * Test of sumScore method, of class Board.
-     */
-    @Test
-    public void testSumScore() {
-        int addToScore = 2048;
-        Board instance = new Board();
-        int result = 2048;
-        instance.sumScore(addToScore);
-        int expResult = instance.getScore();
-        assertEquals(expResult, result);
-    }
 
     /**
      * Test of winEnd method, of class Board.
      */
     @Test
     public void testWinEndOnlyWithZeroValuesNotWin() {
-        Board instance = new Board();
+        Board instance = new Board(new int[][]{
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0}
+        });
         boolean result = instance.winEnd();
         assertFalse(result);
     }
@@ -38,12 +31,13 @@ public class BoardTest {
      * Test of winEnd method, of class Board.
      */
     @Test
-    public void testWinEndWithDiffValuesNotWin() {
-        Board instance = new Board();
-        instance.setValue(0, 0, 1024);
-        instance.setValue(1, 2, 2);
-        instance.setValue(3, 1, 128);
-        instance.setValue(3, 3, 1024);
+    public void testWinEndWithDiffAndZeroValuesNotWin() {
+        Board instance = new Board(new int[][]{
+            {1024, 0, 0, 8},
+            {0, 0, 2, 256},
+            {512, 16, 0, 0},
+            {0, 128, 0, 1024}
+        });
         boolean result = instance.winEnd();
         assertFalse(result);
     }
@@ -53,11 +47,27 @@ public class BoardTest {
      */
     @Test
     public void testWinEndWithValuesAbove2048() {
-        Board instance = new Board();
-        instance.setValue(0, 0, 4096);
-        instance.setValue(1, 2, 2);
-        instance.setValue(3, 1, 512);
-        instance.setValue(3, 3, 4096);
+        Board instance = new Board(new int[][]{
+            {4096, 0, 0, 0},
+            {0, 0, 2, 0},
+            {2047, 0, 0, 0},
+            {0, 512, 0, 2049}
+        });
+        boolean result = instance.winEnd();
+        assertFalse(result);
+    }
+
+    /**
+     * Test of winEnd method, of class Board.
+     */
+    @Test
+    public void testWinEndBoardFullDiffValuesNot2048() {
+        Board instance = new Board(new int[][]{
+            {2, 2, 8, 8},
+            {8, 32, 2, 4},
+            {1024, 16, 128, 4},
+            {32, 512, 8, 512}
+        });
         boolean result = instance.winEnd();
         assertFalse(result);
     }
@@ -67,11 +77,12 @@ public class BoardTest {
      */
     @Test
     public void testWinEnd2048AtStartBoard() {
-        Board instance = new Board();
-        instance.setValue(0, 0, 2048);
-        instance.setValue(1, 2, 2);
-        instance.setValue(3, 1, 128);
-        instance.setValue(3, 3, 1024);
+        Board instance = new Board(new int[][]{
+            {2048, 2, 2, 0},
+            {4, 4, 2, 0},
+            {0, 16, 8, 16},
+            {0, 128, 0, 128}
+        });
         boolean result = instance.winEnd();
         assertTrue(result);
     }
@@ -81,11 +92,12 @@ public class BoardTest {
      */
     @Test
     public void testWinEnd2048AtEndBoard() {
-        Board instance = new Board();
-        instance.setValue(0, 0, 1024);
-        instance.setValue(1, 2, 64);
-        instance.setValue(3, 1, 256);
-        instance.setValue(3, 3, 2048);
+        Board instance = new Board(new int[][]{
+            {16, 8, 1024, 0},
+            {4, 0, 2, 0},
+            {0, 16, 1024, 16},
+            {256, 0, 0, 2048}
+        });
         boolean result = instance.winEnd();
         assertTrue(result);
     }
@@ -94,8 +106,14 @@ public class BoardTest {
      * Test of loseEnd method, of class Board.
      */
     @Test
-    public void testLoseEndWithZeroValues() {
-        Board instance = new Board();
+    public void testLoseEndOnlyZeroValuesFalse() {
+        Board instance = new Board(new int[][]{
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0}
+        });
+        instance.addFreePlaces();
         boolean result = instance.loseEnd();
         assertFalse(result);
     }
@@ -104,14 +122,14 @@ public class BoardTest {
      * Test of loseEnd method, of class Board.
      */
     @Test
-    public void testLoseEndWithDiffValuesButFalse() {
-        Board instance = new Board();
-        instance.setValue(0, 0, 2);
-        instance.setValue(1, 0, 128);
-        instance.setValue(1, 3, 8);
-        instance.setValue(2, 3, 8);
-        instance.setValue(3, 2, 8);
-        instance.setValue(3, 3, 32);
+    public void testLoseEndWithDiffAndZeroValuesFalse() {
+        Board instance = new Board(new int[][]{
+            {0, 8, 1024, 0},
+            {128, 0, 2, 8},
+            {0, 16, 1024, 8},
+            {256, 0, 8, 32}
+        });
+        instance.addFreePlaces();
         boolean result = instance.loseEnd();
         assertFalse(result);
     }
@@ -120,15 +138,13 @@ public class BoardTest {
      * Test of loseEnd method, of class Board.
      */
     @Test
-    public void testLoseEndWithAllDiffValues() {
-        Board instance = new Board();
-        int value = 0;
-        for (int lg = 0; lg < instance.getNbRow(); lg++) {
-            for (int col = 0; col < instance.getNbColumn(); col++) {
-                value += value + 2;
-                instance.setValue(lg, col, value);
-            }
-        }
+    public void testLoseEndWithAllDiffValuesTrue() {
+        Board instance = new Board(new int[][]{
+            {4, 8, 2, 32},
+            {2, 16, 128, 8},
+            {128, 4, 32, 2},
+            {16, 2, 16, 256}
+        });
         instance.addFreePlaces();
         boolean result = instance.loseEnd();
         assertTrue(result);
@@ -159,7 +175,13 @@ public class BoardTest {
      */
     @Test
     public void testSetRandomValueBoardSetANumber() {
-        Board instance = new Board();
+        Board instance = new Board(new int[][]{
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0}
+        });
+        instance.addFreePlaces();
         instance.setRandomValueBoard();
         boolean result = false;
         for (int lg = 0; lg < instance.getNbRow(); lg++) {
@@ -177,22 +199,14 @@ public class BoardTest {
      */
     @Test
     public void testDoubleValues() {
-        Board instance = new Board();
-        instance.setValue(0, 0, 64);
-        int expResult = 128;
+        Board instance = new Board(new int[][]{
+            {64, 0, 8, 0},
+            {0, 0, 2, 0},
+            {256, 0, 1024, 0},
+            {0, 512, 0, 0}
+        });
         int result = instance.doubleValues(0, 0);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of doubleValues method, of class Board.
-     */
-    @Test
-    public void testDoubleValues2() {
-        Board instance = new Board();
-        instance.setValue(3, 3, 1024);
-        int expResult = 2048;
-        int result = instance.doubleValues(3, 3);
+        int expResult = 128;
         assertEquals(expResult, result);
     }
 
@@ -202,34 +216,20 @@ public class BoardTest {
     @Test
     public void testMoveValuesUp() {
         Direction direction = Direction.UP;
-        Board instance = new Board();
-        //Fair un parcours pour tout mettre a zero car j'ai un random.
-        for (int lg = 0; lg < instance.getNbRow(); lg++) {
-            for (int col = 0; col < instance.getNbColumn(); col++) {
-                if (instance.getValue(lg, col) != 0) {
-                    instance.setValue(lg, col, 0);
-                    lg = 4;
-                    col = 4;
-                }
-            }
-        }
-        instance.setValue(0, 0, 2);
-        instance.setValue(1, 2, 8);
-        instance.setValue(3, 1, 16);
-        instance.setValue(2, 3, 32);
+        Board instance = new Board(new int[][]{
+            {2, 0, 0, 0},
+            {0, 0, 0, 32},
+            {4, 0, 8, 0},
+            {0, 16, 0, 0}
+        });
         instance.moveValues(direction);
-        int result = instance.getValue(0, 0);
-        int result2 = instance.getValue(0, 2);
-        int result3 = instance.getValue(0, 1);
-        int result4 = instance.getValue(0, 3);
-        int expResult = 2;
-        int expResult2 = 8;
-        int expResult3 = 16;
-        int expResult4 = 32;
-        assertEquals(expResult, result);
-        assertEquals(expResult2, result2);
-        assertEquals(expResult3, result3);
-        assertEquals(expResult4, result4);
+        Board expResult = new Board(new int[][]{
+            {2, 16, 8, 32},
+            {4, 0, 0, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0}
+        });
+        assertArrayEquals(expResult.getBoard(), instance.getBoard());
     }
 
     /**
@@ -238,112 +238,64 @@ public class BoardTest {
     @Test
     public void testMoveValuesSumAndUp() {
         Direction direction = Direction.UP;
-        Board instance = new Board();
-        //Fair un parcours pour tout mettre a zero car j'ai un random.
-        for (int lg = 0; lg < instance.getNbRow(); lg++) {
-            for (int col = 0; col < instance.getNbColumn(); col++) {
-                if (instance.getValue(lg, col) != 0) {
-                    instance.setValue(lg, col, 0);
-                    lg = 4;
-                    col = 4;
-                }
-            }
-        }
-        instance.setValue(2, 3, 2);
-        instance.setValue(3, 3, 2);
-        instance.setValue(1, 1, 4);
-        instance.setValue(2, 1, 4);
+        Board instance = new Board(new int[][]{
+            {0, 4, 0, 2},
+            {8, 4, 2, 0},
+            {0, 0, 2, 2},
+            {8, 16, 0, 32}
+        });
         instance.moveValues(direction);
-        int result = instance.getValue(0, 3);
-        int result2 = instance.getValue(2, 3);
-        int result3 = instance.getValue(3, 3);
-        int result4 = instance.getValue(0, 1);
-        int result5 = instance.getValue(1, 1);
-        int result6 = instance.getValue(2, 1);
-        int expResult = 4;
-        int expResult2 = 0;
-        int expResult3 = 0;
-        int expResult4 = 8;
-        int expResult5 = 0;
-        int expResult6 = 0;
-        assertEquals(expResult, result);
-        assertEquals(expResult2, result2);
-        assertEquals(expResult3, result3);
-        assertEquals(expResult4, result4);
-        assertEquals(expResult5, result5);
-        assertEquals(expResult6, result6);
+        Board expResult = new Board(new int[][]{
+            {16, 8, 4, 4},
+            {0, 16, 0, 32},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0}
+        });
+        assertArrayEquals(expResult.getBoard(), instance.getBoard());
     }
 
     /**
      * Test of moveValues method, of class Board.
      */
     @Test
-    public void testMoveValuesFullColUp() {
+    public void testMoveValuesFullBoardUp() {
         Direction direction = Direction.UP;
-        Board instance = new Board();
-        //Fair un parcours pour tout mettre a zero car j'ai un random.
-        for (int lg = 0; lg < instance.getNbRow(); lg++) {
-            for (int col = 0; col < instance.getNbColumn(); col++) {
-                if (instance.getValue(lg, col) != 0) {
-                    instance.setValue(lg, col, 0);
-                    lg = 4;
-                    col = 4;
-                }
-            }
-        }
-        instance.setValue(0, 0, 256);
-        instance.setValue(1, 0, 32);
-        instance.setValue(2, 0, 1024);
-        instance.setValue(3, 0, 256);
+        Board instance = new Board(new int[][]{
+            {16, 4, 256, 2},
+            {8, 4, 32, 16},
+            {4, 32, 1024, 2},
+            {8, 16, 256, 32}
+        });
         instance.moveValues(direction);
-        int result = instance.getValue(0, 0);
-        int result2 = instance.getValue(1, 0);
-        int result3 = instance.getValue(2, 0);
-        int result4 = instance.getValue(3, 0);
-        int expResult = 256;
-        int expResult2 = 32;
-        int expResult3 = 1024;
-        int expResult4 = 256;
-        assertEquals(expResult, result);
-        assertEquals(expResult2, result2);
-        assertEquals(expResult3, result3);
-        assertEquals(expResult4, result4);
+        Board expResult = new Board(new int[][]{
+            {16, 8, 256, 2},
+            {8, 32, 32, 16},
+            {4, 16, 1024, 2},
+            {8, 0, 256, 32}
+        });
+        assertArrayEquals(expResult.getBoard(), instance.getBoard());
     }
 
     /**
      * Test of moveValues method, of class Board.
      */
     @Test
-    public void testMoveValuesFullColSumUp() {
+    public void testMoveValuesFullBoardSumUp() {
         Direction direction = Direction.UP;
-        Board instance = new Board();
-        //Fair un parcours pour tout mettre a zero car j'ai un random.
-        for (int lg = 0; lg < instance.getNbRow(); lg++) {
-            for (int col = 0; col < instance.getNbColumn(); col++) {
-                if (instance.getValue(lg, col) != 0) {
-                    instance.setValue(lg, col, 0);
-                    lg = 4;
-                    col = 4;
-                }
-            }
-        }
-        instance.setValue(0, 0, 256);
-        instance.setValue(1, 0, 32);
-        instance.setValue(2, 0, 32);
-        instance.setValue(3, 0, 256);
+        Board instance = new Board(new int[][]{
+            {16, 4, 256, 2},
+            {16, 4, 256, 2},
+            {8, 4, 64, 4},
+            {8, 4, 64, 4}
+        });
         instance.moveValues(direction);
-        int result = instance.getValue(0, 0);
-        int result2 = instance.getValue(1, 0);
-        int result3 = instance.getValue(2, 0);
-        int result4 = instance.getValue(3, 0);
-        int expResult = 256;
-        int expResult2 = 64;
-        int expResult3 = 256;
-        int expResult4 = 0;
-        assertEquals(expResult, result);
-        assertEquals(expResult2, result2);
-        assertEquals(expResult3, result3);
-        assertEquals(expResult4, result4);
+        Board expResult = new Board(new int[][]{
+            {32, 8, 512, 4},
+            {16, 8, 128, 8},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0}
+        });
+        assertArrayEquals(expResult.getBoard(), instance.getBoard());
     }
 
     /**
@@ -352,39 +304,20 @@ public class BoardTest {
     @Test
     public void testMoveValuesDownValueS() {
         Direction direction = Direction.DOWN;
-        Board instance = new Board();
-        //Fair un parcours pour tout mettre a zero car j'ai un random.
-        for (int lg = 0; lg < instance.getNbRow(); lg++) {
-            for (int col = 0; col < instance.getNbColumn(); col++) {
-                if (instance.getValue(lg, col) != 0) {
-                    instance.setValue(lg, col, 0);
-                    lg = 4;
-                    col = 4;
-                }
-            }
-        }
-        instance.setValue(0, 2, 8);
-        instance.setValue(1, 3, 8);
-        instance.setValue(0, 0, 8);
+        Board instance = new Board(new int[][]{
+            {0, 2, 8, 32},
+            {4, 0, 0, 0},
+            {16, 0, 0, 128},
+            {0, 0, 0, 0}
+        });
         instance.moveValues(direction);
-        int result = instance.getValue(3, 2);
-        int result2 = instance.getValue(0, 2);
-        int result3 = instance.getValue(1, 3);
-        int result4 = instance.getValue(0, 0);
-        int result5 = instance.getValue(3, 3);
-        int result6 = instance.getValue(3, 0);
-        int expResult = 8;
-        int expResult2 = 0;
-        int expResult3 = 0;
-        int expResult4 = 0;
-        int expResult5 = 8;
-        int expResult6 = 8;
-        assertEquals(expResult, result);
-        assertEquals(expResult2, result2);
-        assertEquals(expResult3, result3);
-        assertEquals(expResult4, result4);
-        assertEquals(expResult5, result5);
-        assertEquals(expResult6, result6);
+        Board expResult = new Board(new int[][]{
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+            {4, 0, 0, 32},
+            {16, 2, 8, 128}
+        });
+        assertArrayEquals(expResult.getBoard(), instance.getBoard());
     }
 
     /**
@@ -393,37 +326,20 @@ public class BoardTest {
     @Test
     public void testMoveValuesSumDown() {
         Direction direction = Direction.DOWN;
-        Board instance = new Board();
-        //Fair un parcours pour tout mettre a zero car j'ai un random.
-        for (int lg = 0; lg < instance.getNbRow(); lg++) {
-            for (int col = 0; col < instance.getNbColumn(); col++) {
-                if (instance.getValue(lg, col) != 0) {
-                    instance.setValue(lg, col, 0);
-                    lg = 4;
-                    col = 4;
-                }
-            }
-        }
-        instance.setValue(1, 3, 8);
-        instance.setValue(2, 3, 8);
-        instance.setValue(0, 0, 4);
-        instance.setValue(3, 0, 4);
+        Board instance = new Board(new int[][]{
+            {16, 2, 8, 128},
+            {16, 0, 0, 0},
+            {0, 2, 8, 0},
+            {0, 2, 0, 128}
+        });
         instance.moveValues(direction);
-        int result = instance.getValue(3, 3);
-        int result2 = instance.getValue(1, 3);
-        int result3 = instance.getValue(2, 3);
-        int result4 = instance.getValue(0, 0);
-        int result5 = instance.getValue(3, 0);
-        int expResult = 16;
-        int expResult2 = 0;
-        int expResult3 = 0;
-        int expResult4 = 0;
-        int expResult5 = 8;
-        assertEquals(expResult, result);
-        assertEquals(expResult2, result2);
-        assertEquals(expResult3, result3);
-        assertEquals(expResult4, result4);
-        assertEquals(expResult5, result5);
+        Board expResult = new Board(new int[][]{
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+            {0, 2, 0, 0},
+            {32, 4, 16, 256}
+        });
+        assertArrayEquals(expResult.getBoard(), instance.getBoard());
     }
 
     /**
@@ -432,66 +348,64 @@ public class BoardTest {
     @Test
     public void testMoveValuesDownFailSum() {
         Direction direction = Direction.DOWN;
-        Board instance = new Board();
-        //Fair un parcours pour tout mettre a zero car j'ai un random.
-        for (int lg = 0; lg < instance.getNbRow(); lg++) {
-            for (int col = 0; col < instance.getNbColumn(); col++) {
-                if (instance.getValue(lg, col) != 0) {
-                    instance.setValue(lg, col, 0);
-                    lg = 4;
-                    col = 4;
-                }
-            }
-        }
-        instance.setValue(1, 0, 8);
-        instance.setValue(2, 0, 4);
-        instance.setValue(3, 0, 8);
+        Board instance = new Board(new int[][]{
+            {16, 8, 8, 128},
+            {64, 0, 128, 0},
+            {16, 2, 8, 256},
+            {64, 4, 128, 16}
+        });
         instance.moveValues(direction);
-        int result = instance.getValue(1, 0);
-        int result2 = instance.getValue(2, 0);
-        int result3 = instance.getValue(3, 0);
-        int expResult = 8;
-        int expResult2 = 4;
-        int expResult3 = 8;
-        assertEquals(expResult, result);
-        assertEquals(expResult2, result2);
-        assertEquals(expResult3, result3);
+        Board expResult = new Board(new int[][]{
+            {16, 0, 8, 0},
+            {64, 8, 128, 128},
+            {16, 2, 8, 256},
+            {64, 4, 128, 16}
+        });
+        assertArrayEquals(expResult.getBoard(), instance.getBoard());
     }
 
     /**
      * Test of moveValues method, of class Board.
      */
     @Test
-    public void testMoveValuesDownFullCol() {
+    public void testMoveValuesDownFullBoard() {
         Direction direction = Direction.DOWN;
-        Board instance = new Board();
-        //Fair un parcours pour tout mettre a zero car j'ai un random.
-        for (int lg = 0; lg < instance.getNbRow(); lg++) {
-            for (int col = 0; col < instance.getNbColumn(); col++) {
-                if (instance.getValue(lg, col) != 0) {
-                    instance.setValue(lg, col, 0);
-                    lg = 4;
-                    col = 4;
-                }
-            }
-        }
-        instance.setValue(0, 2, 8);
-        instance.setValue(1, 2, 1024);
-        instance.setValue(2, 2, 256);
-        instance.setValue(3, 2, 16);
+        Board instance = new Board(new int[][]{
+            {2, 1024, 64, 256},
+            {64, 32, 16, 8},
+            {2, 256, 2, 128},
+            {64, 512, 128, 256}
+        });
         instance.moveValues(direction);
-        int result = instance.getValue(0, 2);
-        int result2 = instance.getValue(1, 2);
-        int result3 = instance.getValue(2, 2);
-        int result4 = instance.getValue(3, 2);
-        int expResult = 8;
-        int expResult2 = 1024;
-        int expResult3 = 256;
-        int expResult4 = 16;
-        assertEquals(expResult, result);
-        assertEquals(expResult2, result2);
-        assertEquals(expResult3, result3);
-        assertEquals(expResult4, result4);
+        Board expResult = new Board(new int[][]{
+            {2, 1024, 64, 256},
+            {64, 32, 16, 8},
+            {2, 256, 2, 128},
+            {64, 512, 128, 256}
+        });
+        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+    }
+
+    /**
+     * Test of moveValues method, of class Board.
+     */
+    @Test
+    public void testMoveValuesDownFullBoardAndSum() {
+        Direction direction = Direction.DOWN;
+        Board instance = new Board(new int[][]{
+            {16, 4, 256, 2},
+            {16, 4, 256, 2},
+            {8, 4, 64, 4},
+            {8, 4, 64, 4}
+        });
+        instance.moveValues(direction);
+        Board expResult = new Board(new int[][]{
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+            {32, 8, 512, 4},
+            {16, 8, 128, 8}
+        });
+        assertArrayEquals(expResult.getBoard(), instance.getBoard());
     }
 
     /**
@@ -500,63 +414,42 @@ public class BoardTest {
     @Test
     public void testMoveValuesLeftValueS() {
         Direction direction = Direction.LEFT;
-        Board instance = new Board();
-        //Fair un parcours pour tout mettre a zero car j'ai un random.
-        for (int lg = 0; lg < instance.getNbRow(); lg++) {
-            for (int col = 0; col < instance.getNbColumn(); col++) {
-                if (instance.getValue(lg, col) != 0) {
-                    instance.setValue(lg, col, 0);
-                    lg = 4;
-                    col = 4;
-                }
-            }
-        }
-        instance.setValue(0, 2, 8);
-        instance.setValue(1, 2, 8);
+        Board instance = new Board(new int[][]{
+            {16, 0, 0, 2},
+            {0, 0, 0, 256},
+            {8, 4, 64, 0},
+            {0, 4, 0, 0}
+        });
         instance.moveValues(direction);
-        int result = instance.getValue(0, 0);
-        int result2 = instance.getValue(1, 0);
-        int result3 = instance.getValue(0, 2);
-        int result4 = instance.getValue(1, 2);
-        int expResult = 8;
-        int expResult2 = 8;
-        int expResult3 = 0;
-        int expResult4 = 0;
-        assertEquals(expResult, result);
-        assertEquals(expResult2, result2);
-        assertEquals(expResult3, result3);
-        assertEquals(expResult4, result4);
+        Board expResult = new Board(new int[][]{
+            {16, 2, 0, 0},
+            {256, 0, 0, 0},
+            {8, 4, 64, 0},
+            {4, 0, 0, 0}
+        });
+        assertArrayEquals(expResult.getBoard(), instance.getBoard());
     }
 
     /**
      * Test of moveValues method, of class Board.
      */
     @Test
-    public void testMoveValuesLeftValueSSum() {
+    public void testMoveValuesLeftValuesAndSum() {
         Direction direction = Direction.LEFT;
-        Board instance = new Board();
-        //Fair un parcours pour tout mettre a zero car j'ai un random.
-        for (int lg = 0; lg < instance.getNbRow(); lg++) {
-            for (int col = 0; col < instance.getNbColumn(); col++) {
-                if (instance.getValue(lg, col) != 0) {
-                    instance.setValue(lg, col, 0);
-                    lg = 4;
-                    col = 4;
-                }
-            }
-        }
-        instance.setValue(1, 1, 4);
-        instance.setValue(1, 2, 4);
+        Board instance = new Board(new int[][]{
+            {16, 0, 0, 16},
+            {256, 0, 256, 8},
+            {4, 4, 64, 0},
+            {2, 4, 0, 0}
+        });
         instance.moveValues(direction);
-        int result = instance.getValue(1, 0);
-        int result2 = instance.getValue(1, 1);
-        int result3 = instance.getValue(1, 2);
-        int expResult = 8;
-        int expResult2 = 0;
-        int expResult3 = 0;
-        assertEquals(expResult, result);
-        assertEquals(expResult2, result2);
-        assertEquals(expResult3, result3);
+        Board expResult = new Board(new int[][]{
+            {32, 0, 0, 0},
+            {512, 8, 0, 0},
+            {8, 64, 0, 0},
+            {2, 4, 0, 0}
+        });
+        assertArrayEquals(expResult.getBoard(), instance.getBoard());
     }
 
     /**
@@ -565,30 +458,21 @@ public class BoardTest {
     @Test
     public void testMoveValuesLeftValuesFailSum() {
         Direction direction = Direction.LEFT;
-        Board instance = new Board();
-        //Fair un parcours pour tout mettre a zero car j'ai un random.
-        for (int lg = 0; lg < instance.getNbRow(); lg++) {
-            for (int col = 0; col < instance.getNbColumn(); col++) {
-                if (instance.getValue(lg, col) != 0) {
-                    instance.setValue(lg, col, 0);
-                    lg = 4;
-                    col = 4;
-                }
-            }
-        }
-        instance.setValue(0, 1, 2);
-        instance.setValue(0, 2, 4);
-        instance.setValue(0, 3, 2);
+        Board instance = new Board(new int[][]{
+            {16, 8, 0, 16},
+            {256, 2, 256, 0},
+            {64, 4, 64, 0},
+            {2, 16, 2, 8}
+        });
         instance.moveValues(direction);
-        int result = instance.getValue(0, 0);
-        int result2 = instance.getValue(0, 1);
-        int result3 = instance.getValue(0, 2);
-        int expResult = 2;
-        int expResult2 = 4;
-        int expResult3 = 2;
-        assertEquals(expResult, result);
-        assertEquals(expResult2, result2);
-        assertEquals(expResult3, result3);
+        Board expResult = new Board(new int[][]{
+            {16, 8, 16, 0},
+            {256, 2, 256, 0},
+            {64, 4, 64, 0},
+            {2, 16, 2, 8}
+        });
+        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+
     }
 
     /**
@@ -597,34 +481,21 @@ public class BoardTest {
     @Test
     public void testMoveValuesLeftValuesFullRow() {
         Direction direction = Direction.LEFT;
-        Board instance = new Board();
-        //Fair un parcours pour tout mettre a zero car j'ai un random.
-        for (int lg = 0; lg < instance.getNbRow(); lg++) {
-            for (int col = 0; col < instance.getNbColumn(); col++) {
-                if (instance.getValue(lg, col) != 0) {
-                    instance.setValue(lg, col, 0);
-                    lg = 4;
-                    col = 4;
-                }
-            }
-        }
-        instance.setValue(0, 0, 2);
-        instance.setValue(0, 1, 4);
-        instance.setValue(0, 2, 8);
-        instance.setValue(0, 3, 16);
+        Board instance = new Board(new int[][]{
+            {16, 8, 32, 16},
+            {256, 2, 256, 8},
+            {64, 4, 64, 32},
+            {2, 4, 128, 2}
+        });
         instance.moveValues(direction);
-        int result = instance.getValue(0, 0);
-        int result2 = instance.getValue(0, 1);
-        int result3 = instance.getValue(0, 2);
-        int result4 = instance.getValue(0, 3);
-        int expResult = 2;
-        int expResult2 = 4;
-        int expResult3 = 8;
-        int expResult4 = 16;
-        assertEquals(expResult, result);
-        assertEquals(expResult2, result2);
-        assertEquals(expResult3, result3);
-        assertEquals(expResult4, result4);
+        Board expResult = new Board(new int[][]{
+            {16, 8, 32, 16},
+            {256, 2, 256, 8},
+            {64, 4, 64, 32},
+            {2, 4, 128, 2}
+        });
+        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+
     }
 
     /**
@@ -633,26 +504,20 @@ public class BoardTest {
     @Test
     public void testMoveValuesRight() {
         Direction direction = Direction.RIGHT;
-        Board instance = new Board();
-        //Fair un parcours pour tout mettre a zero car j'ai un random.
-        for (int lg = 0; lg < instance.getNbRow(); lg++) {
-            for (int col = 0; col < instance.getNbColumn(); col++) {
-                if (instance.getValue(lg, col) != 0) {
-                    instance.setValue(lg, col, 0);
-                    lg = 4;
-                    col = 4;
-                }
-            }
-        }
-        instance.setValue(0, 0, 2);
-        instance.setValue(1, 1, 4);
+        Board instance = new Board(new int[][]{
+            {32, 2, 0, 0},
+            {4, 0, 0, 0},
+            {128, 8, 0, 0},
+            {0, 0, 0, 0}
+        });
         instance.moveValues(direction);
-        int result = instance.getValue(0, 3);
-        int result2 = instance.getValue(1, 3);
-        int expResult = 2;
-        int expResult2 = 4;
-        assertEquals(expResult, result);
-        assertEquals(expResult2, result2);
+        Board expResult = new Board(new int[][]{
+            {0, 0, 32, 2},
+            {0, 0, 0, 4},
+            {0, 0, 128, 8},
+            {0, 0, 0, 0}
+        });
+        assertArrayEquals(expResult.getBoard(), instance.getBoard());
     }
 
     /**
@@ -661,28 +526,20 @@ public class BoardTest {
     @Test
     public void testMoveValuesRightSum() {
         Direction direction = Direction.RIGHT;
-        Board instance = new Board();
-        //Fair un parcours pour tout mettre a zero car j'ai un random.
-        for (int lg = 0; lg < instance.getNbRow(); lg++) {
-            for (int col = 0; col < instance.getNbColumn(); col++) {
-                if (instance.getValue(lg, col) != 0) {
-                    instance.setValue(lg, col, 0);
-                    lg = 4;
-                    col = 4;
-                }
-            }
-        }
-        instance.setValue(0, 0, 16);
-        instance.setValue(0, 1, 16);
-        instance.setValue(3, 3, 8);
-        instance.setValue(3, 0, 8);
+        Board instance = new Board(new int[][]{
+            {0, 0, 2, 2},
+            {0, 4, 4, 0},
+            {8, 0, 0, 8},
+            {2, 0, 2, 0}
+        });
         instance.moveValues(direction);
-        int result = instance.getValue(0, 3);
-        int result2 = instance.getValue(3, 3);
-        int expResult = 32;
-        int expResult2 = 16;
-        assertEquals(expResult, result);
-        assertEquals(expResult2, result2);
+        Board expResult = new Board(new int[][]{
+            {0, 0, 0, 4},
+            {0, 0, 0, 8},
+            {0, 0, 0, 16},
+            {0, 0, 0, 4}
+        });
+        assertArrayEquals(expResult.getBoard(), instance.getBoard());
     }
 
     /**
@@ -691,64 +548,63 @@ public class BoardTest {
     @Test
     public void testMoveValuesRightFailSum() {
         Direction direction = Direction.RIGHT;
-        Board instance = new Board();
-        //Fair un parcours pour tout mettre a zero car j'ai un random.
-        for (int lg = 0; lg < instance.getNbRow(); lg++) {
-            for (int col = 0; col < instance.getNbColumn(); col++) {
-                if (instance.getValue(lg, col) != 0) {
-                    instance.setValue(lg, col, 0);
-                    lg = 4;
-                    col = 4;
-                }
-            }
-        }
-        instance.setValue(0, 0, 16);
-        instance.setValue(0, 1, 2);
-        instance.setValue(0, 2, 8);
+        Board instance = new Board(new int[][]{
+            {4, 0, 2, 4},
+            {16, 8, 16, 0},
+            {4, 32, 0, 4},
+            {16, 4, 2, 16}
+        });
         instance.moveValues(direction);
-        int result = instance.getValue(0, 1);
-        int result2 = instance.getValue(0, 2);
-        int result3 = instance.getValue(0, 3);
-        int expResult = 16;
-        int expResult2 = 2;
-        int expResult3 = 8;
-        assertEquals(expResult, result);
-        assertEquals(expResult2, result2);
-        assertEquals(expResult3, result3);
+        Board expResult = new Board(new int[][]{
+            {0, 4, 2, 4},
+            {0, 16, 8, 16},
+            {0, 4, 32, 4},
+            {16, 4, 2, 16}
+        });
+        assertArrayEquals(expResult.getBoard(), instance.getBoard());
     }
 
     /**
      * Test of moveValues method, of class Board.
      */
     @Test
-    public void testMoveValuesRightFullRow() {
+    public void testMoveValuesRightFullBaordNotMove() {
         Direction direction = Direction.RIGHT;
-        Board instance = new Board();
-        //Fair un parcours pour tout mettre a zero car j'ai un random.
-        for (int lg = 0; lg < instance.getNbRow(); lg++) {
-            for (int col = 0; col < instance.getNbColumn(); col++) {
-                if (instance.getValue(lg, col) != 0) {
-                    instance.setValue(lg, col, 0);
-                    lg = 4;
-                    col = 4;
-                }
-            }
-        }
-        instance.setValue(0, 0, 16);
-        instance.setValue(0, 1, 2);
-        instance.setValue(0, 2, 8);
-        instance.setValue(0, 3, 128);
+        Board instance = new Board(new int[][]{
+            {4, 2, 8, 16},
+            {16, 2, 8, 32},
+            {32, 1024, 512, 128},
+            {64, 2, 256, 2}
+        });
         instance.moveValues(direction);
-        int result = instance.getValue(0, 0);
-        int result2 = instance.getValue(0, 1);
-        int result3 = instance.getValue(0, 2);
-        int result4 = instance.getValue(0, 3);
-        int expResult = 16;
-        int expResult2 = 2;
-        int expResult3 = 8;
-        int expResult4 = 128;
-        assertEquals(expResult, result);
-        assertEquals(expResult2, result2);
-        assertEquals(expResult3, result3);
+        Board expResult = new Board(new int[][]{
+            {4, 2, 8, 16},
+            {16, 2, 8, 32},
+            {32, 1024, 512, 128},
+            {64, 2, 256, 2}
+        });
+        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+    }
+
+    /**
+     * Test of moveValues method, of class Board.
+     */
+    @Test
+    public void testMoveValuesRightFullBaordAndSum() {
+        Direction direction = Direction.RIGHT;
+        Board instance = new Board(new int[][]{
+            {2, 2, 4, 4},
+            {16, 16, 8, 8},
+            {32, 32, 128, 128},
+            {64, 64, 256, 256}
+        });
+        instance.moveValues(direction);
+        Board expResult = new Board(new int[][]{
+            {0, 0, 4, 8},
+            {0, 0, 32, 16},
+            {0, 0, 64, 256},
+            {0, 0, 128, 512}
+        });
+        assertArrayEquals(expResult.getBoard(), instance.getBoard());
     }
 }

@@ -10,7 +10,7 @@ import esi.atl.g53735.view.View;
  * @author g53735
  */
 public class Main {
-    
+
     public static void main(String[] args) {
         System.out.println("           2048");
         System.out.println("===========================");

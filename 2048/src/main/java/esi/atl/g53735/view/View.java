@@ -53,15 +53,13 @@ public class View implements InterfaceView {
         for (int line = 0; line < lineCount; line++) {
             for (int col = 0; col < colCount; col++) {
                 int value = board.getValue(line, col);
-                if (value == 0) {
+                if (value < 10) {
                     System.out.print(" |   " + value);
-                } else if (value > 0 && value < 10) {
-                    System.out.print(" |   " + value);
-                } else if (value >= 10 && value < 100) {
+                } else if (value < 100) {
                     System.out.print(" |  " + value);
-                } else if (value >= 100 && value < 1000) {
+                } else if (value < 1000) {
                     System.out.print(" | " + value);
-                } else if (value >= 1000 && value < 10000) {
+                } else if (value < 10000) {
                     System.out.print(" |" + value);
                 }
                 if (col == 3) {
