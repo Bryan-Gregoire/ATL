@@ -3,7 +3,7 @@ package esi.atl.g53735.model;
 import java.util.ArrayList;
 
 /**
- * Game board, made up of board.
+ * Game board, made up values of board.
  *
  * @author g53735
  */
@@ -17,12 +17,7 @@ public final class Board {
      *
      */
     public Board() {
-        this.board = new int[][]{
-            {0, 0, 0, 0},
-            {0, 0, 0, 0},
-            {0, 0, 0, 0},
-            {0, 0, 0, 0}
-        };
+        this.board = new int[4][4];
         addFreePlaces();
         setRandomValueBoard();
     }
