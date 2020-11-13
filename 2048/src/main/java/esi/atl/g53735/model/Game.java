@@ -21,6 +21,15 @@ public class Game implements Model {
     }
 
     /**
+     * Constructor of Game for the test.
+     *
+     * @param board the game board.
+     */
+    Game(Board board) {
+        this.board = board;
+    }
+
+    /**
      * Get the board of the game.
      *
      * @return the board.
@@ -51,15 +60,6 @@ public class Game implements Model {
     }
 
     /**
-     * Add the given integer to the game score.
-     *
-     * @param addToScore the given integer.
-     */
-    private void addToScore(int addToScore) {
-        this.score += addToScore;
-    }
-
-    /**
      * Indicate that the game started.
      */
     @Override
@@ -81,7 +81,7 @@ public class Game implements Model {
     }
 
     /**
-     * Move the values of the game board.
+     * Move the values of the game board in the given direction.
      *
      * @param direction the direction which move.
      */
@@ -91,5 +91,14 @@ public class Game implements Model {
         board.addFreePlaces();
         board.setRandomValueBoard();
         setNewLevelStatus();
+    }
+
+    /**
+     * Add the given integer to the game score.
+     *
+     * @param addToScore the given integer.
+     */
+    private void addToScore(int addToScore) {
+        this.score += addToScore;
     }
 }

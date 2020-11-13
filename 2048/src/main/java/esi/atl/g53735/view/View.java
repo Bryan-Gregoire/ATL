@@ -1,8 +1,6 @@
 package esi.atl.g53735.view;
 
 import esi.atl.g53735.model.Board;
-import esi.atl.g53735.model.Direction;
-import java.util.Scanner;
 
 /**
  * Represents the View of the game.
@@ -10,16 +8,6 @@ import java.util.Scanner;
  * @author g53735
  */
 public class View implements InterfaceView {
-
-    private final Scanner keyboard;
-
-    /**
-     * Constructor of my Scanner.
-     *
-     */
-    public View() {
-        this.keyboard = new Scanner(System.in);
-    }
 
     /**
      * Display the given message.
@@ -68,47 +56,5 @@ public class View implements InterfaceView {
             }
             System.out.println("");
         }
-    }
-
-    /**
-     * Ask to enter a direction.
-     *
-     * @return the given direction.
-     */
-    @Override
-    public Direction askDirection() {
-        System.out.println("Which direction want to move(U/UP,D/DOWN,R/RIGHT"
-                + ",L/LEFT) :");
-        String dir = keyboard.nextLine().toUpperCase();
-        while (!"U".equals(dir) && !"UP".equals(dir)
-                && !"D".equals(dir) && !"DOWN".equals(dir)
-                && !"R".equals(dir) && !"RIGHT".equals(dir)
-                && !"L".equals(dir) && !"LEFT".equals(dir)) {
-            System.out.println("This is not a direction");
-            System.out.println("Enter a direction: ");
-            dir = keyboard.nextLine().toUpperCase();
-        }
-        return senseDirection(dir);
-    }
-
-    /**
-     * If a given string corresponds to a direction.
-     *
-     * @param direction the given string which represent the direction.
-     * @return the direction.
-     */
-    private Direction senseDirection(String direction) {
-        switch (direction) {
-            case "U":
-            case "UP":
-                return Direction.UP;
-            case "D":
-            case "DOWN":
-                return Direction.DOWN;
-            case "L":
-            case "LEFT":
-                return Direction.LEFT;
-        }
-        return Direction.RIGHT;
     }
 }
