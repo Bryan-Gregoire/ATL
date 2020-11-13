@@ -22,7 +22,12 @@ public final class Board {
         setRandomValueBoard();
     }
 
-    Board(int[][] board) {   // Pour les test.
+    /**
+     * Constructor of board for the test.
+     *
+     * @param board the board.
+     */
+    Board(int[][] board) {
         this.board = board;
     }
 
