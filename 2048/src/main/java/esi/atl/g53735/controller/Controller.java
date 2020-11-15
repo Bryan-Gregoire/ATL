@@ -46,7 +46,7 @@ public class Controller {
         }
 
         if (game.getStatus() == LevelStatus.WIN) {
-            view.displayMessage("GAME OVER, YOU WON !");
+            view.displayMessage("YOU WON !");
         } else if (game.getStatus() == LevelStatus.FAIL) {
             view.displayMessage("GAME OVER, You lost !");
         }
