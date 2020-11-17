@@ -101,7 +101,7 @@ public class BMRData extends GridPane {
             @Override
             public void handle(KeyEvent event) {
                 if (!event.getCharacter().matches("\\d")
-                        || ageField.getText().length() > 1) {
+                        || ageField.getText().length() > 2) {
                     event.consume();
 
                 }
@@ -204,7 +204,7 @@ public class BMRData extends GridPane {
             alert.showAndWait();
             return true;
         }
-        return size > 300 || weight > 500 || age > 80;
+        return size > 300 || weight > 500 || age > 150;
     }
 
     /**

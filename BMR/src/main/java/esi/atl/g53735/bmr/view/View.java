@@ -176,7 +176,7 @@ public class View extends Application implements PropertyChangeListener {
                 tabCharts.addKgVsCalWomenSeriesData(bmrFacade.getWeightPerson(),
                         (double) evt.getNewValue());
             }
+            rootRight.setCalories((double) evt.getNewValue());
         }
-        rootRight.setCalories((double) evt.getNewValue());
     }
 }
