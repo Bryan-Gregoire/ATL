@@ -29,7 +29,7 @@ public class BMRData extends GridPane {
     private TextField weightField;
     private TextField ageField;
     private final ToggleGroup genderGroup;
-    ChoiceBox<ActivityLevel> box;
+    private final ChoiceBox<ActivityLevel> box;
 
     /**
      * Constructor of BMRData.
