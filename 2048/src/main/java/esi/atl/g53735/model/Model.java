@@ -1,5 +1,7 @@
 package esi.atl.g53735.model;
 
+import java.beans.PropertyChangeListener;
+
 /**
  * Define methods that the class Game should implement.
  *
@@ -45,4 +47,18 @@ public interface Model {
      * @param direction the direction which move.
      */
     public void move(Direction direction);
+
+    /**
+     * Add the given listener to the model.
+     *
+     * @param listener the given listener to add.
+     */
+    public void addPropertChangeListener(PropertyChangeListener listener);
+
+    /**
+     * Remove the given listener.
+     *
+     * @param listener the given listener to remove.
+     */
+    public void removePropertyChangeListener(PropertyChangeListener listener);
 }

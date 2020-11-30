@@ -1,5 +1,8 @@
 package esi.atl.g53735.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 /**
  * Bring together the elements necessary for the game to present a facade to the
  * view.
@@ -11,6 +14,10 @@ public class Game implements Model {
     private final Board board;
     private LevelStatus status = LevelStatus.NOT_STARTED;
     int score = 0;
+    public static final String BOARD_MOVE = "Move";
+    public static final String SCORE = "Add Score";
+
+    private PropertyChangeSupport pcs;
 
     /**
      * Constructor of Game.
@@ -18,6 +25,7 @@ public class Game implements Model {
      */
     public Game() {
         this.board = new Board();
+        pcs = new PropertyChangeSupport(this);
     }
 
     /**
@@ -91,6 +99,7 @@ public class Game implements Model {
         board.addFreePlaces();
         board.setRandomValueBoard();
         setNewLevelStatus();
+        pcs.firePropertyChange(BOARD_MOVE, 0, board);
     }
 
     /**
@@ -99,6 +108,28 @@ public class Game implements Model {
      * @param addToScore the given integer.
      */
     private void addToScore(int addToScore) {
+        int oldValue = this.score;
         this.score += addToScore;
+        pcs.firePropertyChange(SCORE, oldValue, score);
+    }
+
+    /**
+     * Add listener
+     *
+     * @param listener the listener.
+     */
+    @Override
+    public void addPropertChangeListener(PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(listener);
+    }
+
+    /**
+     * Remove listener.
+     *
+     * @param listener the listener.
+     */
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        pcs.removePropertyChangeListener(listener);
     }
 }
