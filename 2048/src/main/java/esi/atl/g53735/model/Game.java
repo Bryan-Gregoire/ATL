@@ -45,8 +45,8 @@ public class Game implements Model {
         startStatus();
         this.board = new Board();
         this.pcs.firePropertyChange(BOARD_MOVE, null, this.board);
+        this.pcs.firePropertyChange(SCORE, this.score, 0);
         this.score = 0;
-        this.pcs.firePropertyChange(SCORE, 0, this.score);
     }
 
     /**

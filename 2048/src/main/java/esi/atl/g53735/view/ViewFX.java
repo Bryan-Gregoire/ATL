@@ -32,10 +32,10 @@ public class ViewFX extends Application implements PropertyChangeListener,
 
     private ControllerFX controller;
 
-    private Label lblScore;
-    private Label title;
-    private VBox root;
-    private VBox containBoard;
+    private final Label lblScore;
+    private final Label title;
+    private final VBox root;
+    private final VBox containBoard;
 
     public ViewFX() {
         root = new VBox();
@@ -51,17 +51,18 @@ public class ViewFX extends Application implements PropertyChangeListener,
         lblScore.setTextFill(Paint.valueOf("#776e65"));
         lblScore.setFont(Font.font("Arial", FontWeight.BOLD, 35));
 
-//        Button again = new Button("Recommencer");
-//        again.addEventHandler(ActionEvent.ACTION,
-//                new EventHandler<ActionEvent>() {
-//
-//            @Override
-//            public void handle(ActionEvent t) {
-//                controller.startGame();
-//            }
-//        });
+        Button again = new Button("Recommencer");
+        again.addEventHandler(ActionEvent.ACTION,
+                new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                controller.startGame();
+                root.requestFocus();
+            }
+        });
         root.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(title, containBoard, lblScore);
+        root.getChildren().addAll(title, containBoard, lblScore, again);
     }
 
     /**
@@ -81,13 +82,15 @@ public class ViewFX extends Application implements PropertyChangeListener,
     @Override
     public void start(Stage stage) throws Exception {
 
-        Scene scene = new Scene(root, 1500, 750);
-        scene.setOnKeyPressed((t) -> {
+        root.setOnKeyPressed((t) -> {
             keyDirection(t);
         });
+        
+        Scene scene = new Scene(root, 1500, 750);
         scene.setCursor(Cursor.HAND);
         stage.setScene(scene);
         stage.show();
+        root.requestFocus();
     }
 
     /**
@@ -146,5 +149,4 @@ public class ViewFX extends Application implements PropertyChangeListener,
             default:
         }
     }
-
 }
