@@ -6,6 +6,9 @@ import esi.atl.g53735.model.Direction;
 import esi.atl.g53735.model.Game;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -15,6 +18,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -32,6 +36,7 @@ public class ViewFX extends Application implements PropertyChangeListener,
 
     private ControllerFX controller;
 
+    ListView listView;
     private final Label lblScore;
     private final Label title;
     private final VBox root;
@@ -40,16 +45,28 @@ public class ViewFX extends Application implements PropertyChangeListener,
     public ViewFX() {
         root = new VBox();
         this.containBoard = new VBox();
+        HBox containGame = new HBox();
+
+        listView = new ListView();
+        DateFormat format = new SimpleDateFormat("hh:mm:ss");
+        Calendar calendar = Calendar.getInstance();
+        String lgListView = format.format(calendar.getTime())
+                + " - Bienvenu au 2048";
+        listView.getItems().add(lgListView);
+
+        containGame.getChildren().addAll(containBoard, listView);
+        containGame.setAlignment(Pos.CENTER);
+        containGame.setSpacing(5);
 
         title = new Label("2048");
         title.setTextFill(Paint.valueOf("#776e65"));
-        title.setFont(Font.font("Arial", FontWeight.BOLD, 50));
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 75));
         title.setPadding(new Insets(10));
 
         lblScore = new Label("Score : " + 0);
         lblScore.setPadding(new Insets(10));
         lblScore.setTextFill(Paint.valueOf("#776e65"));
-        lblScore.setFont(Font.font("Arial", FontWeight.BOLD, 35));
+        lblScore.setFont(Font.font("Arial", FontWeight.BOLD, 50));
 
         Button again = new Button("Recommencer");
         again.addEventHandler(ActionEvent.ACTION,
@@ -58,11 +75,17 @@ public class ViewFX extends Application implements PropertyChangeListener,
             @Override
             public void handle(ActionEvent t) {
                 controller.startGame();
+                DateFormat format = new SimpleDateFormat("hh:mm:ss");
+                Calendar calendar = Calendar.getInstance();
+                String lgListView = format.format(calendar.getTime())
+                        + " - Partie recommencer";
+                listView.getItems().add(lgListView);
                 root.requestFocus();
             }
         });
+        
         root.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(title, containBoard, lblScore, again);
+        root.getChildren().addAll(title, containGame, lblScore, again);
     }
 
     /**
@@ -85,7 +108,7 @@ public class ViewFX extends Application implements PropertyChangeListener,
         root.setOnKeyPressed((t) -> {
             keyDirection(t);
         });
-        
+
         Scene scene = new Scene(root, 1500, 750);
         scene.setCursor(Cursor.HAND);
         stage.setScene(scene);
