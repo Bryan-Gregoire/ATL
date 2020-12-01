@@ -4,6 +4,7 @@ import esi.atl.g53735.controller.ControllerFX;
 import esi.atl.g53735.model.Board;
 import esi.atl.g53735.model.Direction;
 import esi.atl.g53735.model.Game;
+import esi.atl.g53735.model.LevelStatus;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
@@ -48,11 +49,6 @@ public class ViewFX extends Application implements PropertyChangeListener,
         HBox containGame = new HBox();
 
         listView = new ListView();
-        DateFormat format = new SimpleDateFormat("hh:mm:ss");
-        Calendar calendar = Calendar.getInstance();
-        String lgListView = format.format(calendar.getTime())
-                + " - Bienvenu au 2048";
-        listView.getItems().add(lgListView);
 
         containGame.getChildren().addAll(containBoard, listView);
         containGame.setAlignment(Pos.CENTER);
@@ -83,7 +79,7 @@ public class ViewFX extends Application implements PropertyChangeListener,
                 root.requestFocus();
             }
         });
-        
+
         root.setAlignment(Pos.CENTER);
         root.getChildren().addAll(title, containGame, lblScore, again);
     }
@@ -128,6 +124,30 @@ public class ViewFX extends Application implements PropertyChangeListener,
         }
         if (evt.getPropertyName().equals(Game.BOARD_MOVE)) {
             buildBoard((Board) evt.getNewValue());
+        }
+        if (evt.getPropertyName().equals(Game.STATUS)) {
+            DateFormat format = new SimpleDateFormat("hh:mm:ss");
+            Calendar calendar = Calendar.getInstance();
+
+            String lgListView;
+            if (evt.getNewValue() == LevelStatus.IN_PROGRESS) {
+                lgListView = format.format(calendar.getTime())
+                        + " - Bievenu au 2048.";
+                listView.getItems().add(lgListView);
+            } else if (evt.getNewValue() == LevelStatus.FAIL) {
+                String lgGameOver = format.format(calendar.getTime())
+                        + " - Partie terminée";
+                lgListView = format.format(calendar.getTime())
+                        + " - Vous avez perdu.";
+                listView.getItems().addAll(lgGameOver, lgListView);
+
+            } else if (evt.getNewValue() == LevelStatus.WIN) {
+                String lgGameOver = format.format(calendar.getTime())
+                        + " - Partie terminée";
+                lgListView = format.format(calendar.getTime())
+                        + " - Vous avez gagner.";
+                listView.getItems().addAll(lgGameOver, lgListView);
+            }
         }
     }
 

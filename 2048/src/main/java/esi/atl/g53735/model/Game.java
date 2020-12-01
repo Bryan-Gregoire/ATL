@@ -17,6 +17,7 @@ public class Game implements Model {
 
     public static final String BOARD_MOVE = "Move";
     public static final String SCORE = "Add Score";
+    public static final String STATUS = "Status";
     private PropertyChangeSupport pcs;
 
     /**
@@ -85,6 +86,8 @@ public class Game implements Model {
     @Override
     public void startStatus() {
         this.status = LevelStatus.IN_PROGRESS;
+        this.pcs.firePropertyChange(STATUS, LevelStatus.NOT_STARTED,
+                this.status);
     }
 
     /**
@@ -94,8 +97,12 @@ public class Game implements Model {
     @Override
     public void setNewLevelStatus() {
         if (this.board.winEnd()) {
+            this.pcs.firePropertyChange(STATUS, this.status,
+                    LevelStatus.WIN);
             this.status = LevelStatus.WIN;
         } else if (this.board.loseEnd()) {
+            this.pcs.firePropertyChange(STATUS, this.status,
+                    LevelStatus.FAIL);
             this.status = LevelStatus.FAIL;
         }
     }
