@@ -61,4 +61,10 @@ public interface Model {
      * @param listener the given listener to remove.
      */
     public void removePropertyChangeListener(PropertyChangeListener listener);
+
+    /**
+     * Start a game.
+     *
+     */
+    public void startGame();
 }

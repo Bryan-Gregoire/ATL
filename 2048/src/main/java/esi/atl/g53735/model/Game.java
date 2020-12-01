@@ -11,12 +11,12 @@ import java.beans.PropertyChangeSupport;
  */
 public class Game implements Model {
 
-    private final Board board;
+    private Board board;
     private LevelStatus status = LevelStatus.NOT_STARTED;
     int score = 0;
+
     public static final String BOARD_MOVE = "Move";
     public static final String SCORE = "Add Score";
-
     private PropertyChangeSupport pcs;
 
     /**
@@ -24,7 +24,6 @@ public class Game implements Model {
      *
      */
     public Game() {
-        this.board = new Board();
         pcs = new PropertyChangeSupport(this);
     }
 
@@ -35,6 +34,19 @@ public class Game implements Model {
      */
     Game(Board board) {
         this.board = board;
+        pcs = new PropertyChangeSupport(this);
+    }
+
+    /**
+     * Start a game. Clean the game board, reset the score.
+     */
+    @Override
+    public void startGame() {
+        startStatus();
+        this.board = new Board();
+        this.pcs.firePropertyChange(BOARD_MOVE, null, this.board);
+        this.score = 0;
+        this.pcs.firePropertyChange(SCORE, 0, this.score);
     }
 
     /**
@@ -99,7 +111,7 @@ public class Game implements Model {
         board.addFreePlaces();
         board.setRandomValueBoard();
         setNewLevelStatus();
-        pcs.firePropertyChange(BOARD_MOVE, 0, board);
+        pcs.firePropertyChange(BOARD_MOVE, null, board);
     }
 
     /**

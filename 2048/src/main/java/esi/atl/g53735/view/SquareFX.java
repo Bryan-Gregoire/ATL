@@ -11,18 +11,18 @@ import javafx.scene.text.TextAlignment;
  *
  * @author g53735
  */
-public class Square extends Label {
+public class SquareFX extends Label {
 
     int value;
 
-    public Square(int value) {
+    public SquareFX(int value) {
         super();
         this.value = value;
         this.setText(this.value == 0 ? "0" : "" + this.value);
         this.setTextFill(Paint.valueOf("#776e65"));
-        this.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        this.setFont(Font.font("Arial", FontWeight.BOLD, 35));
         setBackgroundColor();
-        this.setMinSize(50, 50);
+        this.setMinSize(65, 65);
         this.setTextAlignment(TextAlignment.CENTER);
         this.setAlignment(Pos.CENTER);
     }
