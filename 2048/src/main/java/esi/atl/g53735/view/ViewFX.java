@@ -37,51 +37,21 @@ public class ViewFX extends Application implements PropertyChangeListener,
 
     private ControllerFX controller;
 
-    ListView listView;
-    private final Label lblScore;
-    private final Label title;
+    private final ListView listView;
     private final VBox root;
     private final VBox containBoard;
+    private final HBox containGame;
+    private Label lblScore;
 
     public ViewFX() {
         root = new VBox();
         this.containBoard = new VBox();
-        HBox containGame = new HBox();
+        containGame = new HBox();
 
         listView = new ListView();
-
-        containGame.getChildren().addAll(containBoard, listView);
-        containGame.setAlignment(Pos.CENTER);
-        containGame.setSpacing(5);
-
-        title = new Label("2048");
-        title.setTextFill(Paint.valueOf("#776e65"));
-        title.setFont(Font.font("Arial", FontWeight.BOLD, 75));
-        title.setPadding(new Insets(10));
-
-        lblScore = new Label("Score : " + 0);
-        lblScore.setPadding(new Insets(10));
-        lblScore.setTextFill(Paint.valueOf("#776e65"));
-        lblScore.setFont(Font.font("Arial", FontWeight.BOLD, 50));
-
-        Button again = new Button("Recommencer");
-        again.addEventHandler(ActionEvent.ACTION,
-                new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent t) {
-                controller.startGame();
-                DateFormat format = new SimpleDateFormat("hh:mm:ss");
-                Calendar calendar = Calendar.getInstance();
-                String lgListView = format.format(calendar.getTime())
-                        + " - Partie recommencer";
-                listView.getItems().add(lgListView);
-                root.requestFocus();
-            }
-        });
-
-        root.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(title, containGame, lblScore, again);
+        listView.setMouseTransparent(true); //Transparent to mouse event.
+        listView.setFocusTraversable(false);//so that you couldn't interact 
+        //with the node by focusing in other ways.
     }
 
     /**
@@ -100,12 +70,48 @@ public class ViewFX extends Application implements PropertyChangeListener,
      */
     @Override
     public void start(Stage stage) throws Exception {
+        Label title = new Label("2048");
+        title.setTextFill(Paint.valueOf("#776e65"));
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 75));
+        title.setPadding(new Insets(10));
 
+        Button again = new Button("Recommencer");
+        again.setStyle("-fx-background-color: #8f7a66");
+        again.setTextFill(Paint.valueOf("#f9f6f2"));
+        again.setFont(Font.font("Clear sans", FontWeight.BOLD, 20));
+        again.setPrefSize(250, 30);
+
+        again.addEventHandler(ActionEvent.ACTION,
+                new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                controller.startGame();
+                DateFormat format = new SimpleDateFormat("hh:mm:ss");
+                Calendar calendar = Calendar.getInstance();
+                String lgListView = format.format(calendar.getTime())
+                        + " - Partie recommencer";
+                listView.getItems().add(lgListView);
+                root.requestFocus();
+            }
+        });
+
+        lblScore = new Label("Score : " + 0);
+        lblScore.setPadding(new Insets(10));
+        lblScore.setTextFill(Paint.valueOf("#776e65"));
+        lblScore.setFont(Font.font("Arial", FontWeight.BOLD, 50));
+
+        containGame.getChildren().addAll(containBoard, listView);
+        containGame.setAlignment(Pos.CENTER);
+        containGame.setSpacing(5);
+
+        root.setAlignment(Pos.CENTER);
+        root.getChildren().addAll(title, containGame, lblScore, again);
         root.setOnKeyPressed((t) -> {
             keyDirection(t);
         });
 
-        Scene scene = new Scene(root, 1500, 750);
+        Scene scene = new Scene(root, 1000, 750);
         scene.setCursor(Cursor.HAND);
         stage.setScene(scene);
         stage.show();
@@ -128,25 +134,25 @@ public class ViewFX extends Application implements PropertyChangeListener,
         if (evt.getPropertyName().equals(Game.STATUS)) {
             DateFormat format = new SimpleDateFormat("hh:mm:ss");
             Calendar calendar = Calendar.getInstance();
+            String lgStatus;
 
-            String lgListView;
             if (evt.getNewValue() == LevelStatus.IN_PROGRESS) {
-                lgListView = format.format(calendar.getTime())
+                lgStatus = format.format(calendar.getTime())
                         + " - Bievenu au 2048.";
-                listView.getItems().add(lgListView);
+                listView.getItems().add(lgStatus);
             } else if (evt.getNewValue() == LevelStatus.FAIL) {
                 String lgGameOver = format.format(calendar.getTime())
                         + " - Partie terminée";
-                lgListView = format.format(calendar.getTime())
+                lgStatus = format.format(calendar.getTime())
                         + " - Vous avez perdu.";
-                listView.getItems().addAll(lgGameOver, lgListView);
+                listView.getItems().addAll(lgGameOver, lgStatus);
 
             } else if (evt.getNewValue() == LevelStatus.WIN) {
-                String lgGameOver = format.format(calendar.getTime())
+                String lgEndGame = format.format(calendar.getTime())
                         + " - Partie terminée";
-                lgListView = format.format(calendar.getTime())
+                lgStatus = format.format(calendar.getTime())
                         + " - Vous avez gagner.";
-                listView.getItems().addAll(lgGameOver, lgListView);
+                listView.getItems().addAll(lgEndGame, lgStatus);
             }
         }
     }
