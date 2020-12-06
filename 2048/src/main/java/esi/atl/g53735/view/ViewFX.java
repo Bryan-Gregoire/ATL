@@ -35,12 +35,12 @@ public class ViewFX extends Application implements PropertyChangeListener,
 
     private final ListViewFX listView;
     private final BoardViewFX containBoard;
-    private final Label lblScore;
+    private final scoreFX lblScore;
 
     public ViewFX() {
         this.containBoard = new BoardViewFX();
         listView = new ListViewFX();
-        lblScore = new Label();
+        lblScore = new scoreFX();
     }
 
     /**
@@ -85,10 +85,6 @@ public class ViewFX extends Application implements PropertyChangeListener,
             }
         });
 
-        lblScore.setPadding(new Insets(10));
-        lblScore.setTextFill(Paint.valueOf("#776e65"));
-        lblScore.setFont(Font.font("Arial", FontWeight.BOLD, 50));
-
         containGame.getChildren().addAll(containBoard, listView);
         containGame.setAlignment(Pos.CENTER);
         containGame.setSpacing(5);
@@ -122,7 +118,6 @@ public class ViewFX extends Application implements PropertyChangeListener,
         if (evt.getPropertyName().equals(Game.STATUS)) {
             if (evt.getNewValue() == LevelStatus.IN_PROGRESS) {
                 listView.addMessageList(" - Bievenu au 2048.");
-                lblScore.setText("Score : " + 0);
             } else if (evt.getNewValue() == LevelStatus.FAIL) {
                 listView.addMessageList(" - Partie terminée");
                 listView.addMessageList(" - Vous avez perdu.");

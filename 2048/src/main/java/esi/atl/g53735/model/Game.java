@@ -13,7 +13,7 @@ public class Game implements Model {
 
     private Board board;
     private LevelStatus status = LevelStatus.NOT_STARTED;
-    int score = 0;
+    private int score;
 
     public static final String BOARD_MOVE = "Move";
     public static final String SCORE = "Add Score";
@@ -25,6 +25,7 @@ public class Game implements Model {
      *
      */
     public Game() {
+        this.board = new Board(); //Si je met pas, NullPointer en console.
         pcs = new PropertyChangeSupport(this);
     }
 
@@ -46,8 +47,8 @@ public class Game implements Model {
         startStatus();
         this.board = new Board();
         this.pcs.firePropertyChange(BOARD_MOVE, null, this.board);
-        this.pcs.firePropertyChange(SCORE, this.score, 0);
         this.score = 0;
+        this.pcs.firePropertyChange(SCORE, -1, this.score);
     }
 
     /**
@@ -85,9 +86,9 @@ public class Game implements Model {
      */
     @Override
     public void startStatus() {
+        this.pcs.firePropertyChange(STATUS, this.status,
+                LevelStatus.IN_PROGRESS);
         this.status = LevelStatus.IN_PROGRESS;
-        this.pcs.firePropertyChange(STATUS, LevelStatus.NOT_STARTED,
-                this.status);
     }
 
     /**
