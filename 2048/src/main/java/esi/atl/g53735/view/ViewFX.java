@@ -7,9 +7,6 @@ import esi.atl.g53735.model.Game;
 import esi.atl.g53735.model.LevelStatus;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,7 +16,6 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -37,21 +33,14 @@ public class ViewFX extends Application implements PropertyChangeListener,
 
     private ControllerFX controller;
 
-    private final ListView listView;
-    private final VBox root;
-    private final VBox containBoard;
-    private final HBox containGame;
-    private Label lblScore;
+    private final ListViewFX listView;
+    private final BoardViewFX containBoard;
+    private final Label lblScore;
 
     public ViewFX() {
-        root = new VBox();
-        this.containBoard = new VBox();
-        containGame = new HBox();
-
-        listView = new ListView();
-        listView.setMouseTransparent(true); //Transparent to mouse event.
-        listView.setFocusTraversable(false);//so that you couldn't interact 
-        //with the node by focusing in other ways.
+        this.containBoard = new BoardViewFX();
+        listView = new ListViewFX();
+        lblScore = new Label();
     }
 
     /**
@@ -64,12 +53,16 @@ public class ViewFX extends Application implements PropertyChangeListener,
     }
 
     /**
+     * Start of the view.
      *
-     * @param stage
-     * @throws Exception
+     * @param stage the stage.
      */
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
+        VBox root = new VBox();
+        HBox containGame = new HBox();
+
+        stage.setTitle("2048");
         Label title = new Label("2048");
         title.setTextFill(Paint.valueOf("#776e65"));
         title.setFont(Font.font("Arial", FontWeight.BOLD, 75));
@@ -87,16 +80,11 @@ public class ViewFX extends Application implements PropertyChangeListener,
             @Override
             public void handle(ActionEvent t) {
                 controller.startGame();
-                DateFormat format = new SimpleDateFormat("hh:mm:ss");
-                Calendar calendar = Calendar.getInstance();
-                String lgListView = format.format(calendar.getTime())
-                        + " - Partie recommencer";
-                listView.getItems().add(lgListView);
+                listView.addMessageList(" - Partie recommencer");
                 root.requestFocus();
             }
         });
 
-        lblScore = new Label("Score : " + 0);
         lblScore.setPadding(new Insets(10));
         lblScore.setTextFill(Paint.valueOf("#776e65"));
         lblScore.setFont(Font.font("Arial", FontWeight.BOLD, 50));
@@ -129,50 +117,19 @@ public class ViewFX extends Application implements PropertyChangeListener,
             lblScore.setText("Score : " + evt.getNewValue());
         }
         if (evt.getPropertyName().equals(Game.BOARD_MOVE)) {
-            buildBoard((Board) evt.getNewValue());
+            containBoard.buildBoard((Board) evt.getNewValue());
         }
         if (evt.getPropertyName().equals(Game.STATUS)) {
-            DateFormat format = new SimpleDateFormat("hh:mm:ss");
-            Calendar calendar = Calendar.getInstance();
-            String lgStatus;
-
             if (evt.getNewValue() == LevelStatus.IN_PROGRESS) {
-                lgStatus = format.format(calendar.getTime())
-                        + " - Bievenu au 2048.";
-                listView.getItems().add(lgStatus);
+                listView.addMessageList(" - Bievenu au 2048.");
+                lblScore.setText("Score : " + 0);
             } else if (evt.getNewValue() == LevelStatus.FAIL) {
-                String lgGameOver = format.format(calendar.getTime())
-                        + " - Partie terminée";
-                lgStatus = format.format(calendar.getTime())
-                        + " - Vous avez perdu.";
-                listView.getItems().addAll(lgGameOver, lgStatus);
-
+                listView.addMessageList(" - Partie terminée");
+                listView.addMessageList(" - Vous avez perdu.");
             } else if (evt.getNewValue() == LevelStatus.WIN) {
-                String lgEndGame = format.format(calendar.getTime())
-                        + " - Partie terminée";
-                lgStatus = format.format(calendar.getTime())
-                        + " - Vous avez gagner.";
-                listView.getItems().addAll(lgEndGame, lgStatus);
+                listView.addMessageList(" - Partie terminée");
+                listView.addMessageList(" - Vous avez gagner.");
             }
-        }
-    }
-
-    /**
-     * Build a board based on the given board, composed of SquareFX.
-     *
-     * @param board the given board.
-     */
-    private void buildBoard(Board board) {
-        if (!containBoard.getChildren().isEmpty()) {
-            containBoard.getChildren().clear();
-        }
-        for (int i = 0; i < board.getNbRow(); i++) {
-            HBox line = new HBox();
-            for (int j = 0; j < board.getNbColumn(); j++) {
-                line.getChildren().add(new SquareFX(board.getValue(i, j)));
-            }
-            line.setAlignment(Pos.CENTER);
-            containBoard.getChildren().add(line);
         }
     }
 
@@ -181,7 +138,7 @@ public class ViewFX extends Application implements PropertyChangeListener,
      *
      * @param e the direction which move.
      */
-    public void keyDirection(KeyEvent e) {
+    private void keyDirection(KeyEvent e) {
         switch (e.getCode()) {
             case UP:
                 this.controller.move(Direction.UP);
