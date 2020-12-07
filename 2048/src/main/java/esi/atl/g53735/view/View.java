@@ -41,6 +41,7 @@ public class View implements InterfaceView {
         for (int line = 0; line < lineCount; line++) {
             for (int col = 0; col < colCount; col++) {
                 int value = board.getValue(line, col);
+                //@pbt prefer printf
                 if (value < 10) {
                     System.out.print(" |   " + value);
                 } else if (value < 100) {

@@ -9,6 +9,7 @@ package esi.atl.g53735.model;
 public class Game implements Model {
 
     private final Board board;
+    //@pbt initialize here or in contructor. not both
     private LevelStatus status = LevelStatus.NOT_STARTED;
     int score = 0;
 
@@ -73,6 +74,7 @@ public class Game implements Model {
      */
     @Override
     public void setNewLevelStatus() {
+        //@pbt reall setter or update (naming)
         if (this.board.winEnd()) {
             this.status = LevelStatus.WIN;
         } else if (this.board.loseEnd()) {
@@ -99,6 +101,7 @@ public class Game implements Model {
      * @param addToScore the given integer.
      */
     private void addToScore(int addToScore) {
+        //@pbt not very usefull
         this.score += addToScore;
     }
 }

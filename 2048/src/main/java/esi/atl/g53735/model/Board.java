@@ -9,6 +9,7 @@ import java.util.ArrayList;
  */
 public final class Board {
 
+    //@pbt don't call container board but squares, squaress, container, aSquares…
     private final int[][] board;
     private final ArrayList<Integer> freePlaces = new ArrayList<>();
 
@@ -37,6 +38,7 @@ public final class Board {
      * @return square.
      */
     public int[][] getBoard() {
+        //@pbt defensive getter or getValue
         return board;
     }
 
@@ -89,6 +91,7 @@ public final class Board {
     public boolean winEnd() {
         for (int lg = 0; lg < getNbRow(); lg++) {
             for (int col = 0; col < getNbColumn(); col++) {
+                //@pbt don't use getvalue in the class but this.board
                 if (getValue(lg, col) == 2048) {
                     return true;
                 }
@@ -141,6 +144,7 @@ public final class Board {
      * @return 2 or 4.
      */
     public int randomValue() {
+        //@pbt prefer random to math.random
         int rand = (int) (Math.random() * 10);
         return rand < 9 ? 2 : 4;
     }
@@ -179,6 +183,8 @@ public final class Board {
             int col = freePlaces.get(insertFreePlace) % getNbColumn();
             setValue(lg, col, randomValue());
         }
+        //@pbt why clear and refill freeplaces 
+        //and not just remove insertFreePlace ?
         addFreePlaces();
     }
 
@@ -236,6 +242,7 @@ public final class Board {
      * @return the value of the sum.
      */
     private int sumUp(int col) {
+        //@pbt in board class you can use constant for value 4
         int nbRow = getNbRow();
         int addToScore = 0;
         for (int lg = 0; lg < nbRow - 1; lg++) {
@@ -243,6 +250,7 @@ public final class Board {
             int nextLg = lg + 1;
             if (getValue(lg, col) != 0) {
                 while (!out && nextLg < nbRow) {
+                    //@pbt don't use getters and setters in board but this.board
                     if (getValue(nextLg, col) > 0
                             && getValue(lg, col) != getValue(nextLg, col)) {
                         out = true;
@@ -503,4 +511,5 @@ public final class Board {
             }
         }
     }
+    
 }
