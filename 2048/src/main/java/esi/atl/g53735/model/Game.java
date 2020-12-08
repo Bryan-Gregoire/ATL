@@ -25,8 +25,7 @@ public class Game implements Model {
      *
      */
     public Game() {
-        this.board = new Board(); //Si je met pas, NullPointer en console.
-        pcs = new PropertyChangeSupport(this);
+        this(new Board());
     }
 
     /**
@@ -97,6 +96,9 @@ public class Game implements Model {
      */
     @Override
     public void setNewLevelStatus() {
+        if (this.board == null) {
+            throw new IllegalArgumentException("Board does not exist");
+        }
         if (this.board.winEnd()) {
             this.pcs.firePropertyChange(STATUS, this.status,
                     LevelStatus.WIN);
@@ -115,6 +117,9 @@ public class Game implements Model {
      */
     @Override
     public void move(Direction direction) {
+        if (this.board == null) {
+            throw new IllegalArgumentException("Board does not exist");
+        }
         addToScore(board.moveValues(direction));
         board.addFreePlaces();
         board.setRandomValueBoard();

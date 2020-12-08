@@ -1,7 +1,6 @@
 package esi.atl.g53735.model;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -195,22 +194,6 @@ public class BoardTest {
     }
 
     /**
-     * Test of doubleValues method, of class Board.
-     */
-    @Test
-    public void testDoubleValues() {
-        Board instance = new Board(new int[][]{
-            {64, 0, 8, 0},
-            {0, 0, 2, 0},
-            {256, 0, 1024, 0},
-            {0, 512, 0, 0}
-        });
-        int result = instance.doubleValues(0, 0);
-        int expResult = 128;
-        assertEquals(expResult, result);
-    }
-
-    /**
      * Test of moveValues method, of class Board.
      */
     @Test
@@ -229,7 +212,7 @@ public class BoardTest {
             {0, 0, 0, 0},
             {0, 0, 0, 0}
         });
-        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+        assertArrayEquals(expResult.getSquares(), instance.getSquares());
     }
 
     /**
@@ -251,7 +234,7 @@ public class BoardTest {
             {0, 0, 0, 0},
             {0, 0, 0, 0}
         });
-        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+        assertArrayEquals(expResult.getSquares(), instance.getSquares());
     }
 
     /**
@@ -273,7 +256,7 @@ public class BoardTest {
             {4, 16, 1024, 2},
             {8, 0, 256, 32}
         });
-        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+        assertArrayEquals(expResult.getSquares(), instance.getSquares());
     }
 
     /**
@@ -295,7 +278,7 @@ public class BoardTest {
             {0, 0, 0, 0},
             {0, 0, 0, 0}
         });
-        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+        assertArrayEquals(expResult.getSquares(), instance.getSquares());
     }
 
     /**
@@ -317,7 +300,7 @@ public class BoardTest {
             {4, 0, 0, 32},
             {16, 2, 8, 128}
         });
-        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+        assertArrayEquals(expResult.getSquares(), instance.getSquares());
     }
 
     /**
@@ -339,7 +322,7 @@ public class BoardTest {
             {0, 2, 0, 0},
             {32, 4, 16, 256}
         });
-        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+        assertArrayEquals(expResult.getSquares(), instance.getSquares());
     }
 
     /**
@@ -361,7 +344,7 @@ public class BoardTest {
             {16, 2, 8, 256},
             {64, 4, 128, 16}
         });
-        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+        assertArrayEquals(expResult.getSquares(), instance.getSquares());
     }
 
     /**
@@ -383,7 +366,7 @@ public class BoardTest {
             {2, 256, 2, 128},
             {64, 512, 128, 256}
         });
-        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+        assertArrayEquals(expResult.getSquares(), instance.getSquares());
     }
 
     /**
@@ -405,7 +388,7 @@ public class BoardTest {
             {32, 8, 512, 4},
             {16, 8, 128, 8}
         });
-        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+        assertArrayEquals(expResult.getSquares(), instance.getSquares());
     }
 
     /**
@@ -427,7 +410,7 @@ public class BoardTest {
             {8, 4, 64, 0},
             {4, 0, 0, 0}
         });
-        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+        assertArrayEquals(expResult.getSquares(), instance.getSquares());
     }
 
     /**
@@ -449,7 +432,7 @@ public class BoardTest {
             {8, 64, 0, 0},
             {2, 4, 0, 0}
         });
-        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+        assertArrayEquals(expResult.getSquares(), instance.getSquares());
     }
 
     /**
@@ -471,7 +454,7 @@ public class BoardTest {
             {64, 4, 64, 0},
             {2, 16, 2, 8}
         });
-        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+        assertArrayEquals(expResult.getSquares(), instance.getSquares());
 
     }
 
@@ -494,7 +477,7 @@ public class BoardTest {
             {64, 4, 64, 32},
             {2, 4, 128, 2}
         });
-        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+        assertArrayEquals(expResult.getSquares(), instance.getSquares());
 
     }
 
@@ -517,7 +500,7 @@ public class BoardTest {
             {0, 0, 128, 8},
             {0, 0, 0, 0}
         });
-        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+        assertArrayEquals(expResult.getSquares(), instance.getSquares());
     }
 
     /**
@@ -539,7 +522,7 @@ public class BoardTest {
             {0, 0, 0, 16},
             {0, 0, 0, 4}
         });
-        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+        assertArrayEquals(expResult.getSquares(), instance.getSquares());
     }
 
     /**
@@ -561,7 +544,7 @@ public class BoardTest {
             {0, 4, 32, 4},
             {16, 4, 2, 16}
         });
-        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+        assertArrayEquals(expResult.getSquares(), instance.getSquares());
     }
 
     /**
@@ -583,7 +566,7 @@ public class BoardTest {
             {32, 1024, 512, 128},
             {64, 2, 256, 2}
         });
-        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+        assertArrayEquals(expResult.getSquares(), instance.getSquares());
     }
 
     /**
@@ -605,6 +588,6 @@ public class BoardTest {
             {0, 0, 64, 256},
             {0, 0, 128, 512}
         });
-        assertArrayEquals(expResult.getBoard(), instance.getBoard());
+        assertArrayEquals(expResult.getSquares(), instance.getSquares());
     }
 }

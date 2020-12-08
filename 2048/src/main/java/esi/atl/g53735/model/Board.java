@@ -3,21 +3,21 @@ package esi.atl.g53735.model;
 import java.util.ArrayList;
 
 /**
- * Game board, made up values of board.
+ * Game board, made up values of squares.
  *
  * @author g53735
  */
 public final class Board {
 
-    private final int[][] board;
-    private final ArrayList<Integer> freePlaces = new ArrayList<>();
+    private final int[][] squares;
+    private final ArrayList<Integer> freePlaces;
 
     /**
-     * Constructor of the game board.
+     * Constructor of board.
      *
      */
     public Board() {
-        this.board = new int[4][4];
+        this(new int[4][4]);
         addFreePlaces();
         setRandomValueBoard();
     }
@@ -25,23 +25,25 @@ public final class Board {
     /**
      * Constructor of board for the test.
      *
-     * @param board the board.
+     * @param board the squares.
      */
     Board(int[][] board) {
-        this.board = board;
+        this.squares = board;
+        this.freePlaces = new ArrayList<>();
     }
 
     /**
-     * Get a Square.
+     * Get board of Squares.
      *
      * @return square.
      */
-    public int[][] getBoard() {
-        return board;
+    public int[][] getSquares() {
+        int[][] squaresCopy = this.squares;
+        return squaresCopy;
     }
 
     /**
-     * get the value of a given position in the board.
+     * get the value of a given position in the squares.
      *
      * @param lg the line which the value is.
      * @param col the column which the value is.
@@ -49,25 +51,25 @@ public final class Board {
      * @return the value of the square.
      */
     public int getValue(int lg, int col) {
-        return this.board[lg][col];
+        return this.squares[lg][col];
     }
 
     /**
-     * Gives the number of rows on the game board.
+     * Gives the number of rows on the game squares.
      *
      * @return the number of rows.
      */
     public int getNbRow() {
-        return this.board.length;
+        return this.squares.length;
     }
 
     /**
-     * Gives the number of columns on the game board.
+     * Gives the number of columns on the game squares.
      *
      * @return the number of columns.
      */
     public int getNbColumn() {
-        return this.board[0].length;
+        return this.squares[0].length;
     }
 
     /**
@@ -78,18 +80,18 @@ public final class Board {
      * @param value the given value to set.
      */
     public void setValue(int lg, int col, int value) {
-        this.board[lg][col] = value;
+        this.squares[lg][col] = value;
     }
 
     /**
-     * Check if a value in the board is 2048.
+     * Check if a value in the squares is 2048.
      *
      * @return true if a value is 2048, otherwise false.
      */
     public boolean winEnd() {
         for (int lg = 0; lg < getNbRow(); lg++) {
             for (int col = 0; col < getNbColumn(); col++) {
-                if (getValue(lg, col) == 2048) {
+                if (this.squares[lg][col] == 2048) {
                     return true;
                 }
             }
@@ -121,12 +123,12 @@ public final class Board {
         for (int lg = 0; lg < nbLg; lg++) {
             for (int col = 0; col < nbCol; col++) {
                 if (col < nbCol - 1) {
-                    if (getValue(lg, col) == getValue(lg, col + 1)) {
+                    if (this.squares[lg][col] == this.squares[lg][col + 1]) {
                         return true;
                     }
                 }
                 if (lg < nbLg - 1) {
-                    if (getValue(lg, col) == getValue(lg + 1, col)) {
+                    if (this.squares[lg][col] == this.squares[lg + 1][col]) {
                         return true;
                     }
                 }
@@ -147,7 +149,7 @@ public final class Board {
 
     /**
      * Empty the list, add to the list the position of the free places on the
-     * board.
+     * squares.
      *
      */
     public void addFreePlaces() {
@@ -155,7 +157,7 @@ public final class Board {
         int place = 0;
         for (int i = 0; i < getNbRow(); i++) {
             for (int j = 0; j < getNbColumn(); j++) {
-                if (getValue(i, j) == 0) {
+                if (this.squares[i][j] == 0) {
                     this.freePlaces.add(place);
                 }
                 place++;
@@ -164,8 +166,8 @@ public final class Board {
     }
 
     /**
-     * If there is a free place in the board, a value 2 or 4 randomly chosen is
-     * placed randomly on the board.
+     * If there is a free place in the squares, a value 2 or 4 randomly chosen
+     * is placed randomly on the squares.
      *
      */
     public void setRandomValueBoard() {
@@ -177,24 +179,13 @@ public final class Board {
             int insertFreePlace = (int) (Math.random() * freePlaces.size());
             int lg = freePlaces.get(insertFreePlace) / getNbRow();
             int col = freePlaces.get(insertFreePlace) % getNbColumn();
-            setValue(lg, col, randomValue());
+            this.squares[lg][col] = randomValue();
         }
         addFreePlaces();
     }
 
     /**
-     * Get the double of the value.
-     *
-     * @param lg the line of the board.
-     * @param col the column of the board.
-     * @return the double of the value.
-     */
-    public int doubleValues(int lg, int col) {
-        return getValue(lg, col) * 2;
-    }
-
-    /**
-     * Move the values of the board in the given direction.
+     * Move the values of the squares in the given direction.
      *
      * @param direction the given direction.
      * @return the value of the sum of the values.
@@ -232,7 +223,7 @@ public final class Board {
      * which are the same there is a different number than these then there is
      * no sum to do.
      *
-     * @param col the column of the board.
+     * @param col the column of the squares.
      * @return the value of the sum.
      */
     private int sumUp(int col) {
@@ -241,15 +232,17 @@ public final class Board {
         for (int lg = 0; lg < nbRow - 1; lg++) {
             boolean out = false;
             int nextLg = lg + 1;
-            if (getValue(lg, col) != 0) {
+            if (this.squares[lg][col] != 0) {
                 while (!out && nextLg < nbRow) {
-                    if (getValue(nextLg, col) > 0
-                            && getValue(lg, col) != getValue(nextLg, col)) {
+                    if (this.squares[nextLg][col] > 0
+                            && this.squares[lg][col]
+                            != this.squares[nextLg][col]) {
                         out = true;
-                    } else if (getValue(lg, col) == getValue(nextLg, col)) {
-                        setValue(lg, col, doubleValues(lg, col));
-                        setValue(nextLg, col, 0);
-                        addToScore += getValue(lg, col);
+                    } else if (this.squares[lg][col]
+                            == this.squares[nextLg][col]) {
+                        this.squares[lg][col] *= 2;
+                        this.squares[nextLg][col] = 0;
+                        addToScore += this.squares[lg][col];
                         lg++;
                         out = true;
                     }
@@ -261,20 +254,20 @@ public final class Board {
     }
 
     /**
-     * Move all the values on the board to the top, the values do not overlap.
+     * Move all the values on the squares to the top, the values do not overlap.
      *
-     * @param col the column of the board.
+     * @param col the column of the squares.
      */
     private void moveAllUp(int col) {
         int nbRow = getNbRow();
         for (int lg = 0; lg < nbRow - 1; lg++) {
             boolean out = false;
             int lgMove = lg + 1;
-            if (getValue(lg, col) == 0) {
+            if (this.squares[lg][col] == 0) {
                 while (!out && lgMove < nbRow) {
-                    if (getValue(lgMove, col) != 0) {
-                        setValue(lg, col, getValue(lgMove, col));
-                        setValue(lgMove, col, 0);
+                    if (this.squares[lgMove][col] != 0) {
+                        this.squares[lg][col] = this.squares[lgMove][col];
+                        this.squares[lgMove][col] = 0;
                         out = true;
                     }
                     lgMove++;
@@ -303,7 +296,7 @@ public final class Board {
      * which are the same there is a different number than these then there is
      * no sum to do.
      *
-     * @param col the column of the board.
+     * @param col the column of the squares.
      * @return the value of the sum.
      */
     private int sumDown(int col) {
@@ -312,15 +305,17 @@ public final class Board {
         for (int lg = nbRow - 1; lg >= 1; lg--) {
             boolean out = false;
             int nextLg = lg - 1;
-            if (getValue(lg, col) != 0) {
+            if (this.squares[lg][col] != 0) {
                 while (!out && nextLg >= 0) {
-                    if (getValue(nextLg, col) > 0
-                            && getValue(lg, col) != getValue(nextLg, col)) {
+                    if (this.squares[nextLg][col] > 0
+                            && this.squares[lg][col]
+                            != this.squares[nextLg][col]) {
                         out = true;
-                    } else if (getValue(lg, col) == getValue(nextLg, col)) {
-                        setValue(lg, col, doubleValues(lg, col));
-                        setValue(nextLg, col, 0);
-                        addToScore += getValue(lg, col);
+                    } else if (this.squares[lg][col]
+                            == this.squares[nextLg][col]) {
+                        this.squares[lg][col] *= 2;
+                        this.squares[nextLg][col] = 0;
+                        addToScore += this.squares[lg][col];
                         lg--;
                         out = true;
                     }
@@ -332,21 +327,21 @@ public final class Board {
     }
 
     /**
-     * Move all the values on the board to the bottom, the values do not
+     * Move all the values on the squares to the bottom, the values do not
      * overlap.
      *
-     * @param col the column of the board.
+     * @param col the column of the squares.
      */
     private void moveAllDown(int col) {
         int nbRow = getNbRow();
         for (int lg = nbRow - 1; lg >= 1; lg--) {
             boolean out = false;
             int lgMove = lg - 1;
-            if (getValue(lg, col) == 0) {
+            if (this.squares[lg][col] == 0) {
                 while (!out && lgMove >= 0) {
-                    if (getValue(lgMove, col) != 0) {
-                        setValue(lg, col, getValue(lgMove, col));
-                        setValue(lgMove, col, 0);
+                    if (this.squares[lgMove][col] != 0) {
+                        this.squares[lg][col] = this.squares[lgMove][col];
+                        this.squares[lgMove][col] = 0;
                         out = true;
                     }
                     lgMove--;
@@ -375,7 +370,7 @@ public final class Board {
      * which are the same there is a different number than these then there is
      * no sum to do.
      *
-     * @param lg the line of the board.
+     * @param lg the line of the squares.
      * @return the value of the sum.
      */
     private int sumLeft(int lg) {
@@ -383,15 +378,17 @@ public final class Board {
         for (int col = 0; col < getNbColumn() - 1; col++) {
             boolean out = false;
             int nextCol = col + 1;
-            if (getValue(lg, col) != 0) {
+            if (this.squares[lg][col] != 0) {
                 while (!out && nextCol < getNbColumn()) {
-                    if (getValue(lg, nextCol) > 0
-                            && getValue(lg, col) != getValue(lg, nextCol)) {
+                    if (this.squares[lg][nextCol] > 0
+                            && this.squares[lg][col]
+                            != this.squares[lg][nextCol]) {
                         out = true;
-                    } else if (getValue(lg, col) == getValue(lg, nextCol)) {
-                        setValue(lg, col, doubleValues(lg, col));
-                        setValue(lg, nextCol, 0);
-                        addToScore += getValue(lg, col);
+                    } else if (this.squares[lg][col]
+                            == this.squares[lg][nextCol]) {
+                        this.squares[lg][col] *= 2;
+                        this.squares[lg][nextCol] = 0;
+                        addToScore += this.squares[lg][col];
                         col++;
                         out = true;
                     }
@@ -403,20 +400,21 @@ public final class Board {
     }
 
     /**
-     * Move all the values on the board to the left, the values do not overlap.
+     * Move all the values on the squares to the left, the values do not
+     * overlap.
      *
-     * @param lg the line of the board.
+     * @param lg the line of the squares.
      */
     private void moveAllLeft(int lg) {
         int nbCol = getNbColumn();
         for (int col = 0; col < nbCol - 1; col++) {
             boolean out = false;
             int nextCol = col + 1;
-            if (getValue(lg, col) == 0) {
+            if (this.squares[lg][col] == 0) {
                 while (!out && nextCol < nbCol) {
-                    if (getValue(lg, nextCol) != 0) {
-                        setValue(lg, col, getValue(lg, nextCol));
-                        setValue(lg, nextCol, 0);
+                    if (this.squares[lg][nextCol] != 0) {
+                        this.squares[lg][col] = this.squares[lg][nextCol];
+                        this.squares[lg][nextCol] = 0;
                         out = true;
                     }
                     nextCol++;
@@ -448,7 +446,7 @@ public final class Board {
      * which are the same there is a different number than these then there is
      * no sum to do.
      *
-     * @param lg the line of he game board.
+     * @param lg the line of he game squares.
      * @return the value of the sum.
      */
     private int sumRight(int lg) {
@@ -456,15 +454,17 @@ public final class Board {
         for (int col = getNbColumn() - 1; col > 0; col--) {
             boolean out = false;
             int beforeCol = col - 1;
-            if (getValue(lg, col) != 0) {
+            if (this.squares[lg][col] != 0) {
                 while (!out && beforeCol >= 0) {
-                    if (getValue(lg, beforeCol) > 0
-                            && getValue(lg, col) != getValue(lg, beforeCol)) {
+                    if (this.squares[lg][beforeCol] > 0
+                            && this.squares[lg][col]
+                            != this.squares[lg][beforeCol]) {
                         out = true;
-                    } else if (getValue(lg, col) == getValue(lg, beforeCol)) {
-                        setValue(lg, col, doubleValues(lg, col));
-                        setValue(lg, beforeCol, 0);
-                        addToScore += getValue(lg, col);
+                    } else if (this.squares[lg][col]
+                            == this.squares[lg][beforeCol]) {
+                        this.squares[lg][col] *= 2;
+                        this.squares[lg][beforeCol] = 0;
+                        addToScore += this.squares[lg][col];
                         col--;
                         out = true;
                     }
@@ -479,20 +479,21 @@ public final class Board {
     }
 
     /**
-     * Move all the values on the board to the right, the values do not overlap.
+     * Move all the values on the squares to the right, the values do not
+     * overlap.
      *
-     * @param lg the line of the game board.
+     * @param lg the line of the game squares.
      */
     private void moveAllRight(int lg) {
         int nbCol = getNbColumn();
         for (int col = nbCol - 1; col > 0; col--) {
             boolean out = false;
             int beforeCol = col - 1;
-            if (getValue(lg, col) == 0) {
+            if (this.squares[lg][col] == 0) {
                 while (!out && beforeCol >= 0) {
-                    if (getValue(lg, beforeCol) != 0) {
-                        setValue(lg, col, getValue(lg, beforeCol));
-                        setValue(lg, beforeCol, 0);
+                    if (this.squares[lg][beforeCol] != 0) {
+                        this.squares[lg][col] = this.squares[lg][beforeCol];
+                        this.squares[lg][beforeCol] = 0;
                         out = true;
                     }
                     beforeCol--;
