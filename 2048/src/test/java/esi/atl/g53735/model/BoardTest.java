@@ -112,7 +112,6 @@ public class BoardTest {
             {0, 0, 0, 0},
             {0, 0, 0, 0}
         });
-        instance.addFreePlaces();
         boolean result = instance.loseEnd();
         assertFalse(result);
     }
@@ -128,7 +127,6 @@ public class BoardTest {
             {0, 16, 1024, 8},
             {256, 0, 8, 32}
         });
-        instance.addFreePlaces();
         boolean result = instance.loseEnd();
         assertFalse(result);
     }
@@ -144,7 +142,6 @@ public class BoardTest {
             {128, 4, 32, 2},
             {16, 2, 16, 256}
         });
-        instance.addFreePlaces();
         boolean result = instance.loseEnd();
         assertTrue(result);
     }
@@ -180,7 +177,6 @@ public class BoardTest {
             {0, 0, 0, 0},
             {0, 0, 0, 0}
         });
-        instance.addFreePlaces();
         instance.setRandomValueBoard();
         boolean result = false;
         for (int lg = 0; lg < instance.getNbRow(); lg++) {

@@ -12,7 +12,7 @@ import javafx.scene.control.ListView;
 public class ListViewFX extends ListView {
 
     public ListViewFX() {
-        this.setMouseTransparent(true); //Transparent to mouse event.
+        //this.setMouseTransparent(true); //Transparent to mouse event.
         this.setFocusTraversable(false);//so that you couldn't interact 
         //with the node by focusing in other ways.
     }

@@ -34,7 +34,7 @@ public interface Model {
      * Check if the game is lose or win and set the status, else do nothing.
      *
      */
-    public void setNewLevelStatus();
+    public void updateLevelStatus();
 
     /**
      * Set status to say the game has started.

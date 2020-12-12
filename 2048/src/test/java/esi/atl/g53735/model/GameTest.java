@@ -10,10 +10,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GameTest {
 
     /**
-     * Test of setNewLevelStatus method, of class Game.
+     * Test of updateLevelStatus method, of class Game.
      */
     @Test
-    public void testSetNewLevelStatus() {
+    public void testUpdateLevelStatus() {
         Game instance = new Game(new Board(new int[][]{
             {2, 4, 8, 16},
             {32, 64, 128, 256},
@@ -27,8 +27,7 @@ public class GameTest {
         LevelStatus result2 = instance.getStatus();
         LevelStatus expResult2 = LevelStatus.IN_PROGRESS;
 
-        instance.getBoard().addFreePlaces();
-        instance.setNewLevelStatus();
+        instance.updateLevelStatus();
         LevelStatus result3 = instance.getStatus();
         LevelStatus expResult3 = LevelStatus.IN_PROGRESS;
 
@@ -38,18 +37,17 @@ public class GameTest {
     }
 
     /**
-     * Test of setNewLevelStatus method, of class Game.
+     * Test of UpdateLevelStatus method, of class Game.
      */
     @Test
-    public void testSetNewLevelStatusFAIL() {
+    public void testUpdateLevelStatusFAIL() {
         Game instance = new Game(new Board(new int[][]{
             {2, 4, 8, 16},
             {32, 64, 128, 256},
             {512, 1024, 2, 512},
             {256, 128, 64, 32}
         }));
-        instance.getBoard().addFreePlaces();
-        instance.setNewLevelStatus();
+        instance.updateLevelStatus();
         LevelStatus result = instance.getStatus();
         LevelStatus expResult = LevelStatus.FAIL;
 
@@ -57,18 +55,17 @@ public class GameTest {
     }
 
     /**
-     * Test of setNewLevelStatus method, of class Game.
+     * Test of UpdateLevelStatus method, of class Game.
      */
     @Test
-    public void testSetNewLevelStatusWIN() {
+    public void testUpdateLevelStatusWIN() {
         Game instance = new Game(new Board(new int[][]{
             {2, 4, 8, 16},
             {32, 64, 128, 256},
             {512, 2048, 2, 512},
             {256, 128, 64, 32}
         }));
-        instance.getBoard().addFreePlaces();
-        instance.setNewLevelStatus();
+        instance.updateLevelStatus();
         LevelStatus result = instance.getStatus();
         LevelStatus expResult = LevelStatus.WIN;
 
@@ -87,6 +84,7 @@ public class GameTest {
             {4, 0, 0, 16},
             {4, 16, 0, 0}
         }));
+        instance.startStatus();
         instance.move(direction);
         int result = instance.getScore();
         int expResult = 44;
@@ -105,6 +103,7 @@ public class GameTest {
             {4, 0, 8, 0},
             {4, 16, 0, 2}
         }));
+        instance.startStatus();
         instance.move(direction);
         int result = instance.getScore();
         int expResult = 32;
@@ -123,6 +122,7 @@ public class GameTest {
             {4, 0, 4, 0},
             {4, 16, 0, 2}
         }));
+        instance.startStatus();
         instance.move(direction);
         int result = instance.getScore();
         int expResult = 16;
@@ -141,6 +141,7 @@ public class GameTest {
             {4, 8, 8, 0},
             {4, 16, 0, 2}
         }));
+        instance.startStatus();
         instance.move(direction);
         int result = instance.getScore();
         int expResult = 24;

@@ -1,6 +1,7 @@
 package esi.atl.g53735.model;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Game board, made up values of squares.
@@ -11,6 +12,7 @@ public final class Board {
 
     private final int[][] squares;
     private final ArrayList<Integer> freePlaces;
+    private final static Random rand = new Random();
 
     /**
      * Constructor of board.
@@ -18,18 +20,18 @@ public final class Board {
      */
     public Board() {
         this(new int[4][4]);
-        addFreePlaces();
         setRandomValueBoard();
     }
 
     /**
      * Constructor of board for the test.
      *
-     * @param board the squares.
+     * @param squares the squares.
      */
-    Board(int[][] board) {
-        this.squares = board;
+    Board(int[][] squares) {
+        this.squares = squares;
         this.freePlaces = new ArrayList<>();
+        addFreePlaces();
     }
 
     /**
@@ -38,8 +40,7 @@ public final class Board {
      * @return square.
      */
     public int[][] getSquares() {
-        int[][] squaresCopy = this.squares;
-        return squaresCopy;
+        return this.squares;
     }
 
     /**
@@ -81,6 +82,39 @@ public final class Board {
      */
     public void setValue(int lg, int col, int value) {
         this.squares[lg][col] = value;
+    }
+
+    /**
+     * Make a copy of the current squares.
+     *
+     * @return the copy.
+     */
+    private int[][] copySquares() {
+        int[][] copy = new int[getNbRow()][getNbColumn()];
+        for (int i = 0; i < getNbRow(); i++) {
+            for (int j = 0; j < getNbColumn(); j++) {
+                copy[i][j] = this.squares[i][j];
+            }
+        }
+        return copy;
+    }
+
+    /**
+     * Check if squares changed after move.
+     *
+     * @param oldSquares the squares before the move.
+     * @param newSquares the squares after the move.
+     * @return true if changed, otherwise false.
+     */
+    private boolean boardChanged(int[][] oldSquares, int[][] newSquares) {
+        for (int i = 0; i < getNbRow(); i++) {
+            for (int j = 0; j < getNbColumn(); j++) {
+                if (oldSquares[i][j] != newSquares[i][j]) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -143,8 +177,8 @@ public final class Board {
      * @return 2 or 4.
      */
     public int randomValue() {
-        int rand = (int) (Math.random() * 10);
-        return rand < 9 ? 2 : 4;
+        int random = rand.nextInt(10);
+        return random < 9 ? 2 : 4;
     }
 
     /**
@@ -176,30 +210,42 @@ public final class Board {
                 setValue(freePlaces.get(0) / getNbRow(),
                         freePlaces.get(0) % getNbColumn(), randomValue());
             }
-            int insertFreePlace = (int) (Math.random() * freePlaces.size());
+            int insertFreePlace = rand.nextInt(freePlaces.size());
             int lg = freePlaces.get(insertFreePlace) / getNbRow();
             int col = freePlaces.get(insertFreePlace) % getNbColumn();
             this.squares[lg][col] = randomValue();
+            this.freePlaces.remove(insertFreePlace);
         }
-        addFreePlaces();
     }
 
     /**
-     * Move the values of the squares in the given direction.
+     * Move the values of the squares in the given direction. if the squares
+     * does not move return -2.
      *
      * @param direction the given direction.
-     * @return the value of the sum of the values.
+     * @return -2 if squares has not changed,otherwise the value of the sum of
+     * the values.
      */
     public int moveValues(Direction direction) {
+        int[][] oldSquares = copySquares();
+        int score = 0;
         switch (direction) {
             case UP:
-                return moveUp();
+                score = moveUp();
+                break;
             case DOWN:
-                return moveDown();
+                score = moveDown();
+                break;
             case LEFT:
-                return moveleft();
+                score = moveleft();
+                break;
+            case RIGHT:
+                score = moveRight();
         }
-        return moveRight();
+        if (!boardChanged(oldSquares, this.squares)) {
+            return -2;
+        }
+        return score;
 
     }
 

@@ -11,6 +11,11 @@ import javafx.scene.layout.VBox;
  */
 public class BoardViewFX extends VBox {
 
+    public BoardViewFX() {
+        this.setStyle("-fx-border-color: ##8f7a66");
+    }
+    
+
     /**
      * Build a board based on the given board, composed of SquareFX.
      *

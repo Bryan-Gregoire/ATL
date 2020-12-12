@@ -12,7 +12,7 @@ import java.beans.PropertyChangeSupport;
 public class Game implements Model {
 
     private Board board;
-    private LevelStatus status = LevelStatus.NOT_STARTED;
+    private LevelStatus status;
     private int score;
 
     public static final String BOARD_MOVE = "Move";
@@ -35,6 +35,7 @@ public class Game implements Model {
      */
     Game(Board board) {
         this.board = board;
+        status = LevelStatus.NOT_STARTED;
         pcs = new PropertyChangeSupport(this);
     }
 
@@ -57,7 +58,7 @@ public class Game implements Model {
      */
     @Override
     public Board getBoard() {
-        return board;
+        return new Board(board.getSquares());
     }
 
     /**
@@ -95,7 +96,7 @@ public class Game implements Model {
      *
      */
     @Override
-    public void setNewLevelStatus() {
+    public void updateLevelStatus() {
         if (this.board == null) {
             throw new IllegalArgumentException("Board does not exist");
         }
@@ -120,11 +121,18 @@ public class Game implements Model {
         if (this.board == null) {
             throw new IllegalArgumentException("Board does not exist");
         }
-        addToScore(board.moveValues(direction));
-        board.addFreePlaces();
-        board.setRandomValueBoard();
-        setNewLevelStatus();
-        pcs.firePropertyChange(BOARD_MOVE, null, board);
+        if (this.status == LevelStatus.IN_PROGRESS) {
+            int addScore = board.moveValues(direction);
+            if (addScore != -2) {
+                addToScore(addScore);
+                board.addFreePlaces();
+                board.setRandomValueBoard();
+                updateLevelStatus();
+                pcs.firePropertyChange(BOARD_MOVE, null, board);
+            } else {
+                pcs.firePropertyChange(SCORE, -2, this.score);
+            }
+        }
     }
 
     /**

@@ -20,9 +20,9 @@ public class SquareFX extends Label {
         this.value = value;
         this.setText(this.value == 0 ? "0" : "" + this.value);
         this.setTextFill(Paint.valueOf("#776e65"));
-        this.setFont(Font.font("Arial", FontWeight.BOLD, 50));
+        this.setFont(Font.font("Arial", FontWeight.BOLD, 40));
         setBackgroundColor();
-        this.setMinSize(125, 125);
+        this.setMinSize(110, 110);
         this.setTextAlignment(TextAlignment.CENTER);
         this.setAlignment(Pos.CENTER);
     }

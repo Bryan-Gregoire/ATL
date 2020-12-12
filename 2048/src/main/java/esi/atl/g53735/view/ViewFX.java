@@ -61,8 +61,8 @@ public class ViewFX extends Application implements PropertyChangeListener,
     public void start(Stage stage) {
         VBox root = new VBox();
         HBox containGame = new HBox();
-
         stage.setTitle("2048");
+
         Label title = new Label("2048");
         title.setTextFill(Paint.valueOf("#776e65"));
         title.setFont(Font.font("Arial", FontWeight.BOLD, 75));
@@ -85,16 +85,32 @@ public class ViewFX extends Application implements PropertyChangeListener,
             }
         });
 
+        Button exit = new Button("Exit");
+        exit.setStyle("-fx-background-color: #8f7a66");
+        exit.setTextFill(Paint.valueOf("#f9f6f2"));
+        exit.setFont(Font.font("Clear sans", FontWeight.BOLD, 20));
+        exit.setPrefSize(250, 30);
+
+        exit.addEventHandler(ActionEvent.ACTION,
+                new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                System.exit(0);
+            }
+        });
+
         containGame.getChildren().addAll(containBoard, listView);
         containGame.setAlignment(Pos.CENTER);
         containGame.setSpacing(5);
 
         root.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(title, containGame, lblScore, again);
+        root.getChildren().addAll(title, containGame, lblScore, again, exit);
         root.setOnKeyPressed((t) -> {
             keyDirection(t);
         });
-
+        root.setSpacing(10);
+        root.setStyle("-fx-background-color: #faf8ef");
         Scene scene = new Scene(root, 1000, 750);
         scene.setCursor(Cursor.HAND);
         stage.setScene(scene);
@@ -110,7 +126,11 @@ public class ViewFX extends Application implements PropertyChangeListener,
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(Game.SCORE)) {
-            lblScore.setText("Score : " + evt.getNewValue());
+            if ((int) evt.getOldValue() == -2) {
+                listView.addMessageList(" - Mouvement impossible ");
+            } else {
+                lblScore.setText("Score : " + evt.getNewValue());
+            }
         }
         if (evt.getPropertyName().equals(Game.BOARD_MOVE)) {
             containBoard.buildBoard((Board) evt.getNewValue());
