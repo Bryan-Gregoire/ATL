@@ -88,7 +88,7 @@ public final class Board {
      * @param value the given value to set.
      */
     public void setValue(int lg, int col, int value) {
-        if (lg < 0 || col < 0 || lg >= SIZE || col >= SIZE || value > 0
+        if (lg < 0 || col < 0 || lg >= SIZE || col >= SIZE || value < 0
                 || value % 2 != 0) {
             throw new IllegalArgumentException("invalide value");
         }

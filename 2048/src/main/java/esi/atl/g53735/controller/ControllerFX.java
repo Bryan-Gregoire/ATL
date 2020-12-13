@@ -6,6 +6,7 @@ import esi.atl.g53735.view.InterfaceViewFX;
 import java.beans.PropertyChangeListener;
 import java.util.Objects;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 
 /**
  * The Controller represents the dynamics of the game and the update of the View
@@ -34,8 +35,18 @@ public class ControllerFX {
     /**
      * Start a game.
      *
+     * @param stage the stage.
      */
-    public void startGame() {
+    public void startGame(Stage stage) {
+        this.model.startGame();
+        this.view.start(stage);
+    }
+
+    /**
+     * Restart the game.
+     *
+     */
+    public void restartGame() {
         this.model.startGame();
     }
 

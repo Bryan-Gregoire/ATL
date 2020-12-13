@@ -5,7 +5,6 @@ import esi.atl.g53735.model.Board;
 import esi.atl.g53735.model.Game;
 import esi.atl.g53735.model.LevelStatus;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -24,11 +23,10 @@ import javafx.stage.Stage;
 
 /**
  * Represent the view of the game in JavaFX.
- * 
+ *
  * @author g53735
  */
-public class ViewFX extends Application implements PropertyChangeListener,
-        InterfaceViewFX {
+public class ViewFX extends Application implements InterfaceViewFX {
 
     private ControllerFX controller;
 
@@ -38,7 +36,7 @@ public class ViewFX extends Application implements PropertyChangeListener,
 
     /**
      * Constructor of ViewFX.
-     * 
+     *
      */
     public ViewFX() {
         this.containBoard = new BoardViewFX();
@@ -51,6 +49,7 @@ public class ViewFX extends Application implements PropertyChangeListener,
      *
      * @param controller the given controller to set.
      */
+    @Override
     public void setController(ControllerFX controller) {
         this.controller = controller;
     }
@@ -82,7 +81,7 @@ public class ViewFX extends Application implements PropertyChangeListener,
 
             @Override
             public void handle(ActionEvent t) {
-                controller.startGame();
+                controller.restartGame();
                 listView.addMessageList(" - Partie recommencer");
                 root.requestFocus();
             }
@@ -93,7 +92,7 @@ public class ViewFX extends Application implements PropertyChangeListener,
         exit.setTextFill(Paint.valueOf("#f9f6f2"));
         exit.setFont(Font.font("Clear sans", FontWeight.BOLD, 20));
         exit.setPrefSize(250, 30);
-        
+
         exit.addEventHandler(ActionEvent.ACTION,
                 new EventHandler<ActionEvent>() {
 
@@ -114,7 +113,7 @@ public class ViewFX extends Application implements PropertyChangeListener,
         });
         root.setSpacing(10);
         root.setStyle("-fx-background-color: #faf8ef");
-        
+
         Scene scene = new Scene(root, 1000, 750);
         scene.setCursor(Cursor.HAND);
         stage.setScene(scene);
