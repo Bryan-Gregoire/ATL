@@ -34,6 +34,9 @@ public class Game implements Model {
      * @param board the game board.
      */
     Game(Board board) {
+        if (board == null) {
+            throw new IllegalArgumentException("board cannot be null");
+        }
         this.board = board;
         status = LevelStatus.NOT_STARTED;
         pcs = new PropertyChangeSupport(this);
@@ -97,9 +100,6 @@ public class Game implements Model {
      */
     @Override
     public void updateLevelStatus() {
-        if (this.board == null) {
-            throw new IllegalArgumentException("Board does not exist");
-        }
         if (this.board.winEnd()) {
             this.pcs.firePropertyChange(STATUS, this.status,
                     LevelStatus.WIN);
@@ -118,8 +118,8 @@ public class Game implements Model {
      */
     @Override
     public void move(Direction direction) {
-        if (this.board == null) {
-            throw new IllegalArgumentException("Board does not exist");
+        if (direction == null) {
+            throw new IllegalArgumentException("This is not a direction");
         }
         if (this.status == LevelStatus.IN_PROGRESS) {
             int addScore = board.moveValues(direction);
@@ -141,6 +141,10 @@ public class Game implements Model {
      * @param addToScore the given integer.
      */
     private void addToScore(int addToScore) {
+        if (addToScore < 0) {
+            throw new IllegalArgumentException("the score to add cannot be "
+                    + "negative");
+        }
         int oldValue = this.score;
         this.score += addToScore;
         pcs.firePropertyChange(SCORE, oldValue, score);

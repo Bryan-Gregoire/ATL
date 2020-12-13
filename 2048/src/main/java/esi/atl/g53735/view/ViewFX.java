@@ -2,7 +2,6 @@ package esi.atl.g53735.view;
 
 import esi.atl.g53735.controller.ControllerFX;
 import esi.atl.g53735.model.Board;
-import esi.atl.g53735.model.Direction;
 import esi.atl.g53735.model.Game;
 import esi.atl.g53735.model.LevelStatus;
 import java.beans.PropertyChangeEvent;
@@ -16,7 +15,6 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
@@ -25,7 +23,8 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 /**
- *
+ * Represent the view of the game in JavaFX.
+ * 
  * @author g53735
  */
 public class ViewFX extends Application implements PropertyChangeListener,
@@ -37,6 +36,10 @@ public class ViewFX extends Application implements PropertyChangeListener,
     private final BoardViewFX containBoard;
     private final scoreFX lblScore;
 
+    /**
+     * Constructor of ViewFX.
+     * 
+     */
     public ViewFX() {
         this.containBoard = new BoardViewFX();
         listView = new ListViewFX();
@@ -90,7 +93,7 @@ public class ViewFX extends Application implements PropertyChangeListener,
         exit.setTextFill(Paint.valueOf("#f9f6f2"));
         exit.setFont(Font.font("Clear sans", FontWeight.BOLD, 20));
         exit.setPrefSize(250, 30);
-
+        
         exit.addEventHandler(ActionEvent.ACTION,
                 new EventHandler<ActionEvent>() {
 
@@ -107,10 +110,11 @@ public class ViewFX extends Application implements PropertyChangeListener,
         root.setAlignment(Pos.CENTER);
         root.getChildren().addAll(title, containGame, lblScore, again, exit);
         root.setOnKeyPressed((t) -> {
-            keyDirection(t);
+            controller.keyDirection(t);
         });
         root.setSpacing(10);
         root.setStyle("-fx-background-color: #faf8ef");
+        
         Scene scene = new Scene(root, 1000, 750);
         scene.setCursor(Cursor.HAND);
         stage.setScene(scene);
@@ -145,29 +149,6 @@ public class ViewFX extends Application implements PropertyChangeListener,
                 listView.addMessageList(" - Partie terminée");
                 listView.addMessageList(" - Vous avez gagner.");
             }
-        }
-    }
-
-    /**
-     * Move the values of the game board in the direction of the event.
-     *
-     * @param e the direction which move.
-     */
-    private void keyDirection(KeyEvent e) {
-        switch (e.getCode()) {
-            case UP:
-                this.controller.move(Direction.UP);
-                break;
-            case DOWN:
-                this.controller.move(Direction.DOWN);
-                break;
-            case RIGHT:
-                this.controller.move(Direction.RIGHT);
-                break;
-            case LEFT:
-                this.controller.move(Direction.LEFT);
-                break;
-            default:
         }
     }
 }

@@ -8,13 +8,19 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
 /**
+ * Represent a square in the game board.
  *
  * @author g53735
  */
 public class SquareFX extends Label {
 
-    int value;
+    private final int value;
 
+    /**
+     * Constructor of SquareFX.
+     *
+     * @param value the value of the square.
+     */
     public SquareFX(int value) {
         super();
         this.value = value;
@@ -27,6 +33,10 @@ public class SquareFX extends Label {
         this.setAlignment(Pos.CENTER);
     }
 
+    /**
+     * Set a color to the background according to the value.
+     *
+     */
     private void setBackgroundColor() {
         switch (this.value) {
             case 0:

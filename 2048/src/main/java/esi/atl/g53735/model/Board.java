@@ -13,13 +13,14 @@ public final class Board {
     private final int[][] squares;
     private final ArrayList<Integer> freePlaces;
     private final static Random rand = new Random();
+    private final static int SIZE = 4;
 
     /**
      * Constructor of board.
      *
      */
     public Board() {
-        this(new int[4][4]);
+        this(new int[SIZE][SIZE]);
         setRandomValueBoard();
     }
 
@@ -29,6 +30,9 @@ public final class Board {
      * @param squares the squares.
      */
     Board(int[][] squares) {
+        if (squares == null) {
+            throw new IllegalArgumentException("Squares cannot be null");
+        }
         this.squares = squares;
         this.freePlaces = new ArrayList<>();
         addFreePlaces();
@@ -40,7 +44,7 @@ public final class Board {
      * @return square.
      */
     public int[][] getSquares() {
-        return this.squares;
+        return copySquares();
     }
 
     /**
@@ -52,6 +56,9 @@ public final class Board {
      * @return the value of the square.
      */
     public int getValue(int lg, int col) {
+        if (lg < 0 || col < 0 || lg >= SIZE || col >= SIZE) {
+            throw new IllegalArgumentException("lg or col are invalide values");
+        }
         return this.squares[lg][col];
     }
 
@@ -81,6 +88,10 @@ public final class Board {
      * @param value the given value to set.
      */
     public void setValue(int lg, int col, int value) {
+        if (lg < 0 || col < 0 || lg >= SIZE || col >= SIZE || value > 0
+                || value % 2 != 0) {
+            throw new IllegalArgumentException("invalide value");
+        }
         this.squares[lg][col] = value;
     }
 
@@ -90,9 +101,9 @@ public final class Board {
      * @return the copy.
      */
     private int[][] copySquares() {
-        int[][] copy = new int[getNbRow()][getNbColumn()];
-        for (int i = 0; i < getNbRow(); i++) {
-            for (int j = 0; j < getNbColumn(); j++) {
+        int[][] copy = new int[SIZE][SIZE];
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
                 copy[i][j] = this.squares[i][j];
             }
         }
@@ -107,8 +118,8 @@ public final class Board {
      * @return true if changed, otherwise false.
      */
     private boolean boardChanged(int[][] oldSquares, int[][] newSquares) {
-        for (int i = 0; i < getNbRow(); i++) {
-            for (int j = 0; j < getNbColumn(); j++) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
                 if (oldSquares[i][j] != newSquares[i][j]) {
                     return true;
                 }
@@ -123,8 +134,8 @@ public final class Board {
      * @return true if a value is 2048, otherwise false.
      */
     public boolean winEnd() {
-        for (int lg = 0; lg < getNbRow(); lg++) {
-            for (int col = 0; col < getNbColumn(); col++) {
+        for (int lg = 0; lg < SIZE; lg++) {
+            for (int col = 0; col < SIZE; col++) {
                 if (this.squares[lg][col] == 2048) {
                     return true;
                 }
@@ -152,16 +163,14 @@ public final class Board {
      * @return true if a value has a neigbor of the same value otherwise false.
      */
     private boolean hasSameNeighbour() {
-        int nbLg = getNbRow(); // 4 
-        int nbCol = getNbColumn(); // 4
-        for (int lg = 0; lg < nbLg; lg++) {
-            for (int col = 0; col < nbCol; col++) {
-                if (col < nbCol - 1) {
+        for (int lg = 0; lg < SIZE; lg++) {
+            for (int col = 0; col < SIZE; col++) {
+                if (col < SIZE - 1) {
                     if (this.squares[lg][col] == this.squares[lg][col + 1]) {
                         return true;
                     }
                 }
-                if (lg < nbLg - 1) {
+                if (lg < SIZE - 1) {
                     if (this.squares[lg][col] == this.squares[lg + 1][col]) {
                         return true;
                     }
@@ -189,8 +198,8 @@ public final class Board {
     public void addFreePlaces() {
         freePlaces.clear();
         int place = 0;
-        for (int i = 0; i < getNbRow(); i++) {
-            for (int j = 0; j < getNbColumn(); j++) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
                 if (this.squares[i][j] == 0) {
                     this.freePlaces.add(place);
                 }
@@ -207,12 +216,12 @@ public final class Board {
     public void setRandomValueBoard() {
         if (!freePlaces.isEmpty()) {
             if (freePlaces.size() == 1) {
-                setValue(freePlaces.get(0) / getNbRow(),
-                        freePlaces.get(0) % getNbColumn(), randomValue());
+                setValue(freePlaces.get(0) / SIZE,
+                        freePlaces.get(0) % SIZE, randomValue());
             }
             int insertFreePlace = rand.nextInt(freePlaces.size());
-            int lg = freePlaces.get(insertFreePlace) / getNbRow();
-            int col = freePlaces.get(insertFreePlace) % getNbColumn();
+            int lg = freePlaces.get(insertFreePlace) / SIZE;
+            int col = freePlaces.get(insertFreePlace) % SIZE;
             this.squares[lg][col] = randomValue();
             this.freePlaces.remove(insertFreePlace);
         }
@@ -227,6 +236,9 @@ public final class Board {
      * the values.
      */
     public int moveValues(Direction direction) {
+        if (direction == null) {
+            throw new IllegalArgumentException("this isn't a direction");
+        }
         int[][] oldSquares = copySquares();
         int score = 0;
         switch (direction) {
@@ -256,7 +268,7 @@ public final class Board {
      */
     private int moveUp() {
         int addToScore = 0;
-        for (int col = 0; col < getNbColumn(); col++) {
+        for (int col = 0; col < SIZE; col++) {
             addToScore += sumUp(col);
             moveAllUp(col);
         }
@@ -273,13 +285,12 @@ public final class Board {
      * @return the value of the sum.
      */
     private int sumUp(int col) {
-        int nbRow = getNbRow();
         int addToScore = 0;
-        for (int lg = 0; lg < nbRow - 1; lg++) {
+        for (int lg = 0; lg < SIZE - 1; lg++) {
             boolean out = false;
             int nextLg = lg + 1;
             if (this.squares[lg][col] != 0) {
-                while (!out && nextLg < nbRow) {
+                while (!out && nextLg < SIZE) {
                     if (this.squares[nextLg][col] > 0
                             && this.squares[lg][col]
                             != this.squares[nextLg][col]) {
@@ -305,12 +316,11 @@ public final class Board {
      * @param col the column of the squares.
      */
     private void moveAllUp(int col) {
-        int nbRow = getNbRow();
-        for (int lg = 0; lg < nbRow - 1; lg++) {
+        for (int lg = 0; lg < SIZE - 1; lg++) {
             boolean out = false;
             int lgMove = lg + 1;
             if (this.squares[lg][col] == 0) {
-                while (!out && lgMove < nbRow) {
+                while (!out && lgMove < SIZE) {
                     if (this.squares[lgMove][col] != 0) {
                         this.squares[lg][col] = this.squares[lgMove][col];
                         this.squares[lgMove][col] = 0;
@@ -329,7 +339,7 @@ public final class Board {
      */
     private int moveDown() {
         int addToScore = 0;
-        for (int col = 0; col < getNbColumn(); col++) {
+        for (int col = 0; col < SIZE; col++) {
             addToScore += sumDown(col);
             moveAllDown(col);
         }
@@ -346,9 +356,8 @@ public final class Board {
      * @return the value of the sum.
      */
     private int sumDown(int col) {
-        int nbRow = getNbRow();
         int addToScore = 0;
-        for (int lg = nbRow - 1; lg >= 1; lg--) {
+        for (int lg = SIZE - 1; lg >= 1; lg--) {
             boolean out = false;
             int nextLg = lg - 1;
             if (this.squares[lg][col] != 0) {
@@ -379,8 +388,7 @@ public final class Board {
      * @param col the column of the squares.
      */
     private void moveAllDown(int col) {
-        int nbRow = getNbRow();
-        for (int lg = nbRow - 1; lg >= 1; lg--) {
+        for (int lg = SIZE - 1; lg >= 1; lg--) {
             boolean out = false;
             int lgMove = lg - 1;
             if (this.squares[lg][col] == 0) {
@@ -403,7 +411,7 @@ public final class Board {
      */
     private int moveleft() {
         int addToScore = 0;
-        for (int lg = 0; lg < getNbRow(); lg++) {
+        for (int lg = 0; lg < SIZE; lg++) {
             addToScore += sumLeft(lg);
             moveAllLeft(lg);
         }
@@ -421,11 +429,11 @@ public final class Board {
      */
     private int sumLeft(int lg) {
         int addToScore = 0;
-        for (int col = 0; col < getNbColumn() - 1; col++) {
+        for (int col = 0; col < SIZE - 1; col++) {
             boolean out = false;
             int nextCol = col + 1;
             if (this.squares[lg][col] != 0) {
-                while (!out && nextCol < getNbColumn()) {
+                while (!out && nextCol < SIZE) {
                     if (this.squares[lg][nextCol] > 0
                             && this.squares[lg][col]
                             != this.squares[lg][nextCol]) {
@@ -452,12 +460,11 @@ public final class Board {
      * @param lg the line of the squares.
      */
     private void moveAllLeft(int lg) {
-        int nbCol = getNbColumn();
-        for (int col = 0; col < nbCol - 1; col++) {
+        for (int col = 0; col < SIZE - 1; col++) {
             boolean out = false;
             int nextCol = col + 1;
             if (this.squares[lg][col] == 0) {
-                while (!out && nextCol < nbCol) {
+                while (!out && nextCol < SIZE) {
                     if (this.squares[lg][nextCol] != 0) {
                         this.squares[lg][col] = this.squares[lg][nextCol];
                         this.squares[lg][nextCol] = 0;
@@ -465,8 +472,8 @@ public final class Board {
                     }
                     nextCol++;
                 }
-                if (nextCol >= nbCol) { // Si plus de nombres a déplacer. 
-                    col = nbCol;      // Aller a la fin pour sortir du for.
+                if (nextCol >= SIZE) { // Si plus de nombres a déplacer. 
+                    col = SIZE;      // Aller a la fin pour sortir du for.
                 }
             }
         }
@@ -479,7 +486,7 @@ public final class Board {
      */
     private int moveRight() {
         int addToScore = 0;
-        for (int lg = 0; lg < getNbRow(); lg++) {
+        for (int lg = 0; lg < SIZE; lg++) {
             addToScore += sumRight(lg);
             moveAllRight(lg);
         }
@@ -497,7 +504,7 @@ public final class Board {
      */
     private int sumRight(int lg) {
         int addToScore = 0;
-        for (int col = getNbColumn() - 1; col > 0; col--) {
+        for (int col = SIZE - 1; col > 0; col--) {
             boolean out = false;
             int beforeCol = col - 1;
             if (this.squares[lg][col] != 0) {
@@ -531,8 +538,7 @@ public final class Board {
      * @param lg the line of the game squares.
      */
     private void moveAllRight(int lg) {
-        int nbCol = getNbColumn();
-        for (int col = nbCol - 1; col > 0; col--) {
+        for (int col = SIZE - 1; col > 0; col--) {
             boolean out = false;
             int beforeCol = col - 1;
             if (this.squares[lg][col] == 0) {

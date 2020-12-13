@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 /**
+ * Create the Controller and start the game.
  *
  * @author g53735
  */

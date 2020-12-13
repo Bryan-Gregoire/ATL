@@ -5,6 +5,7 @@ import esi.atl.g53735.model.Model;
 import esi.atl.g53735.view.InterfaceViewFX;
 import java.beans.PropertyChangeListener;
 import java.util.Objects;
+import javafx.scene.input.KeyEvent;
 
 /**
  * The Controller represents the dynamics of the game and the update of the View
@@ -39,12 +40,26 @@ public class ControllerFX {
     }
 
     /**
-     * Move the values of the board in the given direction.
+     * Move the values of the game board in the direction of the event.
      *
-     * @param direction
+     * @param e the direction which move.
      */
-    public void move(Direction direction) {
-        this.model.move(direction);
+    public void keyDirection(KeyEvent e) {
+        switch (e.getCode()) {
+            case UP:
+                this.model.move(Direction.UP);
+                break;
+            case DOWN:
+                this.model.move(Direction.DOWN);
+                break;
+            case RIGHT:
+                this.model.move(Direction.RIGHT);
+                break;
+            case LEFT:
+                this.model.move(Direction.LEFT);
+                break;
+            default:
+        }
     }
 
     /**
