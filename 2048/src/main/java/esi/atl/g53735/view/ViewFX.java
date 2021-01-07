@@ -6,6 +6,7 @@ import esi.atl.g53735.model.Game;
 import esi.atl.g53735.model.LevelStatus;
 import java.beans.PropertyChangeEvent;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -39,6 +40,7 @@ public class ViewFX extends Application implements InterfaceViewFX {
      *
      */
     public ViewFX() {
+        //@pbt always this or never
         this.containBoard = new BoardViewFX();
         listView = new ListViewFX();
         lblScore = new scoreFX();
@@ -82,7 +84,8 @@ public class ViewFX extends Application implements InterfaceViewFX {
             @Override
             public void handle(ActionEvent t) {
                 controller.restartGame();
-                listView.addMessageList(" - Partie recommencer");
+                //@pbt update view with propertychange or "Demande de restart"
+                listView.addMessageList(" - Partie recommencée");
                 root.requestFocus();
             }
         });
@@ -98,6 +101,7 @@ public class ViewFX extends Application implements InterfaceViewFX {
 
             @Override
             public void handle(ActionEvent t) {
+                //@pbt or Platform.exit();
                 System.exit(0);
             }
         });
@@ -128,6 +132,7 @@ public class ViewFX extends Application implements InterfaceViewFX {
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        //@pbt view update with model information. 
         if (evt.getPropertyName().equals(Game.SCORE)) {
             if ((int) evt.getOldValue() == -2) {
                 listView.addMessageList(" - Mouvement impossible ");
